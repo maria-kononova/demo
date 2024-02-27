@@ -3,6 +3,8 @@ import requests
 from django.template import loader
 from django.http import HttpResponse
 
+from resume.models import Students
+
 
 # Create your views here.
 def home(request):
@@ -13,5 +15,5 @@ def home(request):
 
 def myresume(request):
     template = loader.get_template('resume.html')
-    context = {}
+    context = {} #'student': Students.objects.all().first()
     return HttpResponse(template.render(context, request))
