@@ -6,15 +6,11 @@ from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
-
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .forms import UserLoginForm
+from .forms import UserRegistrationForm
 import json
-
-from resume.models import Students, User
-
-
-class UserLoginForm(AuthenticationForm):
-    username = forms.CharField(label='Username')
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
 
 
 # Create your views here.
@@ -37,7 +33,7 @@ def login_view(request):
         username = login_data.get("username")
         password = login_data.get("password")
         print(username, password)
-        #user = auth(username=username, password=password)
+        # user = auth(username=username, password=password)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
@@ -47,11 +43,21 @@ def login_view(request):
             return render(request, 'login.html', {'form': form, 'msg': "Пароль или имя пользователя неверное"})
     else:
         form = UserLoginForm()
-    return render(request, 'login.html', {'form': form, 'msg' : ""})
+    return render(request, 'login.html', {'form': form, 'msg': ""})
 
 
-def auth(username, password):
-    for user in User.objects.all():
-        if user.login == username and user.password == password:
-            print("ok")
-            return user
+def register_view(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')  # Перенаправление на страницу входа после успешной регистрации
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'register.html', {'form': form})
+
+# def auth(username, password):
+#     for user in User.objects.all():
+#         if user.login == username and user.password == password:
+#             print("ok")
+#             return user

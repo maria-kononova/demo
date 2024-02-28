@@ -12,12 +12,12 @@
 </head>
 <body>
 <h1>Home page</h1>
-<a href="{% url 'register' %}">to register</a>
+<a href="{% url 'login' %}">to login</a>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Login</button>
     <p>{{ msg }}</p>
+    <button type="submit">Register</button>
 </form>
 
 {% comment %}<img src="{% static 'img/cookie.jpg' %}" alt="фото"/>{% endcomment %}
