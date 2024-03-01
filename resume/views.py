@@ -8,11 +8,13 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .forms import UserLoginForm, TestForm
+
+from .dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES
+from .forms import UserLoginForm, ResumeForm
 from .forms import UserRegistrationForm
 import json
 
-from .models import Test
+from .models import Test, Students
 
 
 # Create your views here.
@@ -24,13 +26,15 @@ def home(request):
 
 def myresume(request):
     if request.method == 'POST':
-        form = TestForm(request.POST)
+        form = ResumeForm(request.POST)
         if form.is_valid():
             print(form.cleaned_data)
-            test = Test(title=form.cleaned_data.get("title"))
-            test.save()
+            students = Students(surname=form.cleaned_data.get('surname'), name=form.cleaned_data.get('name'), middle_name=form.cleaned_data.get('middle_name'), birthdate=form.cleaned_data.get('birthday'),
+                                gender=GENDER_CHOICES[int(form.cleaned_data.get('gender'))-1][1], phone=form.cleaned_data.get('phone'), email=form.cleaned_data.get('email'),
+                                types_of_communication=TYPES_OF_COMMUNICATION_CHOICES[int(form.cleaned_data.get('types_of_communication'))-1][1], education_level=EDUCATION_LEVEL_CHOICES[int(form.cleaned_data.get('education_level'))-1][1])
+            students.save()
     else:
-        form = TestForm()
+        form = ResumeForm()
 
     return render(request, 'resume.html', {'form': form})
     # template = loader.get_template('resume.html')
