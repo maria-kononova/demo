@@ -8,9 +8,11 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .forms import UserLoginForm
+from .forms import UserLoginForm, TestForm
 from .forms import UserRegistrationForm
 import json
+
+from .models import Test
 
 
 # Create your views here.
@@ -21,9 +23,19 @@ def home(request):
 
 
 def myresume(request):
-    template = loader.get_template('resume.html')
-    context = {}  # 'student': Students.objects.all().first()
-    return HttpResponse(template.render(context, request))
+    if request.method == 'POST':
+        form = TestForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data)
+            test = Test(title=form.cleaned_data.get("title"))
+            test.save()
+    else:
+        form = TestForm()
+
+    return render(request, 'resume.html', {'form': form})
+    # template = loader.get_template('resume.html')
+    # context = {}  # 'student': Students.objects.all().first()
+    # return HttpResponse(template.render(context, request))
 
 
 def login_view(request):
@@ -51,7 +63,7 @@ def register_view(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('login')  # Перенаправление на страницу входа после успешной регистрации
+            return redirect('home')  # Перенаправление на страницу входа после успешной регистрации
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
