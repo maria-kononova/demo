@@ -49,6 +49,7 @@ class TestForm(forms.Form):
     surname = forms.CharField(label='Фамилия', max_length=30)
     name = forms.CharField(label='Имя', max_length=30)
     middle_name = forms.CharField(label='Отчество', max_length=30, required=False)
+    photo = forms.ImageField(label='Фото')
     birthday = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget(years=range(year, year-101, -1)))
     gender = forms.ChoiceField(label='Пол', choices=GENDER_CHOICES)
     phone = forms.CharField(label='Телефон', max_length=12)
