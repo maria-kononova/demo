@@ -9,10 +9,15 @@
     <title>Home</title>
     <link rel="stylesheet" href="{% static 'css/main-style.css'%}" type="text/css">
     {% comment %}<script src="{% static 'js/script.js' %}"></script>{% endcomment %}
+    <style>
+        h1{
+            font-size: 20px;
+        }
+    </style>
 </head>
 <body>
-<h1>Home page</h1>
-<a href="{% url 'myresume' %}">go to my resume!</a>
+<h1>Домашняя страница</h1>
+<a href="{% url 'myresume' %}">к созданию резюме!</a>
 {% comment %}<img src="{% static 'img/cookie.jpg' %}" alt="фото"/>{% endcomment %}
 </body>
 </html>

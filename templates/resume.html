@@ -6,13 +6,46 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Resume</title>
+    <style>
+        h1{
+            font-size: 20px;
+        }
+        .myfield{
+            border:1px solid #ccc; 
+            border-radius:5px;
+            padding-left: 5px;
+            height:25px;
+            width:200px;
+            margin: 0;
+        }
+        .field-email{
+            {#width: 210px;#}
+        }
+        .myfield_select{
+            border:1px solid #ccc; 
+            border-radius:5px;
+            height:25px;
+            width:auto;
+            margin: 0;
+        }
+        .button{
+            border:1px solid #ccc; 
+            border-radius:5px;
+            height:25px;
+            width:auto;
+            margin: 0;
+            padding-left: 20px;
+            padding-right: 20px;
+            font-size: 15px;
+        }
+    </style>
 </head>
 <body>
-<h1>My resume</h1>
+<h1>Мое резюме</h1>
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Отправить</button>
+    <button type="submit" class="button">Отправить</button>
 </form>
 </body>
 </html>
