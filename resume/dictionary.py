@@ -1,26 +1,36 @@
+from resume.api import get_countries, get_info, get_currency
+
+COUNTRY_CHOICES = get_countries("/areas/countries")
+
 # Выбор пола
-GENDER_CHOICES = (
-    (1, "Мужской"),
-    (2, "Женский"),
-)
+GENDER_CHOICES = get_info("gender")
 
 # Выбор вида связи
-TYPES_OF_COMMUNICATION_CHOICES = (
-    (1, "Телефон"),
-    (2, "Почта"),
-)
+TYPES_OF_COMMUNICATION_CHOICES = get_info("preferred_contact_type")
 
 # Выбор уровня образования
-EDUCATION_LEVEL_CHOICES = (
-    (1, "Среднее"),
-    (2, "Среднее специальное"),
-    (3, "Неоконченное высшее"),
-    (4, "Высшее"),
-    (5, "Бакалавр"),
-    (6, "Магистр"),
-    (7, "Кандидат наук"),
-    (8, "Доктор наук"),
-)
+EDUCATION_LEVEL_CHOICES = get_info("education_level")
+
+# Выбор возможности переезда
+POSSIBILITY_OF_TRANSFER_CHOICES = get_info("relocation_type")
+
+# Выбор готовности к командировкам
+BUSINESS_TRIPS_CHOICES = get_info("business_trip_readiness")
+
+# Выбор желаемого время в пути до работы
+DESIRED_TIME_CHOICES = get_info("travel_time")
+
+# Занятость
+BUSYNESS_CHOICES = get_info("employment")
+
+# Языки
+LANGUAGE_CHOICES = get_countries("/languages")
+
+# Уровень
+PROFICIENCY_LEVEL_CHOICES = get_info("language_level")
+
+# Выбор валюты для ЗП
+CURRENCY_CHOICES = get_currency()
 
 # Выбор города
 CITY_CHOICES = (
@@ -34,27 +44,6 @@ STATION_METRO_CHOICES = (
     (2, "Адмиралтейская"),
     (3, "Площадь Восстания"),
     (4, "Невский проспект"),
-)
-
-# Выбор возможности переезда
-POSSIBILITY_OF_TRANSFER_CHOICES = (
-    (1, "Невозможен"),
-    (2, "Возможен"),
-    (3, "Желателен"),
-)
-
-# Выбор готовности к командировкам
-BUSINESS_TRIPS_CHOICES = (
-    (1, "Никогда"),
-    (2, "Готов"),
-    (3, "Иногда"),
-)
-
-# Выбор желаемого время в пути до работы
-DESIRED_TIME_CHOICES = (
-    (1, "Не имеет значения"),
-    (2, "Не более часа"),
-    (3, "Не более полутора часов"),
 )
 
 # Выбор категории прав
@@ -84,23 +73,7 @@ SPECIALIZATION_CHOICES = (
     (2, "Специализация 2"),
 )
 
-# Выбор валюты для ЗП
-CURRENCY_CHOICES = (
-    (1, "₽"),
-    (2, "$"),
-    (3, "€"),
-)
-
-# Выбор валюты для ЗП
-BUSYNESS_CHOICES = (
-    (1, "Полная занятость"),
-    (2, "Частичная занятость"),
-    (3, "Проектная работа"),
-    (4, "Волонтерство"),
-    (5, "Стажировка"),
-)
-
-# Выбор валюты для ЗП
+# График работы
 WORK_TIME_CHOICES = (
     (1, "Полный день"),
     (2, "Сменный график"),
@@ -108,4 +81,3 @@ WORK_TIME_CHOICES = (
     (4, "Удаленная работа"),
     (5, "Вахтовый метод"),
 )
-

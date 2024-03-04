@@ -1,6 +1,32 @@
 import requests
+import json
+
+BASE_URL = 'https://api.hh.ru'
 
 
+def get_countries(url):
+    j = requests.get(f"{BASE_URL}{url}").json()
+    # Загрузка JSON-строки в объект Python
+    data = json.loads(json.dumps(j))
+    # Получение списка имен объектов
+    names_list = [(d['id'], d['name']) for d in data]
+    return names_list
+
+def get_info(entity):
+    j = requests.get(f"{BASE_URL}/dictionaries").json()
+    # Загрузка JSON-строки в объект Python
+    data = json.loads(json.dumps(j))
+    # Получение списка имен объектов
+    names_list = [(d['id'], d['name']) for d in data[entity]]
+    return names_list
+
+def get_currency():
+    j = requests.get(f"{BASE_URL}/dictionaries").json()
+    # Загрузка JSON-строки в объект Python
+    data = json.loads(json.dumps(j))
+    # Получение списка имен объектов
+    names_list = [(d['code'], d['abbr']) for d in data["currency"]]
+    return names_list
 def auth():
     # client_id = "VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0"
     # client_secret = "JDUG1I830GU1JHKGSOFBVQGH03TG51IS284HP4RC536RJ99BJ2LMVAEHDS0SMLRT"
@@ -55,6 +81,7 @@ def auth():
         f.write(post_request.text)
 
     return post_request.json()['redirectUrl']
+
 
 def get_access_token(url, client_id, client_secret):
     response = requests.post(

@@ -8,7 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from resume.dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, CITY_CHOICES, \
     STATION_METRO_CHOICES, POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES, \
     DRIVING_LISENSE_CHOICES, LOCALE_RESUME_CHOICES, SPECIALIZATION_CHOICES, CURRENCY_CHOICES, BUSYNESS_CHOICES, \
-    WORK_TIME_CHOICES
+    WORK_TIME_CHOICES, COUNTRY_CHOICES, LANGUAGE_CHOICES, PROFICIENCY_LEVEL_CHOICES
 
 year = datetime.now().year
 
@@ -71,14 +71,14 @@ class ResumeForm(forms.Form):
                                       widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Языки
-    #language = forms.ChoiceField(label='Язык', choices=LANGUAGE_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
-    #proficiency_level = forms.ChoiceField(label='Уровень владения', choices=PROFICIENCY_LEVEL_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    language = forms.ChoiceField(label='Язык', choices=LANGUAGE_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    proficiency_level = forms.ChoiceField(label='Уровень владения', choices=PROFICIENCY_LEVEL_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Гражданство
-    # country_citizen_chip = forms.ChoiceField(label='Гражданство', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    country_citizen_chip = forms.ChoiceField(label='Гражданство', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Разрешение на работу
-    # country_work_resolution = forms.ChoiceField(label='Разрешение на работу', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    country_work_resolution = forms.ChoiceField(label='Разрешение на работу', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Ключевые навыки
     # skill = forms.ChoiceField(label='Ключевые навыки', choices=SKILL_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
