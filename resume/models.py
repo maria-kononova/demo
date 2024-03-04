@@ -266,7 +266,7 @@ class Students(models.Model):
     email = models.CharField(db_column='Email', max_length=45)  # Field name made lowercase.
     types_of_communication = models.CharField(db_column='Types_of_communication', max_length=10)  # Field name made lowercase.
     education_level = models.CharField(db_column='Education_level', max_length=45)  # Field name made lowercase.
-    id_auth_user = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='ID_user')  # Field name made lowercase.
+    id_auth_user = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='ID_auth_user')  # Field name made lowercase.
 
     class Meta:
         managed = False

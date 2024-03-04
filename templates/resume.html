@@ -6,16 +6,30 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Resume</title>
+    <title>Резюме</title>
     <link rel="stylesheet" href="{% static 'css/main-style.css' %}" type="text/css"/>
 </head>
 <body>
 <div class="container"></div>
 <div class="block">
     <h1>Мое резюме</h1>
+    <hr>
     <form method="post">
+        <h2>Личные данные</h2>
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ student_form.as_p }}
+        <hr>
+        <h2>О работе</h2>
+        {% csrf_token %}
+        {{ about_job_form.as_p }}
+        <hr>
+        <h2>Образование</h2>
+        {% csrf_token %}
+        {{ education_form.as_p }}
+        <hr>
+        <h2>Дополнительно</h2>
+        {% csrf_token %}
+        {{ resume_form.as_p }}
         <button type="submit" class="button">Отправить</button>
     </form>
 </div>
