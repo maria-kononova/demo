@@ -1,8 +1,9 @@
 import datetime
 
 from resume.dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, \
-    POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES
-from resume.models import Students, Resume, EducationalInstitution
+    POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES, CURRENCY_CHOICES, \
+    SPECIALIZATION_CHOICES, BUSYNESS_CHOICES, WORK_TIME_CHOICES
+from resume.models import Students, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, WorkTimetable
 
 
 def create_student(student_form, user):
@@ -36,13 +37,43 @@ def create_resume(resume_form, student):
                   locale_resume=resume_form.cleaned_data.get('locale_resume'),
                   date_of_creation=datetime.datetime.now())
 
+
 def create_education(education_form, resume):
     education_new_id = EducationalInstitution.objects.all().count() + 1
-    return  EducationalInstitution(id=education_new_id, id_resume=resume,
-                           name_of_institution=education_form.cleaned_data.get(
-                               'name_of_institution'),
-                           faculty=education_form.cleaned_data.get('faculty'),
-                           specialization=education_form.cleaned_data.get('specialization_of_institution'),
-                           year_of_completion="2024",
-                           level_education=dict(EDUCATION_LEVEL_CHOICES).get(
-                               education_form.cleaned_data.get('level_education')))
+    return EducationalInstitution(id=education_new_id, id_resume=resume,
+                                  name_of_institution=education_form.cleaned_data.get(
+                                      'name_of_institution'),
+                                  faculty=education_form.cleaned_data.get('faculty'),
+                                  specialization=education_form.cleaned_data.get('specialization_of_institution'),
+                                  year_of_completion="2024",
+                                  level_education=dict(EDUCATION_LEVEL_CHOICES).get(
+                                      education_form.cleaned_data.get('level_education')))
+
+
+def create_about_job(about_job_form, resume):
+    about_new_id = AboutJob.objects.all().count() + 1
+    return AboutJob(id_about_job=about_new_id, id_resume=resume,
+                    desired_position=about_job_form.cleaned_data.get('desired_position'),
+                    desired_salary=about_job_form.cleaned_data.get('desired_salary'),
+                    currency=dict(CURRENCY_CHOICES).get(about_job_form.cleaned_data.get('currency')))
+
+
+def create_specialization(about_job_form, about_job):
+    specialization_new_id = Specialization.objects.all().count() + 1
+    return Specialization(id=specialization_new_id, id_about_job=about_job,
+                          specialization=dict(SPECIALIZATION_CHOICES).get(
+                              about_job_form.cleaned_data.get('specialization')))
+
+
+def create_busyness(about_job_form, about_job):
+    busyness_new_id = Busyness.objects.all().count() + 1
+    return Busyness(id=busyness_new_id, id_about_job=about_job,
+                    type_busyness=dict(BUSYNESS_CHOICES).get(
+                        about_job_form.cleaned_data.get('busyness')))
+
+
+def create_work_timetable(about_job_form, about_job):
+    work_timetable_new_id = WorkTimetable.objects.all().count() + 1
+    return WorkTimetable(id=work_timetable_new_id, id_about_job=about_job,
+                         work_timetable=dict(WORK_TIME_CHOICES).get(
+                             about_job_form.cleaned_data.get('work_timetable')))

@@ -19,7 +19,8 @@ from .forms import UserRegistrationForm
 import json
 
 from .models import Test, Students, AuthUser, Resume, EducationalInstitution
-from .save import create_student, create_resume, create_education
+from .save import create_student, create_resume, create_education, create_about_job, create_specialization, \
+    create_busyness, create_work_timetable
 
 
 # Create your views here.
@@ -34,6 +35,7 @@ def home(request):
     else:
         return redirect('login')
 
+
 def myresume(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
@@ -42,20 +44,28 @@ def myresume(request):
             resume_form = ResumeForm(request.POST)
             education_form = EducationForm(request.POST)
             about_job_form = AboutJobForm(request.POST)
-            if student_form.is_valid() and resume_form.is_valid() and education_form.is_valid():
+            if student_form.is_valid() and resume_form.is_valid() and education_form.is_valid() and about_job_form.is_valid():
                 print(student_form.cleaned_data)
                 print(resume_form.cleaned_data)
                 print(education_form.cleaned_data)
-                print(dict(EDUCATION_LEVEL_CHOICES).get(student_form.cleaned_data.get('level_education')))
+                print(about_job_form.cleaned_data)
                 user_id = request.user.id
                 user = AuthUser.objects.get(pk=user_id)
                 student = create_student(student_form, user)
                 resume = create_resume(resume_form, student)
                 education = create_education(education_form, resume)
+                about_job = create_about_job(about_job_form, resume)
+                specialization = create_specialization(about_job_form, about_job)
+                busyness = create_busyness(about_job_form, about_job)
+                work_timetable = create_work_timetable(about_job_form, about_job)
                 with transaction.atomic():
                     student.save()
                     resume.save()
                     education.save()
+                    about_job.save()
+                    specialization.save()
+                    busyness.save()
+                    work_timetable.save()
                     return redirect('home')
         else:
             return render(request, 'resume.html', {'student_form': StudentForm(), 'resume_form': ResumeForm(),
