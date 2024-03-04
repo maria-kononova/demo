@@ -1,29 +1,55 @@
-{% load static %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Резюме</title>
-    <link rel="stylesheet" href="{% static 'css/main-style.css' %}" type="text/css"/>
-</head>
-<body>
-<div class="container"></div>
-<div class="block">
-    <h1>Мое резюме</h1>
-    <hr>
-    <form method="post">
-        <h2>Личные данные</h2>
-        {% csrf_token %}
-        {{ student_form.as_p }}
+{% extends 'index.html' %}
+{% block content %}
+    <div class="container"></div>
+    <div class="block">
+        <h1>Мое резюме</h1>
         <hr>
-        <h2>Дополнительно</h2>
-        {% csrf_token %}
-        {{ resume_form.as_p }}
-        <button type="submit" class="button">Отправить</button>
-    </form>
-</div>
-</body>
-</html>
+        <form id="form-container" method="post">
+                    <h2>Личные данные</h2>
+                    {% csrf_token %}
+                    {{ student_form.as_p }}
+                    <hr>
+                    <h2>О работе</h2>
+                    {% csrf_token %}
+                    {{ about_job_form.as_p }}
+                    <hr>
+            <h2>Образование</h2>
+{#            {% for education_form in education_formset %}#}
+                <hr>
+                <div class="bird-form">
+                    {% csrf_token %}
+                    {{ education_form.as_p }}
+                </div>
+{#            {% endfor %}#}
+            <button id="add-form" type="button">+</button>
+                    <hr>
+                    <h2>Дополнительно</h2>
+                    {% csrf_token %}
+                    {{ resume_form.as_p }}
+            <button type="submit" class="button">Отправить</button>
+        </form>
+    </div>
+    </body>
+    <script>
+        let birdForm = document.querySelectorAll(".bird-form")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+        let formNum = birdForm.length - 1
+        addButton.addEventListener('click', addForm)
+
+        function addForm(e) {
+            e.preventDefault()
+
+            let newForm = birdForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`, 'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+
+            totalForms.setAttribute('value', `${formNum + 1}`)
+        }
+    </script>
+{% endblock %}
