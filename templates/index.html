@@ -32,15 +32,19 @@
     <script src="https://unpkg.com/htmx.org@1.6.0"></script>
 </head>
 <body>
-<header>
-    <div>
-        <a href="#"><img src="{% static 'img/resume_logo.svg' %}" alt="logo" height="60"/></a>
-    </div>
-    <div>
-        <ul>
-            <li><a href="{% url 'home' %}">Мои резюме</a></li>
-            <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
-        </ul>
+<header class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div>
+                <a href="#"><img src="{% static 'img/resume_logo.svg' %}" alt="logo" height="60"/></a>
+            </div>
+            <div>
+                <ul>
+                    <li><a href="{% url 'home' %}">Мои резюме</a></li>
+                    <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
 </header>

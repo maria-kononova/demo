@@ -1,0 +1,46 @@
+/* Стили для шапки */
+header {
+    background-color: #ffffff;
+    padding: 10px;
+    height: 80px;
+    float: left;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+*header {
+    color: #000000;
+}
+header h1 {
+    margin-top: 6px;
+}
+header h1 a {
+    color: #000000;
+    text-decoration: none;
+}
+header h1 a:hover {
+    color: #000000;
+}
+header ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    float: right;
+}
+header ul li {
+    float: left;
+    position: relative;
+}
+header ul li a {
+    display: block;
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: #000000;
+    padding: 20px;
+    margin-top: -5px;
+}
+header ul li a:hover {
+    background: #ffffff;
+    transition: 0.5s;
+    color: #000000;
+}

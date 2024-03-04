@@ -30,7 +30,7 @@ h1 {
     font-size: 20px;
 }
 h2{
-    font: 18px;
+    font-size: 18px;
 }
 
 .container {
@@ -43,7 +43,7 @@ h2{
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 20px;
-    margin: 20px auto;
+    margin: 100px auto;
     width: 60%;
 }
 .myfield {
