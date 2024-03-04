@@ -228,7 +228,8 @@ class Resume(models.Model):
     business_trips = models.CharField(db_column='Business_trips', max_length=7)  # Field name made lowercase.
     desired_time_in_the_way = models.CharField(db_column='Desired_time_in_the_way', max_length=45)  # Field name made lowercase.
     availability_car = models.IntegerField(db_column='Availability_car')  # Field name made lowercase.
-    locale_resume = models.CharField(db_column='Locale_resume', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    locale_resume = models.CharField(db_column='Locale_resume', max_length=45)  # Field name made lowercase.
+    date_of_creation = models.DateTimeField(db_column='Date_of_creation')  # Field name made lowercase.
 
     class Meta:
         managed = False
