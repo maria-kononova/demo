@@ -19,14 +19,6 @@
         {% csrf_token %}
         {{ student_form.as_p }}
         <hr>
-        <h2>О работе</h2>
-        {% csrf_token %}
-        {{ about_job_form.as_p }}
-        <hr>
-        <h2>Образование</h2>
-        {% csrf_token %}
-        {{ education_form.as_p }}
-        <hr>
         <h2>Дополнительно</h2>
         {% csrf_token %}
         {{ resume_form.as_p }}

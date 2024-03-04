@@ -9,7 +9,9 @@ def get_countries(url):
     # Загрузка JSON-строки в объект Python
     data = json.loads(json.dumps(j))
     # Получение списка имен объектов
-    names_list = [(d['id'], d['name']) for d in data]
+    names_list = []
+    for d in data:
+        names_list.append((d['id'], d['name']))
     return names_list
 
 def get_info(entity):

@@ -75,10 +75,10 @@ class ResumeForm(forms.Form):
     proficiency_level = forms.ChoiceField(label='Уровень владения', choices=PROFICIENCY_LEVEL_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Гражданство
-    country_citizen_chip = forms.ChoiceField(label='Гражданство', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    #country_citizen_chip = forms.ChoiceField(label='Гражданство', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Разрешение на работу
-    country_work_resolution = forms.ChoiceField(label='Разрешение на работу', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    #country_work_resolution = forms.ChoiceField(label='Разрешение на работу', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Ключевые навыки
     # skill = forms.ChoiceField(label='Ключевые навыки', choices=SKILL_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
