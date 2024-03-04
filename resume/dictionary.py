@@ -1,4 +1,4 @@
-from resume.api import get_countries, get_info, get_currency
+from resume.api import get_countries, get_info, get_currency, get_specialization
 
 COUNTRY_CHOICES = get_countries("/areas/countries")
 
@@ -31,6 +31,12 @@ PROFICIENCY_LEVEL_CHOICES = get_info("language_level")
 
 # Выбор валюты для ЗП
 CURRENCY_CHOICES = get_currency()
+
+# Выбор специализации
+SPECIALIZATION_CHOICES = get_specialization()
+
+# График работы
+WORK_TIME_CHOICES = get_info("schedule")
 
 # Выбор города
 CITY_CHOICES = (
@@ -67,17 +73,3 @@ LOCALE_RESUME_CHOICES = (
     (2, "en"),
 )
 
-# Выбор специализации
-SPECIALIZATION_CHOICES = (
-    (1, "Специализация 1"),
-    (2, "Специализация 2"),
-)
-
-# График работы
-WORK_TIME_CHOICES = (
-    (1, "Полный день"),
-    (2, "Сменный график"),
-    (3, "Гибкий график"),
-    (4, "Удаленная работа"),
-    (5, "Вахтовый метод"),
-)
