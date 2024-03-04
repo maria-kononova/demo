@@ -90,3 +90,17 @@ hr {
     background-color: #ccc;
     margin: 20px 0;
 }
+
+.table_home{
+    border-collapse: separate;
+    border-spacing: 5px 10px;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+.table_home td{
+    text-align: center;
+    align-content: center;
+    padding: .3em 1em;
+}

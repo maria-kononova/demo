@@ -25,9 +25,11 @@ from .models import Test, Students, AuthUser, Resume
 # request.session.flush() или response.delete_cookie('sessionid') или logout(request) для завершения сессии пользователя
 def home(request):
     if request.user.is_authenticated:
-        template = loader.get_template('home.html')
-        context = {}
-        return HttpResponse(template.render(context, request))
+        # template = loader.get_template('home.html')
+        # context = {}
+        # return HttpResponse(template.render(context, request))
+        resumeList = Resume.objects.all() #filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
+        return render(request, 'home.html', {'resume': resumeList})
     else:
         return redirect('login')
 
