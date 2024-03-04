@@ -224,12 +224,13 @@ class Resume(models.Model):
     description_skills = models.CharField(db_column='Description_skills', max_length=700, blank=True, null=True)  # Field name made lowercase.
     city = models.CharField(db_column='City', max_length=45, blank=True, null=True)  # Field name made lowercase.
     station_metro = models.CharField(db_column='Station_metro', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    possibility_of_transfer = models.CharField(db_column='Possibility_of_transfer', max_length=10)  # Field name made lowercase.
-    business_trips = models.CharField(db_column='Business_trips', max_length=7)  # Field name made lowercase.
+    possibility_of_transfer = models.CharField(db_column='Possibility_of_transfer', max_length=45)  # Field name made lowercase.
+    business_trips = models.CharField(db_column='Business_trips', max_length=45)  # Field name made lowercase.
     desired_time_in_the_way = models.CharField(db_column='Desired_time_in_the_way', max_length=45)  # Field name made lowercase.
     availability_car = models.IntegerField(db_column='Availability_car')  # Field name made lowercase.
     locale_resume = models.CharField(db_column='Locale_resume', max_length=45)  # Field name made lowercase.
     date_of_creation = models.DateTimeField(db_column='Date_of_creation')  # Field name made lowercase.
+    moderation_status = models.CharField(db_column='Moderation_status', max_length=45)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -265,7 +266,7 @@ class Students(models.Model):
     photo = models.TextField(db_column='Photo', blank=True, null=True)  # Field name made lowercase.
     phone = models.CharField(db_column='Phone', max_length=12)  # Field name made lowercase.
     email = models.CharField(db_column='Email', max_length=45)  # Field name made lowercase.
-    types_of_communication = models.CharField(db_column='Types_of_communication', max_length=10)  # Field name made lowercase.
+    types_of_communication = models.CharField(db_column='Types_of_communication', max_length=45)  # Field name made lowercase.
     education_level = models.CharField(db_column='Education_level', max_length=45)  # Field name made lowercase.
     id_auth_user = models.ForeignKey(AuthUser, models.DO_NOTHING, db_column='ID_auth_user')  # Field name made lowercase.
 

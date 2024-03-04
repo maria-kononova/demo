@@ -11,8 +11,35 @@
     {% comment %}<script src="{% static 'js/script.js' %}"></script>{% endcomment %}
 </head>
 <body>
-<h1>Домашняя страница</h1>
-<a href="{% url 'myresume' %}">к созданию резюме!</a>
-{% comment %}<img src="{% static 'img/cookie.jpg' %}" alt="фото"/>{% endcomment %}
+<div class="container"></div>
+<div class="block">
+    <h1>Домашняя страница</h1>
+    <a href="{% url 'myresume' %}">К созданию резюме!</a>
+    {% comment %}<img src="{% static 'img/cookie.jpg' %}" alt="фото"/>{% endcomment %}
+    <hr>
+    <h1>Мои резюме</h1>
+    
+    <table class="table table-striped table_home">
+    <thead>
+      <tr>
+        <th>ID резюме</th>
+		<th>Дата создания</th>
+        <th>Статус</th>
+        <th>Просмотр</th>  
+      </tr>
+    </thead>
+    <tbody>
+	{% for res in resume %}  
+      <tr>
+        <td>{{res.id_resume}}</td>
+		<td>{{res.date_of_creation}}</td>
+        <td>{{res.moderation_status}}</td>
+        <td><button type="submit" class="button">Перейти</button></td>
+      </tr>
+	  {% endfor %} 
+	</tbody>
+</table>	
+    
+</div>
 </body>
 </html>
