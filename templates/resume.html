@@ -6,10 +6,12 @@
         <hr>
         <form id="form-container" method="post">
                     <h2>Личные данные</h2>
+            <hr>
                     {% csrf_token %}
                     {{ student_form.as_p }}
                     <hr>
                     <h2>О работе</h2>
+            <hr>
                     {% csrf_token %}
                     {{ about_job_form.as_p }}
                     <hr>
@@ -24,6 +26,7 @@
 {#            <button id="add-form" type="button">+</button>#}
                     <hr>
                     <h2>Дополнительно</h2>
+            <hr>
                     {% csrf_token %}
                     {{ resume_form.as_p }}
             <button type="submit" class="button">Отправить</button>

@@ -19,8 +19,9 @@
             {{ form.as_p }}
             <p>{{ msg }}</p>
             <button type="submit" class="button">Зарегистрироваться</button>
-            <a href="{% url 'login' %}">к авторизации</a>
+            <p></p>
         </form>
+        <a href="{% url 'login' %}">к авторизации</a>
     </div>
 </div>
 {% comment %}<img src="{% static 'img/cookie.jpg' %}" alt="фото"/>{% endcomment %}

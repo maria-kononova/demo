@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -7,29 +6,31 @@ body {
     padding: 0;
 }
 
-.container {
-    width: 80%;
-    margin: 0 auto;
-}
-
-
 p {
     font-size: 16px;
 }
 
 a {
-    color: #007bff;
+    font-weight: bold;
+    color: #0072ff;
     text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
 }
 
 a:hover {
-    text-decoration: underline;
+    color: #ec103b;
+    transform: scale(1.1);
+}
+
+a:active {
+    color: #000;
 }
 
 h1 {
     font-size: 20px;
 }
-h2{
+
+h2 {
     font-size: 18px;
 }
 
@@ -45,7 +46,10 @@ h2{
     padding: 20px;
     margin: 100px auto;
     width: 60%;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25),
+                0 10px 10px rgba(0,0,0,0.22);
 }
+
 .myfield {
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -56,9 +60,7 @@ h2{
 }
 
 .field-email {
-{
     #width: 210px;
-}
 }
 
 .myfield_select {
@@ -74,14 +76,23 @@ h2{
 }
 
 .button {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    height: 25px;
-    width: auto;
-    margin: 0;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: 15px;
+    font-size: 20px;
+    display: block;
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 70px;
+    margin: 20px auto 0;
+    cursor: pointer;
+    background-image: linear-gradient(to right, #ED1443 0%, #2056AE 51%, #ED1443 100%);
+}
+
+.button:hover {
+     background-position: right center;
 }
 
 hr {
@@ -91,7 +102,7 @@ hr {
     margin: 20px 0;
 }
 
-.table_home{
+.table_home {
     border-collapse: separate;
     border-spacing: 5px 10px;
     margin-left: auto;
@@ -99,7 +110,7 @@ hr {
 
 }
 
-.table_home td{
+.table_home td {
     text-align: center;
     align-content: center;
     padding: .3em 1em;
