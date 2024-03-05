@@ -56,7 +56,11 @@ def myresume(request):
                 print(about_job_form.cleaned_data)
                 user_id = request.user.id
                 user = AuthUser.objects.get(pk=user_id)
-                student = create_student(student_form, user)
+                student_ = Students.objects.filter(id_auth_user=user)
+                if student_.count() != 0:
+                    student = student_[0]
+                else:
+                    student = create_student(student_form, user)
                 resume = create_resume(resume_form, student)
                 education = create_education(education_form, resume)
                 about_job = create_about_job(about_job_form, resume)
