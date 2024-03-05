@@ -4,7 +4,7 @@ import json
 BASE_URL = 'https://api.hh.ru'
 
 
-def get_countries(url):
+def get_from_url(url):
     j = requests.get(f"{BASE_URL}{url}").json()
     # Загрузка JSON-строки в объект Python
     data = json.loads(json.dumps(j))
@@ -14,7 +14,7 @@ def get_countries(url):
         names_list.append((d['id'], d['name']))
     return names_list
 
-def get_info(entity):
+def get_from_dictionaries(entity):
     j = requests.get(f"{BASE_URL}/dictionaries").json()
     # Загрузка JSON-строки в объект Python
     data = json.loads(json.dumps(j))
