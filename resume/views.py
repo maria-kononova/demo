@@ -19,7 +19,7 @@ from .forms import UserRegistrationForm
 import json
 
 from .models import Test, Students, AuthUser, Resume, EducationalInstitution
-from .save import create_student, create_resume, create_education, create_about_job, create_specialization, \
+from .create_object import create_student, create_resume, create_education, create_about_job, create_specialization, \
     create_busyness, create_work_timetable
 
 
@@ -30,7 +30,12 @@ def home(request):
         # template = loader.get_template('home.html')
         # context = {}
         # return HttpResponse(template.render(context, request))
-        resumeList = Resume.objects.all()  # filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
+        user_id = request.user.id
+        user = AuthUser.objects.get(pk=user_id)
+        student = Students.objects.filter(id_auth_user=user)
+        resumeList = []
+        if student.count() != 0:
+            resumeList = Resume.objects.filter(id_student=student[0])  # filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
         return render(request, 'home.html', {'resume': resumeList})
     else:
         return redirect('login')
@@ -112,3 +117,7 @@ def register_view(request):
         return render(request, 'register.html', {'form': form})
     else:
         return redirect('home')
+
+def exit(request):
+    request.session.flush()
+    return redirect('login')

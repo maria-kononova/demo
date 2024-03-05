@@ -35,12 +35,13 @@
 <header class="container-fluid">
         <div class="header-row">
             <div>
-                <a href="#"><img src="{% static 'img/guap-logo.svg' %}" alt="logo" height="60"/></a>
+                <img src="{% static 'img/guap-logo.svg' %}" alt="logo" height="60"/>
             </div>
             <div>
                 <ul>
                     <li><a href="{% url 'home' %}">Мои резюме</a></li>
                     <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
+                    <li><a href="{% url 'exit' %}">Выйти</a></li>
                 </ul>
             </div>
         </div>
