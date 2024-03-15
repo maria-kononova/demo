@@ -35,8 +35,11 @@ def home(request):
         user = AuthUser.objects.get(pk=user_id)
         student = Students.objects.filter(id_auth_user=user)
         resumeList = []
-        if student.count() != 0:
-            resumeList = Resume.objects.filter(id_student=student[0])  # filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
+        if user.is_staff:  # Проверяем, является ли пользователь модератором
+            resumeList = Resume.objects.filter(moderation_status='модерация')
+        else:
+            if student.count() != 0:
+                resumeList = Resume.objects.filter(id_student=student[0])
         return render(request, 'home.html', {'resume': resumeList})
     else:
         return redirect('login')
