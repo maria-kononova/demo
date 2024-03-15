@@ -7,6 +7,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import Group
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
@@ -93,12 +94,14 @@ def login_view(request):
             login_data = request.POST.dict()
             username = login_data.get("username")
             password = login_data.get("password")
-            print(username, password)
-            # user = auth(username=username, password=password)
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Перенаправление на главную страницу после успешной авторизации
+                if user.is_staff == 1:  # Если is_staff равно 1, то пользователь - модератор
+                    user_type = 'Модератор'
+                else:
+                    user_type = 'Студент'
+                return render(request, 'home.html', {'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
             else:
                 form = UserLoginForm()
                 return render(request, 'login.html', {'form': form, 'msg': "Пароль или имя пользователя неверное"})
@@ -106,7 +109,10 @@ def login_view(request):
             form = UserLoginForm()
         return render(request, 'login.html', {'form': form, 'msg': ""})
     else:
-        return redirect('home')
+        user_type = 'Модератор' if request.user.is_staff == 1 else 'Студент'
+        return render(request, 'home.html', {'user_type': user_type})
+
+
 
 
 def register_view(request):

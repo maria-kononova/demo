@@ -3,8 +3,8 @@
 <div class="container"></div>
 <div class="block">
     <h1>Домашняя страница</h1>
+    <p>Роль пользователя: {{ user_type }}</p>  {# Выводим первую группу пользователя #}
     <a href="{% url 'myresume' %}">К созданию резюме!</a>
-    {% comment %}<img src="{% static 'img/cookie.jpg' %}" alt="фото"/>{% endcomment %}
     <hr>
     <h1>Мои резюме</h1>
 
@@ -20,9 +20,9 @@
     <tbody>
 	{% for res in resume %}
       <tr>
-        <td>{{res.id_resume}}</td>
-		<td>{{res.date_of_creation}}</td>
-        <td>{{res.moderation_status}}</td>
+        <td>{{ res.id_resume }}</td>
+		<td>{{ res.date_of_creation }}</td>
+        <td>{{ res.moderation_status }}</td>
         <td><button type="submit" class="button">Перейти</button></td>
       </tr>
 	  {% endfor %}
@@ -31,4 +31,3 @@
 
 </div>
 {% endblock %}
-{% comment %}<img src="{% static 'img/cookie.jpg' %}" alt="фото"/>{% endcomment %}
