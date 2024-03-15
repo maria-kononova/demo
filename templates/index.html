@@ -40,7 +40,9 @@
             <div>
                 <ul>
                     <li><a href="{% url 'home' %}">Мои резюме</a></li>
+                    {% if user_type == 'Студент' %}
                     <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
+                    {% endif %}
                     <li><a href="{% url 'exit' %}">Выйти</a></li>
                 </ul>
             </div>

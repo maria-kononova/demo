@@ -3,10 +3,13 @@
 <div class="container"></div>
 <div class="block">
     <h1>Домашняя страница</h1>
-    <p>Роль пользователя: {{ user_type }}</p>  {# Выводим первую группу пользователя #}
-    <a href="{% url 'myresume' %}">К созданию резюме!</a>
+    <p>Роль пользователя: {{ request.session.user_type }}</p>
+        {% if request.session.user_type == 'Студент' %}
+            <a href="{% url 'myresume' %}">К созданию резюме!</a>
+        {% endif %}
     <hr>
-    <h1>Мои резюме</h1>
+    <h1>{% if request.session.user_type == 'Студент' %}Мои резюме{% elif request.session.user_type == 'Модератор' %}Резюме{% endif %}</h1>
+
 
     <table class="table table-striped table_home">
     <thead>

@@ -104,6 +104,7 @@ def login_view(request):
                     user_type = 'Модератор'
                 else:
                     user_type = 'Студент'
+                request.session['user_type'] = user_type
                 return render(request, 'home.html', {'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
             else:
                 form = UserLoginForm()
