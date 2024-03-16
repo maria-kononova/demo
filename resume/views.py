@@ -35,7 +35,8 @@ def home(request):
         student = Students.objects.filter(id_auth_user=user)
         resumeList = []
         if student.count() != 0:
-            resumeList = Resume.objects.filter(id_student=student[0])  # filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
+            resumeList = Resume.objects.filter(
+                id_student=student[0])  # filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
         return render(request, 'home.html', {'resume': resumeList})
     else:
         return redirect('login')
@@ -122,6 +123,38 @@ def register_view(request):
     else:
         return redirect('home')
 
+
 def exit(request):
     request.session.flush()
     return redirect('login')
+
+
+def account(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            print(list(request.POST.items()))
+            student_form = StudentForm(request.POST)
+
+            if student_form.is_valid():
+                print(student_form.cleaned_data)
+                user_id = request.user.id
+                user = AuthUser.objects.get(pk=user_id)
+                student_ = Students.objects.filter(id_auth_user=user)
+                if student_.count() != 0:
+                    student = student_[0]
+                else:
+                    student = create_student(student_form, user)
+                with transaction.atomic():
+                    student.save()
+                    return redirect('account')
+        else:
+            user_id = request.user.id
+            user = AuthUser.objects.get(pk=user_id)
+            studentList = []
+            studentList = Students.objects.filter(id_auth_user=user)
+            # resumeList = []
+            # if student.count() != 0:
+            #     resumeList = Resume.objects.filter(id_student=student[0])  # filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
+            return render(request, 'account.html', {'student': studentList, 'student_form_account': StudentForm()})
+    else:
+        return redirect('login')

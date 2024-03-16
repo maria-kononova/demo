@@ -5,30 +5,30 @@
         <h1>Создание резюме</h1>
         <hr>
         <form id="form-container" method="post">
-                    <h2>Личные данные</h2>
+            <h2>Личные данные</h2>
             <hr>
-                    {% csrf_token %}
-                    {{ student_form.as_p }}
-                    <hr>
-                    <h2>О работе</h2>
+            {% csrf_token %}
+            {{ student_form.as_p }}
             <hr>
-                    {% csrf_token %}
-                    {{ about_job_form.as_p }}
-                    <hr>
+            <h2>О работе</h2>
+            <hr>
+            {% csrf_token %}
+            {{ about_job_form.as_p }}
+            <hr>
             <h2>Образование</h2>
-{#            {% for education_form in education_formset %}#}
-                <hr>
-                <div class="bird-form">
-                    {% csrf_token %}
-                    {{ education_form.as_p }}
-                </div>
-{#            {% endfor %}#}
-{#            <button id="add-form" type="button">+</button>#}
-                    <hr>
-                    <h2>Дополнительно</h2>
+            {#            {% for education_form in education_formset %}#}
             <hr>
-                    {% csrf_token %}
-                    {{ resume_form.as_p }}
+            <div class="bird-form">
+                {% csrf_token %}
+                {{ education_form.as_p }}
+            </div>
+            {#            {% endfor %}#}
+            {#            <button id="add-form" type="button">+</button>#}
+            <hr>
+            <h2>Дополнительно</h2>
+            <hr>
+            {% csrf_token %}
+            {{ resume_form.as_p }}
             <button type="submit" class="button">Отправить</button>
         </form>
     </div>
