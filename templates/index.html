@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,19 +33,21 @@
 </head>
 <body>
 <header class="container-fluid">
-    <div class="header-row">
-        <div>
-            <img src="{% static 'img/guap-logo.svg' %}" alt="logo" height="60"/>
+        <div class="header-row">
+            <div>
+                <img src="{% static 'img/guap-logo.svg' %}" alt="logo" height="60"/>
+            </div>
+            <div>
+                <ul>
+                    <li><a href="{% url 'account' %}">Аккаунт</a></li>
+                    <li><a href="{% url 'home' %}">Мои резюме</a></li>
+                    {% if user_type == 'Студент' %}
+                    <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'exit' %}">Выйти</a></li>
+                </ul>
+            </div>
         </div>
-        <div>
-            <ul>
-                <li><a href="{% url 'account' %}">Аккаунт</a></li>
-                <li><a href="{% url 'home' %}">Мои резюме</a></li>
-                <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
-                <li><a href="{% url 'exit' %}">Выйти</a></li>
-            </ul>
-        </div>
-    </div>
 </header>
 <div class="container mt-4">
     {% block content %}

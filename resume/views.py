@@ -7,6 +7,7 @@ from django.template import loader
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import Group
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
@@ -34,9 +35,11 @@ def home(request):
         user = AuthUser.objects.get(pk=user_id)
         student = Students.objects.filter(id_auth_user=user)
         resumeList = []
-        if student.count() != 0:
-            resumeList = Resume.objects.filter(
-                id_student=student[0])  # filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
+        if user.is_staff:  # Проверяем, является ли пользователь модератором
+            resumeList = Resume.objects.filter(moderation_status='модерация')
+        else:
+            if student.count() != 0:
+                resumeList = Resume.objects.filter(id_student=student[0])
         return render(request, 'home.html', {'resume': resumeList})
     else:
         return redirect('login')
@@ -94,12 +97,15 @@ def login_view(request):
             login_data = request.POST.dict()
             username = login_data.get("username")
             password = login_data.get("password")
-            print(username, password)
-            # user = auth(username=username, password=password)
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')  # Перенаправление на главную страницу после успешной авторизации
+                if user.is_staff == 1:  # Если is_staff равно 1, то пользователь - модератор
+                    user_type = 'Модератор'
+                else:
+                    user_type = 'Студент'
+                request.session['user_type'] = user_type
+                return render(request, 'home.html', {'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
             else:
                 form = UserLoginForm()
                 return render(request, 'login.html', {'form': form, 'msg': "Пароль или имя пользователя неверное"})
@@ -107,7 +113,10 @@ def login_view(request):
             form = UserLoginForm()
         return render(request, 'login.html', {'form': form, 'msg': ""})
     else:
-        return redirect('home')
+        user_type = 'Модератор' if request.user.is_staff == 1 else 'Студент'
+        return render(request, 'home.html', {'user_type': user_type})
+
+
 
 
 def register_view(request):
@@ -122,7 +131,6 @@ def register_view(request):
         return render(request, 'register.html', {'form': form})
     else:
         return redirect('home')
-
 
 def exit(request):
     request.session.flush()

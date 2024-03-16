@@ -35,6 +35,7 @@ def create_resume(resume_form, student):
                       resume_form.cleaned_data.get('desired_time_in_the_way')),
                   availability_car=resume_form.cleaned_data.get('availability_car'),
                   locale_resume=resume_form.cleaned_data.get('locale_resume'),
+                  moderation_status='модерация',
                   date_of_creation=datetime.datetime.now())
 
 
