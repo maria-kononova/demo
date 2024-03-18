@@ -135,3 +135,6 @@ def register_view(request):
 def exit(request):
     request.session.flush()
     return redirect('login')
+
+def go_to_sample(request):
+    return render(request, 'sample.html')
