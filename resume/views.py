@@ -1,7 +1,7 @@
 import datetime
 from django.forms import formset_factory
 from django.db import transaction
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 import requests
 from django.template import loader
 from django.http import HttpResponse
@@ -48,16 +48,11 @@ def home(request):
 def myresume(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            print(list(request.POST.items()))
             student_form = StudentForm(request.POST)
             resume_form = ResumeForm(request.POST)
             education_form = EducationForm(request.POST)
             about_job_form = AboutJobForm(request.POST)
             if student_form.is_valid() and resume_form.is_valid() and education_form.is_valid() and about_job_form.is_valid():
-                print(student_form.cleaned_data)
-                print(resume_form.cleaned_data)
-                print(education_form.cleaned_data)
-                print(about_job_form.cleaned_data)
                 user_id = request.user.id
                 user = AuthUser.objects.get(pk=user_id)
                 student_ = Students.objects.filter(id_auth_user=user)
@@ -79,7 +74,7 @@ def myresume(request):
                     specialization.save()
                     busyness.save()
                     work_timetable.save()
-                    return redirect('home')
+                return redirect('home')
         else:
             return render(request, 'resume.html', {'student_form': StudentForm(), 'resume_form': ResumeForm(),
                                                    'education_form': EducationForm(), 'about_job_form': AboutJobForm()})
@@ -140,9 +135,9 @@ def exit(request):
 def account(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
+            # Сохранение данных пользователя
             print(list(request.POST.items()))
             student_form = StudentForm(request.POST)
-
             if student_form.is_valid():
                 print(student_form.cleaned_data)
                 user_id = request.user.id
@@ -156,13 +151,49 @@ def account(request):
                     student.save()
                     return redirect('account')
         else:
+            # Вывод данных пользователя
+            update_check = 0
             user_id = request.user.id
             user = AuthUser.objects.get(pk=user_id)
-            studentList = []
             studentList = Students.objects.filter(id_auth_user=user)
-            # resumeList = []
-            # if student.count() != 0:
-            #     resumeList = Resume.objects.filter(id_student=student[0])  # filter(id_student='1') # 1 нужно заменить на ИД студента!!! и убрать ".all()"
-            return render(request, 'account.html', {'student': studentList, 'student_form_account': StudentForm()})
+            return render(request, 'account.html',
+                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
+    else:
+        return redirect('login')
+
+def account_edit(request):
+    if request.user.is_authenticated:
+        # student = get_object_or_404(Students, pk=pk)
+        user_id = request.user.id
+        user = AuthUser.objects.get(pk=user_id)
+        update_check = 1
+        if request.method == "POST":
+            # Сохранение измененных данных
+            #form = StudentForm(request.POST, instance=student)
+            student_form = StudentForm(request.POST)
+            if student_form.is_valid():
+                student_ = Students.objects.filter(id_auth_user=user)
+                student = student_[0]
+                student.surname = request.POST['surname']
+                student.name = request.POST['name']
+                student.middle_name = request.POST['middle_name']
+                # С датой проблемки ((
+                # student.birthdate = student_form.cleaned_data['birthday']
+                # student.birthdate = request.POST['birthday_year'] + "-" + request.POST['birthday_month'] + "-" + request.POST['birthday_day']
+                student.gender = request.POST['gender']
+                student.phone = request.POST['phone']
+                student.email = request.POST['email']
+                student.types_of_communication = request.POST['types_of_communication']
+                student.education_level = request.POST['education_level']
+                with transaction.atomic():
+                    # Добавьте 'birthday'
+                    student.save(update_fields=['surname', 'name', 'middle_name', 'gender', 'phone', 'email', 'types_of_communication', 'education_level'])
+                return redirect('account')
+        else:
+            # Вывод формы для изменения данных (сами данные из бд пока не выгружаются для редактирования)
+            #form = StudentForm(instance=student)
+            studentList = Students.objects.filter(id_auth_user=user)
+            return render(request, 'account.html',
+                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
     else:
         return redirect('login')

@@ -9,6 +9,7 @@ from resume.dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, ED
     STATION_METRO_CHOICES, POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES, \
     DRIVING_LISENSE_CHOICES, LOCALE_RESUME_CHOICES, SPECIALIZATION_CHOICES, CURRENCY_CHOICES, BUSYNESS_CHOICES, \
     WORK_TIME_CHOICES, COUNTRY_CHOICES, LANGUAGE_CHOICES, PROFICIENCY_LEVEL_CHOICES
+from resume.models import Students
 
 year = datetime.now().year
 
@@ -45,6 +46,11 @@ class StudentForm(forms.Form):
                                                widget=forms.Select(attrs={"class": "myfield_select"}))
     education_level = forms.ChoiceField(label='Уровень образования', choices=EDUCATION_LEVEL_CHOICES,
                                         widget=forms.Select(attrs={"class": "myfield_select"}))
+
+    # class Meta:
+    #     model = Students
+    #     fields = ['content']
+    #     #fields = ('surname', 'name', 'middle_name', 'birthday', 'gender', 'phone', 'email', 'types_of_communication', 'education_level')
 
 
 class ResumeForm(forms.Form):
