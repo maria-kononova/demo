@@ -41,6 +41,7 @@
             </div>
             <div>
                 <ul>
+                    <li><a href="{% url 'account' %}">Аккаунт</a></li>
                     <li><a href="{% url 'home' %}">Мои резюме</a></li>
                     {% if request.session.user_type == 'Студент' %}
                     <li><a href="{% url 'myresume' %}">Создать резюме</a></li>

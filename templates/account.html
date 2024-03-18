@@ -1,0 +1,46 @@
+{% extends 'index.html' %}
+{% block content %}
+    <div class="container"></div>
+    <div class="block">
+        <h1>Аккаунт</h1>
+        <hr>
+        {% if student.count == 0 %}
+            <form id="form-container" method="post">
+                <p>Введите ваши данные)</p>
+                {% csrf_token %}
+                {{ student_form_account.as_p }}
+                <button type="submit" class="button">Сохранить</button>
+            </form>
+        {% else %}
+            {% for s in student %}
+                {% if update_check == 1 %}
+                    <form id="form-container" method="post">
+                        <p>Измените ваши данные))</p>
+                        {% csrf_token %}
+                        {{ student_form_account.as_p }}
+                        <button type="submit" class="button">Отмена</button>
+                        <button type="submit" class="button">Сохранить изменения</button>
+                    </form>
+                {% else %}
+                    <form id="form-container" method="get">
+                        <p>Ваши данные)</p>
+                        <p>{{ s.surname }} {{ s.name }} {{ s.middle_name }}</p>
+                        <p>Дата рождения: {{ s.birthdate }}</p>
+                        <p>Пол: {{ s.gender }}</p>
+                        <p>Телефон: {{ s.phone }}</p>
+                        <p>Почта: {{ s.email }}</p>
+                        <p>Вид связи: {{ s.types_of_communication }}</p>
+                        <p>Уровень образования: {{ s.education_level }}</p>
+                        {#<button type="submit" class="button" name="update_btn">Изменить данные</button>#}
+                        {# Нужен именно тег a, с кнопкой не работает( #}
+                        <a class="btn btn-default" href="{% url 'account_edit' %}">Изменить данные</a>
+                    </form>
+                {% endif %}
+
+
+            {% endfor %}
+        {% endif %}
+
+
+    </div>
+{% endblock %}
