@@ -22,7 +22,7 @@
   height: 24.1px;
 }
 
-.79322332456 {
+.t79322332456 {
   margin-bottom: 0.1px;
   display: inline-block;
   overflow-wrap: break-word;
@@ -72,7 +72,7 @@
   height: 39.4px;
 }
 
-.19 {
+.t19 {
   margin: 5px 0;
   display: inline-block;
   overflow-wrap: break-word;
@@ -81,7 +81,8 @@
   font-size: 24px;
   color: #1671C2;
 }
-.20 {
+
+.t20 {
   margin: 5px 0 6.5px 0;
   display: inline-block;
   overflow-wrap: break-word;
@@ -91,7 +92,7 @@
   color: #1671C2;
 }
 
-.21 {
+.t21 {
   margin: 6px 0 4.4px 0;
   display: inline-block;
   overflow-wrap: break-word;
@@ -108,7 +109,7 @@
   height: 5px;
 }
 
-.22 {
+.t22 {
   margin: 0 6px 5px 6px;
   display: inline-block;
   align-self: flex-start;
@@ -129,7 +130,7 @@
   box-sizing: border-box;
 }
 
-.23 {
+.t23 {
   margin: 0 15.1px 6px 0;
   display: inline-block;
   overflow-wrap: break-word;
@@ -138,7 +139,8 @@
   font-size: 16px;
   color: #FFFFFF;
 }
-.24 {
+
+.t24 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -154,7 +156,8 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.25 {
+
+.t25 {
   margin: 0 5.3px 6px 0;
   display: inline-block;
   overflow-wrap: break-word;
@@ -163,7 +166,7 @@
   font-size: 16px;
   color: #FFFFFF;
 }
-.000 {
+.t000 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -178,7 +181,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.26 {
+.t26 {
   margin-bottom: 6px;
   display: inline-block;
   align-self: flex-start;
@@ -189,13 +192,14 @@
   color: #FFFFFF;
 }
 .s-guap-main-1 {
+  background: url("static/img/guap-logo.svg");
   position: absolute;
   left: 20px;
   top: -6px;
   width: 182px;
   height: 94px;
 }
-.27 {
+.t27 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -210,7 +214,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.28 {
+.t28 {
   margin-bottom: 6px;
   display: inline-block;
   overflow-wrap: break-word;
@@ -219,7 +223,7 @@
   font-size: 16px;
   color: #FFFFFF;
 }
-.29 {
+.t29 {
   align-self: flex-start;
   overflow-wrap: break-word;
   font-family: 'Inter';
@@ -236,7 +240,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.30 {
+.t30 {
   margin: 0 1.7px 6px 0;
   display: inline-block;
   overflow-wrap: break-word;
@@ -245,14 +249,14 @@
   font-size: 16px;
   color: #FFFFFF;
 }
-.31 {
+.t31 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
   font-size: 16px;
   color: #FFFFFF;
 }
-.32 {
+.t32 {
   margin: 0 75.9px 15px 0;
   display: inline-block;
   align-self: center;
@@ -270,7 +274,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.33 {
+.t33 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -292,7 +296,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.35 {
+.t35 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -314,7 +318,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.36 {
+.t36 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -336,7 +340,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.37 {
+.t37 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -358,7 +362,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.39 {
+.t39 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -380,7 +384,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.40 {
+.t40 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -402,7 +406,7 @@
   width: fit-content;
   box-sizing: border-box;
 }
-.42 {
+.t42 {
   overflow-wrap: break-word;
   font-family: 'Inter';
   font-weight: 400;
@@ -416,7 +420,7 @@
   width: 10px;
   height: 10px;
 }
-.44 {
+.t44 {
   margin: 0 19px 100px 19px;
   display: inline-block;
   align-self: flex-start;
@@ -426,7 +430,7 @@
   font-size: 16px;
   color: #000000;
 }
-.46 {
+.t46 {
   margin: 0 15px 17px 15px;
   display: inline-block;
   align-self: flex-start;
@@ -436,7 +440,7 @@
   font-size: 16px;
   color: #000000;
 }
-.47 {
+.t47 {
   margin: 0 16px 197px 16px;
   display: inline-block;
   align-self: flex-start;
@@ -454,9 +458,8 @@
   width: 159px;
   height: 240px;
 }
-.container {
+.container-5 {
   background: linear-gradient(354.26deg, #2056AE 39.9%, #2056AE 54.93%, #2056AE 56.73%, #A32B9B 77.46%, #ED1443 100%);
-  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
