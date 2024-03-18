@@ -74,7 +74,7 @@ def myresume(request):
                     specialization.save()
                     busyness.save()
                     work_timetable.save()
-                return redirect('home')
+                    return redirect('home')
         else:
             return render(request, 'resume.html', {'student_form': StudentForm(), 'resume_form': ResumeForm(),
                                                    'education_form': EducationForm(), 'about_job_form': AboutJobForm()})
@@ -131,6 +131,8 @@ def exit(request):
     request.session.flush()
     return redirect('login')
 
+def go_to_sample(request):
+    return render(request, 'sample.html')
 
 def account(request):
     if request.user.is_authenticated:
@@ -188,7 +190,7 @@ def account_edit(request):
                 with transaction.atomic():
                     # Добавьте 'birthday'
                     student.save(update_fields=['surname', 'name', 'middle_name', 'gender', 'phone', 'email', 'types_of_communication', 'education_level'])
-                return redirect('account')
+                    return redirect('account')
         else:
             # Вывод формы для изменения данных (сами данные из бд пока не выгружаются для редактирования)
             #form = StudentForm(instance=student)
