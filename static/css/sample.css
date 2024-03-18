@@ -192,13 +192,12 @@
   color: #FFFFFF;
 }
 .s-guap-main-1 {
-  background: url("static/img/guap-logo.svg");
-  position: absolute;
-  left: 20px;
-  top: -6px;
+  margin: 0 4px 8px 4px;
+  align-self: flex-start;
   width: 182px;
-  height: 94px;
+  height: 82px;
 }
+
 .t27 {
   overflow-wrap: break-word;
   font-family: 'Inter';

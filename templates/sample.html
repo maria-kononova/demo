@@ -4,6 +4,8 @@
 <div class="block">
 <div class="a-45">
   <div class="container-5">
+      {% load static %}
+  <img src="{% static 'img/guap-logo.svg' %}" class="s-guap-main-1"/>
     <div class="foto-na-dokumenty-ot-pechaterfoto-31">
     </div>
     <div class="group-6">
@@ -53,14 +55,14 @@
     </div>
     <div class="container-50">
       <div class="iconphone">
-        <img class="vector-2" />
+        <img src="{% static 'img/icon_phone.svg' %}" class="vector-2" />
       </div>
       <div class="t79322332456">
         +79322332456
       </div>
     </div>
     <div class="container-51">
-      <img class="iconmail" />
+      <img src="{% static 'img/icon_mail.svg' %}" class="iconmail" />
       <span class="bibamail-ru">
         biba@mail.ru
       </span>
@@ -74,7 +76,7 @@
       Должность
     </div>
     <div class="container-49">
-      <img class="iconuser-circle-alt" />
+      <img src="{% static 'img/icon_user.svg' %}" class="iconuser-circle-alt" />
       <div class="t19">
         ЛИЧНАЯ ИНФОРМАЦИЯ
       </div>
@@ -89,7 +91,7 @@
       Готов к командировкам
     </div>
     <div class="container-54">
-      <img class="iconmultiple-pages" />
+      <img src="{% static 'img/icon_multiple.svg' %}" class="iconmultiple-pages" />
       <div class="t20">
         О РАБОТЕ
       </div>
@@ -109,7 +111,7 @@
       </span>
     </div>
     <div class="container-53">
-      <img class="iconbookmark-book" />
+      <img src="{% static 'img/icon_bookmark.svg' %}" class="iconbookmark-book" />
       <div class="t21">
         ОБРАЗОВАНИЕ
       </div>
@@ -150,7 +152,6 @@
       </span>
     </div>
   </div>
-  <img class="s-guap-main-1" />
 </div>
     </div>
 {% endblock %}
