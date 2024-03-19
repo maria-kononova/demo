@@ -128,17 +128,14 @@ def go_to_sample(request, pk):
             return redirect('go_to_sample')
         else:
             # Вывод данных резюме
-            user_id = request.user.id
-            user = AuthUser.objects.get(pk=user_id)
-            student_ = Students.objects.filter(id_auth_user=user)
-            student = student_[0]
-            resume = Resume.objects.filter(pk=pk, id_student=student.id_student)
+            resume = Resume.objects.filter(pk=pk)
+            student = Students.objects.filter(id_student=resume[0].id_student.id_student)
             about_job = AboutJob.objects.filter(id_resume=resume[0].id_resume)
             specialization = Specialization.objects.filter(id_about_job=about_job[0].id_about_job)
             busyness = Busyness.objects.filter(id_about_job=about_job[0].id_about_job)
             work_timetable = WorkTimetable.objects.filter(id_about_job=about_job[0].id_about_job)
             educational_institution = EducationalInstitution.objects.filter(id_resume=resume[0].id_resume)
-            return render(request, 'sample.html', {'student': student, 'resume': resume[0],
+            return render(request, 'sample.html', {'student': student[0], 'resume': resume[0],
                                                    'about_job': about_job[0], 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
                                                    'educational_institution': educational_institution[0]})
