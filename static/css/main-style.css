@@ -46,7 +46,7 @@ h2 {
     border: 1px solid #ccc;
     padding: 20px;
     margin: 100px auto;
-    width: 60%;
+    width: 90%;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
                 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -67,13 +67,12 @@ h2 {
 .myfield_select {
     border: 1px solid #ccc;
     border-radius: 5px;
-    height: 25px;
     width: auto;
     margin: 0;
 }
 
 .field_salary {
-    width: 90px;
+    width: 180px;
 }
 
 .button {
@@ -172,4 +171,25 @@ td:last-child {
 .table_home td {
     border: 1px solid #cccccc; /* Задаёт тонкие светло-серые границы ячейкам */
     text-align: center; /* Выравнивает текст по центру */
+}
+
+.resume-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2056AE; /* Измените на нужный цвет */
+    margin-bottom: 20px;
+}
+
+.user-role {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #ED1443; /* Измените на нужный цвет */
+    margin-bottom: 15px;
 }
