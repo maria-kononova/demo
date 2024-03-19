@@ -90,8 +90,9 @@ def login_view(request):
                 else:
                     user_type = 'Студент'
                 request.session['user_type'] = user_type
-                return render(request, 'home.html', {
-                    'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
+                return redirect('home')
+                # return render(request, 'home.html', {
+                #     'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
             else:
                 form = UserLoginForm()
                 return render(request, 'login.html', {'form': form, 'msg': "Пароль или имя пользователя неверное"})
@@ -99,8 +100,9 @@ def login_view(request):
             form = UserLoginForm()
         return render(request, 'login.html', {'form': form, 'msg': ""})
     else:
-        user_type = 'Модератор' if request.user.is_staff == 1 else 'Студент'
-        return render(request, 'home.html', {'user_type': user_type})
+        return redirect('home')
+        # user_type = 'Модератор' if request.user.is_staff == 1 else 'Студент'
+        # return render(request, 'home.html', {'user_type': user_type})
 
 
 def register_view(request):
