@@ -103,20 +103,72 @@ hr {
 }
 
 table {
-font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-text-align: left;
-border-collapse: separate;
-border-spacing: 5px;
-background: #ECE9E0;
-color: #656665;
-border: 16px solid #ECE9E0;
-border-radius: 20px;
+    width: 100%;
+    border-collapse: separate; /* Возвращаем, чтобы сохранить скругления */
+    border-spacing: 0; /* Убираем промежуток между ячейками */
+    font-family: Arial, sans-serif;
+    background-color: transparent;
+    margin: 20px 0;
+    border-radius: 10px; /* Скругление углов таблицы */
+    overflow: hidden; /* Обрезает содержимое и подчиняется скруглению углов */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
+
+th, td {
+    text-align: left;
+    padding: 15px 20px;
+    border-bottom: 2px solid #444; /* Сделаем линии более четкими */
+}
+
 th {
-font-size: 18px;
-padding: 10px;
+    background-color: #2056AE;
+    color: white;
+    font-size: 18px;
 }
+
 td {
-background: #F5D7BF;
-padding: 10px;
+    background-color: #FFFFFF;
+    font-size: 16px;
+    color: #333;
+    border-right: 2px solid #444; /* Сделаем линии более четкими */
+}
+
+/* Первая строка таблицы */
+th:first-child {
+    border-top-left-radius: 10px; /* Скругление левого верхнего угла */
+}
+
+th:last-child {
+    border-top-right-radius: 10px; /* Скругление правого верхнего угла */
+}
+
+/* Последняя строка таблицы */
+tr:last-child td:first-child {
+    border-bottom-left-radius: 10px; /* Скругление левого нижнего угла */
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 10px; /* Скругление правого нижнего угла */
+}
+
+tr:last-child td {
+    border-bottom: none; /* Удаление границы снизу у последней строки */
+}
+
+td:last-child {
+    border-right: none; /* Удаление границы справа у последней колонки */
+}
+
+.id-column {
+    font-weight: bold; /* Делает текст жирным */
+}
+
+.table_home th {
+    text-align: center;
+    border: 1px solid #cccccc; /* Задаёт тонкие светло-серые границы заголовкам */
+}
+
+.table_home td {
+    border: 1px solid #cccccc; /* Задаёт тонкие светло-серые границы ячейкам */
+    text-align: center; /* Выравнивает текст по центру */
 }

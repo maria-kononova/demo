@@ -23,7 +23,7 @@
     <tbody>
 	{% for res in resume %}
       <tr>
-        <td>{{ res.id_resume }}</td>
+        <td class="id-column">{{ res.id_resume }}</td>
 		<td>{{ res.date_of_creation }}</td>
         <td>{{ res.moderation_status }}</td>
         <td><a href="{% url 'go_to_sample' %}">Перейти</a></td>
