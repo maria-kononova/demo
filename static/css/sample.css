@@ -67,7 +67,8 @@
 }
 
 .block {
-    padding: 0;
+  padding: 0;
+  width: 80%;
 }
 
 .iconbookmark-book {
@@ -425,7 +426,7 @@
   height: 10px;
 }
 .t44 {
-  margin: 0 19px 100px 19px;
+  margin: 0 19px 20px 19px;
   display: inline-block;
   align-self: flex-start;
   overflow-wrap: break-word;
@@ -445,7 +446,7 @@
   color: #000000;
 }
 .t47 {
-  margin: 0 16px 197px 16px;
+  margin: 0 16px 20px 16px;
   display: inline-block;
   align-self: flex-start;
   overflow-wrap: break-word;

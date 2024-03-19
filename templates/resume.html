@@ -6,17 +6,17 @@
 
     <div class="container"></div>
     <div class="block">
-        <h1 class="title">Создание резюме</h1>
+        <h1 class="page-title">Создание резюме</h1>
         <hr>
         <form id="form-container" method="post">
-            <h2 class="title">О работе</h2>
+            <h2 class="user-role">О работе</h2>
             <hr>
             <div class="bird-form">
             {% csrf_token %}
             {{ about_job_form.as_p }}
             </div>
             <hr>
-            <h2 class="title">Образование</h2>
+            <h2 class="user-role">Образование</h2>
             {#            {% for education_form in education_formset %}#}
             <hr>
             <div class="bird-form">
@@ -26,7 +26,7 @@
             {#            {% endfor %}#}
             {#            <button id="add-form" type="button">+</button>#}
             <hr>
-            <h2 class="title">Дополнительно</h2>
+            <h2 class="user-role">Дополнительно</h2>
             <hr>
             <div class="bird-form">
             {% csrf_token %}
