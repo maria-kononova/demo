@@ -2,13 +2,10 @@
 {% block content %}
     <div class="container"></div>
     <div class="block">
-        <h1>Домашняя страница</h1>
-        <p>Роль пользователя: {{ request.session.user_type }}</p>
-        {% if request.session.user_type == 'Студент' %}
-            <a class="link" href="{% url 'myresume' %}">К созданию резюме!</a>
-        {% endif %}
+        <h1 class="page-title">Домашняя страница</h1>
+        <p class="user-role">Роль пользователя: {{ request.session.user_type }}</p>
         <hr>
-        <h1>{% if request.session.user_type == 'Студент' %}Мои резюме{% elif request.session.user_type == 'Модератор' %}
+        <h1 class="resume-title">{% if request.session.user_type == 'Студент' %}Мои резюме{% elif request.session.user_type == 'Модератор' %}
             Резюме{% endif %}</h1>
 
 
@@ -32,6 +29,8 @@
             {% endfor %}
             </tbody>
         </table>
-
+{% if request.session.user_type == 'Студент' %}
+            <a class="link" href="{% url 'myresume' %}">К созданию резюме!</a>
+        {% endif %}
     </div>
 {% endblock %}
