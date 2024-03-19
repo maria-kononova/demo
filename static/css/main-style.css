@@ -102,16 +102,21 @@ hr {
     margin: 20px 0;
 }
 
-.table_home {
-    border-collapse: separate;
-    border-spacing: 5px 10px;
-    margin-left: auto;
-    margin-right: auto;
-
+table {
+font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+text-align: left;
+border-collapse: separate;
+border-spacing: 5px;
+background: #ECE9E0;
+color: #656665;
+border: 16px solid #ECE9E0;
+border-radius: 20px;
 }
-
-.table_home td {
-    text-align: center;
-    align-content: center;
-    padding: .3em 1em;
+th {
+font-size: 18px;
+padding: 10px;
+}
+td {
+background: #F5D7BF;
+padding: 10px;
 }
