@@ -1,19 +1,14 @@
 {% extends 'index.html' %}
 {% block content %}
-    
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/resume.css' %}"/>
-    
+
     <div class="container"></div>
     <div class="block">
         <h1>Создание резюме</h1>
         <hr>
         <form id="form-container" method="post">
-            <h2>Личные данные</h2>
-            <hr>
-            {% csrf_token %}
-            {{ student_form.as_p }}
-            <hr>
             <h2>О работе</h2>
             <hr>
             {% csrf_token %}

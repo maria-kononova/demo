@@ -28,9 +28,6 @@ from .create_object import create_student, create_resume, create_education, crea
 # request.session.flush() или response.delete_cookie('sessionid') или logout(request) для завершения сессии пользователя
 def home(request):
     if request.user.is_authenticated:
-        # template = loader.get_template('home.html')
-        # context = {}
-        # return HttpResponse(template.render(context, request))
         user_id = request.user.id
         user = AuthUser.objects.get(pk=user_id)
         student = Students.objects.filter(id_auth_user=user)
@@ -48,18 +45,14 @@ def home(request):
 def myresume(request):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            student_form = StudentForm(request.POST)
             resume_form = ResumeForm(request.POST)
             education_form = EducationForm(request.POST)
             about_job_form = AboutJobForm(request.POST)
-            if student_form.is_valid() and resume_form.is_valid() and education_form.is_valid() and about_job_form.is_valid():
+            if resume_form.is_valid() and education_form.is_valid() and about_job_form.is_valid():
                 user_id = request.user.id
                 user = AuthUser.objects.get(pk=user_id)
                 student_ = Students.objects.filter(id_auth_user=user)
-                if student_.count() != 0:
-                    student = student_[0]
-                else:
-                    student = create_student(student_form, user)
+                student = student_[0]
                 resume = create_resume(resume_form, student)
                 education = create_education(education_form, resume)
                 about_job = create_about_job(about_job_form, resume)
@@ -67,7 +60,6 @@ def myresume(request):
                 busyness = create_busyness(about_job_form, about_job)
                 work_timetable = create_work_timetable(about_job_form, about_job)
                 with transaction.atomic():
-                    student.save()
                     resume.save()
                     education.save()
                     about_job.save()
@@ -76,11 +68,8 @@ def myresume(request):
                     work_timetable.save()
                     return redirect('home')
         else:
-            return render(request, 'resume.html', {'student_form': StudentForm(), 'resume_form': ResumeForm(),
+            return render(request, 'resume.html', {'resume_form': ResumeForm(),
                                                    'education_form': EducationForm(), 'about_job_form': AboutJobForm()})
-        # template = loader.get_template('resume.html')
-        # context = {}  # 'student': Students.objects.all().first()
-        # return HttpResponse(template.render(context, request))
     else:
         return redirect('login')
 
@@ -100,7 +89,8 @@ def login_view(request):
                 else:
                     user_type = 'Студент'
                 request.session['user_type'] = user_type
-                return render(request, 'home.html', {'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
+                return render(request, 'home.html', {
+                    'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
             else:
                 form = UserLoginForm()
                 return render(request, 'login.html', {'form': form, 'msg': "Пароль или имя пользователя неверное"})
@@ -110,8 +100,6 @@ def login_view(request):
     else:
         user_type = 'Модератор' if request.user.is_staff == 1 else 'Студент'
         return render(request, 'home.html', {'user_type': user_type})
-
-
 
 
 def register_view(request):
@@ -127,12 +115,15 @@ def register_view(request):
     else:
         return redirect('home')
 
+
 def exit(request):
     request.session.flush()
     return redirect('login')
 
+
 def go_to_sample(request):
     return render(request, 'sample.html')
+
 
 def account(request):
     if request.user.is_authenticated:
@@ -163,6 +154,7 @@ def account(request):
     else:
         return redirect('login')
 
+
 def account_edit(request):
     if request.user.is_authenticated:
         # student = get_object_or_404(Students, pk=pk)
@@ -170,30 +162,32 @@ def account_edit(request):
         user = AuthUser.objects.get(pk=user_id)
         update_check = 1
         if request.method == "POST":
-            # Сохранение измененных данных
-            #form = StudentForm(request.POST, instance=student)
-            student_form = StudentForm(request.POST)
-            if student_form.is_valid():
-                student_ = Students.objects.filter(id_auth_user=user)
-                student = student_[0]
-                student.surname = request.POST['surname']
-                student.name = request.POST['name']
-                student.middle_name = request.POST['middle_name']
-                # С датой проблемки ((
-                # student.birthdate = student_form.cleaned_data['birthday']
-                # student.birthdate = request.POST['birthday_year'] + "-" + request.POST['birthday_month'] + "-" + request.POST['birthday_day']
-                student.gender = request.POST['gender']
-                student.phone = request.POST['phone']
-                student.email = request.POST['email']
-                student.types_of_communication = request.POST['types_of_communication']
-                student.education_level = request.POST['education_level']
-                with transaction.atomic():
-                    # Добавьте 'birthday'
-                    student.save(update_fields=['surname', 'name', 'middle_name', 'gender', 'phone', 'email', 'types_of_communication', 'education_level'])
-                    return redirect('account')
+            if 'edit_btn' in request.POST:
+                # Сохранение измененных данных
+                # form = StudentForm(request.POST, instance=student)
+                student_form = StudentForm(request.POST)
+                if student_form.is_valid():
+                    student_ = Students.objects.filter(id_auth_user=user)
+                    student = student_[0]
+                    student.surname = request.POST['surname']
+                    student.name = request.POST['name']
+                    student.middle_name = request.POST['middle_name']
+                    # С датой проблемки ((
+                    # student.birthdate = student_form.cleaned_data['birthday']
+                    # student.birthdate = request.POST['birthday_year'] + "-" + request.POST['birthday_month'] + "-" + request.POST['birthday_day']
+                    student.gender = request.POST['gender']
+                    student.phone = request.POST['phone']
+                    student.email = request.POST['email']
+                    student.types_of_communication = request.POST['types_of_communication']
+                    student.education_level = request.POST['education_level']
+                    with transaction.atomic():
+                        # Добавьте 'birthday'
+                        student.save(update_fields=['surname', 'name', 'middle_name', 'gender', 'phone', 'email',
+                                                    'types_of_communication', 'education_level'])
+                        return redirect('account')
         else:
             # Вывод формы для изменения данных (сами данные из бд пока не выгружаются для редактирования)
-            #form = StudentForm(instance=student)
+            # form = StudentForm(instance=student)
             studentList = Students.objects.filter(id_auth_user=user)
             return render(request, 'account.html',
                           {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
