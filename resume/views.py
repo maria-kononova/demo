@@ -19,7 +19,8 @@ from .forms import UserLoginForm, StudentForm, ResumeForm, EducationForm, AboutJ
 from .forms import UserRegistrationForm
 import json
 
-from .models import Test, Students, AuthUser, Resume, EducationalInstitution
+from .models import Test, Students, AuthUser, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, \
+    WorkTimetable
 from .create_object import create_student, create_resume, create_education, create_about_job, create_specialization, \
     create_busyness, create_work_timetable
 
@@ -121,8 +122,28 @@ def exit(request):
     return redirect('login')
 
 
-def go_to_sample(request):
-    return render(request, 'sample.html')
+def go_to_sample(request, pk):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            return redirect('go_to_sample')
+        else:
+            # Вывод данных резюме
+            user_id = request.user.id
+            user = AuthUser.objects.get(pk=user_id)
+            student_ = Students.objects.filter(id_auth_user=user)
+            student = student_[0]
+            resume = Resume.objects.filter(pk=pk, id_student=student.id_student)
+            about_job = AboutJob.objects.filter(id_resume=resume[0].id_resume)
+            specialization = Specialization.objects.filter(id_about_job=about_job[0].id_about_job)
+            busyness = Busyness.objects.filter(id_about_job=about_job[0].id_about_job)
+            work_timetable = WorkTimetable.objects.filter(id_about_job=about_job[0].id_about_job)
+            educational_institution = EducationalInstitution.objects.filter(id_resume=resume[0].id_resume)
+            return render(request, 'sample.html', {'student': student, 'resume': resume[0],
+                                                   'about_job': about_job[0], 'specialization': specialization[0],
+                                                   'busyness': busyness[0], 'work_timetable': work_timetable[0],
+                                                   'educational_institution': educational_institution[0]})
+    else:
+        return redirect('login')
 
 
 def account(request):
