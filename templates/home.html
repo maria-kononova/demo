@@ -5,7 +5,7 @@
     <h1>Домашняя страница</h1>
     <p>Роль пользователя: {{ request.session.user_type }}</p>
         {% if request.session.user_type == 'Студент' %}
-            <a href="{% url 'myresume' %}">К созданию резюме!</a>
+            <a class="link" href="{% url 'myresume' %}">К созданию резюме!</a>
         {% endif %}
     <hr>
     <h1>{% if request.session.user_type == 'Студент' %}Мои резюме{% elif request.session.user_type == 'Модератор' %}Резюме{% endif %}</h1>
@@ -26,7 +26,7 @@
         <td class="id-column">{{ res.id_resume }}</td>
 		<td>{{ res.date_of_creation }}</td>
         <td>{{ res.moderation_status }}</td>
-        <td><a href="{% url 'go_to_sample' %}">Перейти</a></td>
+        <td><a class="link" href="{% url 'go_to_sample' %}">Перейти</a></td>
       </tr>
 	  {% endfor %}
 	</tbody>
