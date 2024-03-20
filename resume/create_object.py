@@ -18,7 +18,7 @@ def create_student(student_form, user):
                     types_of_communication=dict(TYPES_OF_COMMUNICATION_CHOICES).get(
                         student_form.cleaned_data.get('types_of_communication')),
                     education_level=dict(EDUCATION_LEVEL_CHOICES).get(
-                        student_form.cleaned_data.get('education_level')), id_auth_user=user)
+                        student_form.cleaned_data.get('education_level')), user=user)
 
 
 def create_resume(resume_form, student):
