@@ -1,7 +1,18 @@
 import requests
 import json
 
+from django.forms import model_to_dict
+from rest_framework import viewsets, generics
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from resume.models import AuthUser, Students, Resume
+from resume.permissions import IsOwnerOrReadOnly, IsOwner, IsOwnerStudent
+from resume.serializers import UserSerializer, StudentsSerializer, ResumesSerializer
+
 BASE_URL = 'https://api.hh.ru'
+URL = "http://localhost:8000/"
 
 
 def get_from_url(url):
@@ -14,6 +25,7 @@ def get_from_url(url):
         names_list.append((d['id'], d['name']))
     return names_list
 
+
 def get_from_dictionaries(entity):
     j = requests.get(f"{BASE_URL}/dictionaries").json()
     # Загрузка JSON-строки в объект Python
@@ -22,6 +34,7 @@ def get_from_dictionaries(entity):
     names_list = [(d['id'], d['name']) for d in data[entity]]
     return names_list
 
+
 def get_currency():
     j = requests.get(f"{BASE_URL}/dictionaries").json()
     # Загрузка JSON-строки в объект Python
@@ -29,6 +42,7 @@ def get_currency():
     # Получение списка имен объектов
     names_list = [(d['code'], d['abbr']) for d in data["currency"]]
     return names_list
+
 
 def get_specialization():
     j = requests.get(f"{BASE_URL}/specializations").json()
@@ -40,6 +54,8 @@ def get_specialization():
     #         list.append((spec['id'], spec['name']))
     list = [(item['id'], item['name']) for item in data]
     return list
+
+
 def auth():
     # client_id = "VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0"
     # client_secret = "JDUG1I830GU1JHKGSOFBVQGH03TG51IS284HP4RC536RJ99BJ2LMVAEHDS0SMLRT"
@@ -103,3 +119,131 @@ def get_access_token(url, client_id, client_secret):
         auth=(client_id, client_secret),
     )
     return response.json()["access_token"]
+
+
+# ___________api________
+class UserAPIView(viewsets.ModelViewSet):
+    queryset = AuthUser.objects.all()
+    serializer_class = UserSerializer
+
+
+# Students POST
+class StudentsAPICreate(generics.ListCreateAPIView):
+    serializer_class = StudentsSerializer
+    permission_classes = (IsAuthenticated,)
+
+    # GET информации о возможности создания нового пользователя
+    def get(self, request, *args, **kwargs):
+        user = self.request.user
+        existing_record = Students.objects.filter(user=user).first()
+        if existing_record:
+            student = Students.objects.filter(user=self.request.user).first()
+            return Response({"message": "You have already submitted a record. You can update your record on: ",
+                             "url": URL + "resume/api/v1/students/update/" + str(student.id_student)}, status=400)
+        custom_result = {'message': 'You can create a new student.'}
+        return Response(custom_result)
+
+    # Добавления id студента в ответ
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Дополнительная логика
+        student = Students.objects.filter(user=self.request.user).first()
+        additional_data = {
+            'ID': str(student.id_student)
+        }
+        response.data.update(additional_data)
+        return response
+
+    # Проверка и создание нового студента
+    def perform_create(self, serializer):
+        student = Students.objects.filter(user=self.request.user).first()
+        if not student:
+            serializer.save(user=self.request.user)
+        else:
+            return Response({"message": "You have already submitted a record. You can update your record on: ",
+                             "url": URL + "resume/api/v1/students/update/" + str(student.id_student)}, status=400)
+
+
+# Students GET
+class StudentsAPIView(generics.RetrieveAPIView):
+    queryset = Students.objects.all()
+    serializer_class = StudentsSerializer
+    permission_classes = (IsOwner,)
+    # def retrieve(self, request, *args, **kwargs):
+    #     instance = self.get_object()
+    #
+    #     # Получение текущего пользователя из запроса
+    #     current_user = request.user
+    #
+    #     # Фильтрация объектов по пользователю
+    #     instance = self.get_queryset().filter(user=current_user).first()
+    #
+    #     serializer = self.get_serializer(instance)
+    #     return Response(serializer.data)
+
+
+# Students PUT
+class StudentsAPIUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Students.objects.all()
+    serializer_class = StudentsSerializer
+    permission_classes = (IsOwner,)
+
+    # добавление данных о ID при UPDATE
+    def perform_update(self, serializer):
+        student = Students.objects.filter(user=self.request.user).first()
+        serializer.save(id_student=student.id_student, user=self.request.user)
+
+
+# Students DELETE
+class StudentsAPIDelete(generics.RetrieveDestroyAPIView):
+    queryset = Students.objects.all()
+    serializer_class = StudentsSerializer
+    permission_classes = (IsOwner,)
+
+
+# GET id студента
+class StudentsAPIViewID(APIView):
+    def get(self, request):
+        student = Students.objects.filter(user=self.request.user).first()
+        if student:
+            return Response({'ID': student.id_student}, status=200)
+        return Response({"message": "You don't have submitted a record. You can create your record on: ",
+                         "url": URL + "resume/api/v1/students/create/"}, status=400)
+
+
+#GET списка ID resume
+class ResumesAPIView(generics.RetrieveAPIView):
+    queryset = Resume.objects.all()
+    serializer_class = ResumesSerializer
+    permission_classes = (IsOwnerStudent,)
+
+
+
+
+# class ResumesAPIViewID(APIView):
+#     def get(self, request):
+#         resume = Resume.objects.filter(id_student=Students.objects.filter(user=self.request.user).first().id_student)
+#         if resume:
+#             return Response({'ID': resume.id_resume}, status=200)
+#         return Response({"message": "You don't have submitted a record."}, status=400)
+
+
+#
+#     def post(self, request):
+#         serializer = StudentsSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({'student': serializer.data})
+#
+#     def put(self, request, *args, **kwargs):
+#         pk = kwargs.get('pk', None)
+#         if not pk:
+#             return Response({"error": "Method PUT not allowed"}, status=404)
+#         try:
+#             instance = Students.objects.get(pk=pk)
+#         except:
+#             return Response({"error": "Object does not exists"}, status=404)
+#         serializer = StudentsSerializer(data=request.data, instance=instance)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response({"students": serializer.data})
