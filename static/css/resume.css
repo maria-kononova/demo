@@ -1,0 +1,101 @@
+.block {
+    width: 100%;
+}
+
+.button {
+    font-size: 20px;
+    display: block;
+    text-align: center;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    box-shadow: 0 0 20px #eee;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 70px;
+    margin: 20px auto 0;
+    cursor: pointer;
+    background-image: linear-gradient(to right, #ED1443 0%, #2056AE 51%, #ED1443 100%);
+    position: relative;
+    top: 0;
+}
+
+.button:hover {
+    background-position: right center;
+}
+
+.button:active {
+    top: 3px;
+    box-shadow: 0 2px 0px #387796;
+    transition: all .2s;
+}
+
+/* Стилизация формы добавления образования */
+.bird-form {
+    background: #e3e3e3;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
+    padding: 16px 20px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, input[type="number"]:focus {
+    border: 1px solid #0253be;
+    outline: none;
+    box-shadow: 0 0 10px #4d6a8f;
+}
+
+input[type="text"]:hover, input[type="password"]:hover, input[type="email"]:hover, input[type="number"]:hover {
+    transform: scale(1.02);
+}
+
+select {
+    padding: 6px 12px;
+    display: inline-block;
+    box-sizing: border-box;
+    border-radius: 4px;
+    transition: 0.3s;
+    cursor: pointer; /* Рекомендуется добавить для улучшения пользовательского интерфейса */
+}
+
+select:focus {
+    border: 1px solid #0253be;
+    outline: none;
+    box-shadow: 0 0 10px #4d6a8f;
+}
+
+select:hover {
+    transform: scale(1.02);
+}
+
+.title {
+    text-align: center;
+    font-weight: bold;
+}
+
+textarea {
+    padding: 6px 12px;
+    display: inline-block;
+    box-sizing: border-box;
+    border-radius: 4px;
+    transition: 0.3s;
+    cursor: pointer; /* Рекомендуется добавить для улучшения пользовательского интерфейса */
+}
+
+textarea:focus {
+    border: 1px solid #0253be;
+    outline: none;
+    box-shadow: 0 0 10px #4d6a8f;
+}
+
+textarea:hover {
+    transform: scale(1.02);
+}

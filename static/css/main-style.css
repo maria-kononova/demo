@@ -10,19 +10,20 @@ p {
     font-size: 16px;
 }
 
-a {
+.link {
     font-weight: bold;
     color: #0072ff;
     text-decoration: none;
     transition: color 0.3s ease, transform 0.3s ease;
 }
 
-a:hover {
+.link:hover {
     color: #ec103b;
-    transform: scale(1.1);
+    transform: scale(1.1) !important;
+    text-decoration: none; /* Полоска снизу не появится */
 }
 
-a:active {
+.link:active {
     color: #000;
 }
 
@@ -37,7 +38,6 @@ h2 {
 .container {
     width: 80%;
     margin: 0 auto;
-    text-align: center;
 }
 
 .block {
@@ -46,7 +46,7 @@ h2 {
     border: 1px solid #ccc;
     padding: 20px;
     margin: 100px auto;
-    width: 60%;
+    width: 90%;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25),
                 0 10px 10px rgba(0,0,0,0.22);
 }
@@ -67,13 +67,12 @@ h2 {
 .myfield_select {
     border: 1px solid #ccc;
     border-radius: 5px;
-    height: 25px;
     width: auto;
     margin: 0;
 }
 
 .field_salary {
-    width: 90px;
+    width: 180px;
 }
 
 .button {
@@ -103,16 +102,94 @@ hr {
     margin: 20px 0;
 }
 
-.table_home {
-    border-collapse: separate;
-    border-spacing: 5px 10px;
-    margin-left: auto;
-    margin-right: auto;
+table {
+    width: 100%;
+    border-collapse: separate; /* Возвращаем, чтобы сохранить скругления */
+    border-spacing: 0; /* Убираем промежуток между ячейками */
+    font-family: Arial, sans-serif;
+    background-color: transparent;
+    margin: 20px 0;
+    border-radius: 10px; /* Скругление углов таблицы */
+    overflow: hidden; /* Обрезает содержимое и подчиняется скруглению углов */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
 
+th, td {
+    text-align: left;
+    padding: 15px 20px;
+    border-bottom: 2px solid #444; /* Сделаем линии более четкими */
+}
+
+th {
+    background-color: #2056AE;
+    color: white;
+    font-size: 18px;
+}
+
+td {
+    background-color: #FFFFFF;
+    font-size: 16px;
+    color: #333;
+    border-right: 2px solid #444; /* Сделаем линии более четкими */
+}
+
+/* Первая строка таблицы */
+th:first-child {
+    border-top-left-radius: 10px; /* Скругление левого верхнего угла */
+}
+
+th:last-child {
+    border-top-right-radius: 10px; /* Скругление правого верхнего угла */
+}
+
+/* Последняя строка таблицы */
+tr:last-child td:first-child {
+    border-bottom-left-radius: 10px; /* Скругление левого нижнего угла */
+}
+
+tr:last-child td:last-child {
+    border-bottom-right-radius: 10px; /* Скругление правого нижнего угла */
+}
+
+tr:last-child td {
+    border-bottom: none; /* Удаление границы снизу у последней строки */
+}
+
+td:last-child {
+    border-right: none; /* Удаление границы справа у последней колонки */
+}
+
+.id-column {
+    font-weight: bold; /* Делает текст жирным */
+}
+
+.table_home th {
+    text-align: center;
+    border: 1px solid #cccccc; /* Задаёт тонкие светло-серые границы заголовкам */
 }
 
 .table_home td {
+    border: 1px solid #cccccc; /* Задаёт тонкие светло-серые границы ячейкам */
+    text-align: center; /* Выравнивает текст по центру */
+}
+
+.resume-title {
     text-align: center;
-    align-content: center;
-    padding: .3em 1em;
+    font-weight: bold;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #2056AE; /* Измените на нужный цвет */
+    margin-bottom: 20px;
+}
+
+.user-role {
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+    color: #ED1443; /* Измените на нужный цвет */
+    margin-bottom: 15px;
 }

@@ -1,0 +1,25 @@
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.account-form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+@keyframes pulseColor {
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 123, 255, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 0 15px rgba(0, 123, 255, 0);
+  }
+}
+
+.btn:hover {
+  animation: pulseColor 1s ease-out infinite;
+}

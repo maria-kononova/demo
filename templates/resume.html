@@ -1,34 +1,37 @@
 {% extends 'index.html' %}
 {% block content %}
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/resume.css' %}"/>
+
     <div class="container"></div>
     <div class="block">
-        <h1>Создание резюме</h1>
+        <h1 class="page-title">Создание резюме</h1>
         <hr>
         <form id="form-container" method="post">
-                    <h2>Личные данные</h2>
+            <h2 class="user-role">О работе</h2>
             <hr>
-                    {% csrf_token %}
-                    {{ student_form.as_p }}
-                    <hr>
-                    <h2>О работе</h2>
+            <div class="bird-form">
+            {% csrf_token %}
+            {{ about_job_form.as_p }}
+            </div>
             <hr>
-                    {% csrf_token %}
-                    {{ about_job_form.as_p }}
-                    <hr>
-            <h2>Образование</h2>
-{#            {% for education_form in education_formset %}#}
-                <hr>
-                <div class="bird-form">
-                    {% csrf_token %}
-                    {{ education_form.as_p }}
-                </div>
-{#            {% endfor %}#}
-{#            <button id="add-form" type="button">+</button>#}
-                    <hr>
-                    <h2>Дополнительно</h2>
+            <h2 class="user-role">Образование</h2>
+            {#            {% for education_form in education_formset %}#}
             <hr>
-                    {% csrf_token %}
-                    {{ resume_form.as_p }}
+            <div class="bird-form">
+                {% csrf_token %}
+                {{ education_form.as_p }}
+            </div>
+            {#            {% endfor %}#}
+            {#            <button id="add-form" type="button">+</button>#}
+            <hr>
+            <h2 class="user-role">Дополнительно</h2>
+            <hr>
+            <div class="bird-form">
+            {% csrf_token %}
+            {{ resume_form.as_p }}
+            </div>
             <button type="submit" class="button">Отправить</button>
         </form>
     </div>
