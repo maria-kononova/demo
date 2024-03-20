@@ -47,7 +47,7 @@ def create_education(education_form, resume):
                                       'name_of_institution'),
                                   faculty=education_form.cleaned_data.get('faculty'),
                                   specialization=education_form.cleaned_data.get('specialization_of_institution'),
-                                  year_of_completion="2024",
+                                  year_of_completion='2024', #!!!!!!!!!!!!!!
                                   level_education=dict(EDUCATION_LEVEL_CHOICES).get(
                                       education_form.cleaned_data.get('level_education')))
 
