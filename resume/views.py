@@ -29,9 +29,8 @@ from .create_object import create_student, create_resume, create_education, crea
 # request.session.flush() или response.delete_cookie('sessionid') или logout(request) для завершения сессии пользователя
 def home(request):
     if request.user.is_authenticated:
-        user_id = request.user.id
-        user = AuthUser.objects.get(pk=user_id)
-        student = Students.objects.filter(id_auth_user=user)
+        user= request.user
+        student = Students.objects.filter(user=user)
         resumeList = []
         if user.is_staff:  # Проверяем, является ли пользователь модератором
             resumeList = Resume.objects.filter(moderation_status='модерация')
@@ -40,7 +39,7 @@ def home(request):
                 resumeList = Resume.objects.filter(id_student=student[0])
         return render(request, 'home.html', {'resume': resumeList})
     else:
-        return redirect('login')
+        return redirect('auth')
 
 
 def myresume(request):
@@ -50,9 +49,8 @@ def myresume(request):
             education_form = EducationForm(request.POST)
             about_job_form = AboutJobForm(request.POST)
             if resume_form.is_valid() and education_form.is_valid() and about_job_form.is_valid():
-                user_id = request.user.id
-                user = AuthUser.objects.get(pk=user_id)
-                student_ = Students.objects.filter(id_auth_user=user)
+                user= request.user
+                student_ = Students.objects.filter(user=user)
                 student = student_[0]
                 resume = create_resume(resume_form, student)
                 education = create_education(education_form, resume)
@@ -72,7 +70,7 @@ def myresume(request):
             return render(request, 'resume.html', {'resume_form': ResumeForm(),
                                                    'education_form': EducationForm(), 'about_job_form': AboutJobForm()})
     else:
-        return redirect('login')
+        return redirect('auth')
 
 
 def login_view(request):
@@ -121,7 +119,7 @@ def register_view(request):
 
 def exit(request):
     request.session.flush()
-    return redirect('login')
+    return redirect('auth')
 
 
 def go_to_sample(request, pk):
@@ -142,7 +140,7 @@ def go_to_sample(request, pk):
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
                                                    'educational_institution': educational_institution[0]})
     else:
-        return redirect('login')
+        return redirect('auth')
 
 
 def account(request):
@@ -153,9 +151,8 @@ def account(request):
             student_form = StudentForm(request.POST)
             if student_form.is_valid():
                 print(student_form.cleaned_data)
-                user_id = request.user.id
-                user = AuthUser.objects.get(pk=user_id)
-                student_ = Students.objects.filter(id_auth_user=user)
+                user = request.user
+                student_ = Students.objects.filter(user=user)
                 if student_.count() != 0:
                     student = student_[0]
                 else:
@@ -166,13 +163,12 @@ def account(request):
         else:
             # Вывод данных пользователя
             update_check = 0
-            user_id = request.user.id
-            user = AuthUser.objects.get(pk=user_id)
-            studentList = Students.objects.filter(id_auth_user=user)
+            user = request.user
+            studentList = Students.objects.filter(user=user)
             return render(request, 'account.html',
                           {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
     else:
-        return redirect('login')
+        return redirect('auth')
 
 
 def account_edit(request):
@@ -187,7 +183,7 @@ def account_edit(request):
                 # form = StudentForm(request.POST, instance=student)
                 student_form = StudentForm(request.POST)
                 if student_form.is_valid():
-                    student_ = Students.objects.filter(id_auth_user=user)
+                    student_ = Students.objects.filter(user=user)
                     student = student_[0]
                     student.surname = request.POST['surname']
                     student.name = request.POST['name']
@@ -208,8 +204,8 @@ def account_edit(request):
         else:
             # Вывод формы для изменения данных (сами данные из бд пока не выгружаются для редактирования)
             # form = StudentForm(instance=student)
-            studentList = Students.objects.filter(id_auth_user=user)
+            studentList = Students.objects.filter(user=user)
             return render(request, 'account.html',
                           {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
     else:
-        return redirect('login')
+        return redirect('auth')
