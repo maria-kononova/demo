@@ -50,8 +50,7 @@ def myresume(request):
             about_job_form = AboutJobForm(request.POST)
             if resume_form.is_valid() and education_form.is_valid() and about_job_form.is_valid():
                 user= request.user
-                student_ = Students.objects.filter(user=user)
-                student = student_[0]
+                student = Students.objects.filter(user=user).first()
                 resume = create_resume(resume_form, student)
                 education = create_education(education_form, resume)
                 about_job = create_about_job(about_job_form, resume)
@@ -128,15 +127,15 @@ def go_to_sample(request, pk):
             return redirect('go_to_sample')
         else:
             # Вывод данных резюме
-            resume = Resume.objects.filter(pk=pk)
-            student = Students.objects.filter(id_student=resume[0].id_student.id_student)
-            about_job = AboutJob.objects.filter(id_resume=resume[0].id_resume)
-            specialization = Specialization.objects.filter(id_about_job=about_job[0].id_about_job)
-            busyness = Busyness.objects.filter(id_about_job=about_job[0].id_about_job)
-            work_timetable = WorkTimetable.objects.filter(id_about_job=about_job[0].id_about_job)
-            educational_institution = EducationalInstitution.objects.filter(id_resume=resume[0].id_resume)
-            return render(request, 'sample.html', {'student': student[0], 'resume': resume[0],
-                                                   'about_job': about_job[0], 'specialization': specialization[0],
+            resume = Resume.objects.filter(pk=pk).first()
+            student = Students.objects.filter(id_student=resume.id_student.id_student).first()
+            about_job = AboutJob.objects.filter(id_resume=resume.id_resume).first()
+            specialization = Specialization.objects.filter(id_about_job=about_job.id_about_job)
+            busyness = Busyness.objects.filter(id_about_job=about_job.id_about_job)
+            work_timetable = WorkTimetable.objects.filter(id_about_job=about_job.id_about_job)
+            educational_institution = EducationalInstitution.objects.filter(id_resume=resume.id_resume)
+            return render(request, 'sample.html', {'student': student, 'resume': resume,
+                                                   'about_job': about_job, 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
                                                    'educational_institution': educational_institution[0]})
     else:
@@ -152,14 +151,10 @@ def account(request):
             if student_form.is_valid():
                 print(student_form.cleaned_data)
                 user = request.user
-                student_ = Students.objects.filter(user=user)
-                if student_.count() != 0:
-                    student = student_[0]
-                else:
-                    student = create_student(student_form, user)
+                student = create_student(student_form, user, None)
                 with transaction.atomic():
                     student.save()
-                    return redirect('account')
+                return redirect('account')
         else:
             # Вывод данных пользователя
             update_check = 0
@@ -174,8 +169,7 @@ def account(request):
 def account_edit(request):
     if request.user.is_authenticated:
         # student = get_object_or_404(Students, pk=pk)
-        user_id = request.user.id
-        user = AuthUser.objects.get(pk=user_id)
+        user = request.user
         update_check = 1
         if request.method == "POST":
             if 'edit_btn' in request.POST:
@@ -183,22 +177,10 @@ def account_edit(request):
                 # form = StudentForm(request.POST, instance=student)
                 student_form = StudentForm(request.POST)
                 if student_form.is_valid():
-                    student_ = Students.objects.filter(user=user)
-                    student = student_[0]
-                    student.surname = request.POST['surname']
-                    student.name = request.POST['name']
-                    student.middle_name = request.POST['middle_name']
-                    # С датой проблемки ((
-                    # student.birthdate = student_form.cleaned_data['birthday']
-                    # student.birthdate = request.POST['birthday_year'] + "-" + request.POST['birthday_month'] + "-" + request.POST['birthday_day']
-                    student.gender = request.POST['gender']
-                    student.phone = request.POST['phone']
-                    student.email = request.POST['email']
-                    student.types_of_communication = request.POST['types_of_communication']
-                    student.education_level = request.POST['education_level']
+                    id_student = Students.objects.filter(user=user).first().id_student
+                    student = create_student(student_form, user, id_student)
                     with transaction.atomic():
-                        # Добавьте 'birthday'
-                        student.save(update_fields=['surname', 'name', 'middle_name', 'gender', 'phone', 'email',
+                        student.save(update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone', 'email',
                                                     'types_of_communication', 'education_level'])
                         return redirect('account')
         else:

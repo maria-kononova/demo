@@ -36,7 +36,7 @@ class StudentForm(forms.Form):
     name = forms.CharField(label='Имя', max_length=30, widget=forms.TextInput(attrs={"class": "myfield"}))
     middle_name = forms.CharField(label='Отчество', max_length=30, widget=forms.TextInput(attrs={"class": "myfield"}))
     # photo = forms.FileField(label='Фото', widget=forms.FileInput(attrs={"class": "myfield_select"}))
-    birthday = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget(years=range(year, year - 101, -1),
+    birthdate = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget(years=range(year, year - 101, -1),
                                                                                     attrs={"class": "myfield_select"}))
     gender = forms.ChoiceField(label='Пол', choices=GENDER_CHOICES,
                                widget=forms.Select(attrs={"class": "myfield_select"}))

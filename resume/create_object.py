@@ -6,12 +6,13 @@ from resume.dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, ED
 from resume.models import Students, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, WorkTimetable
 
 
-def create_student(student_form, user):
-    new_student_id = Students.objects.all().count() + 1
-    return Students(id_student=new_student_id, surname=student_form.cleaned_data.get('surname'),
+def create_student(student_form, user, id):
+    if not id:
+        id = Students.objects.all().count() + 1
+    return Students(id_student=id, surname=student_form.cleaned_data.get('surname'),
                     name=student_form.cleaned_data.get('name'),
                     middle_name=student_form.cleaned_data.get('middle_name'),
-                    birthdate=student_form.cleaned_data.get('birthday'),
+                    birthdate=student_form.cleaned_data.get('birthdate'),
                     gender=dict(GENDER_CHOICES).get(student_form.cleaned_data.get('gender')),
                     phone=student_form.cleaned_data.get('phone'),
                     email=student_form.cleaned_data.get('email'),
