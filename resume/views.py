@@ -115,6 +115,22 @@ def register_view(request):
     else:
         return redirect('home')
 
+def submit_comment(request):
+    if request.method == 'POST':
+        comment_text = request.POST.get('comment')
+        status = request.POST.get('status')
+        # Дополнительная логика для обработки комментария и статуса резюме
+
+        # Пример сохранения комментария в базе данных
+        resume_comment = ResumeComment(comment=comment_text, status=status)
+        resume_comment.save()
+
+        # Перенаправление на другую страницу или обновление текущей
+        return HttpResponseRedirect('/resume/1/sample')  # Измените URL на нужный вам
+
+    # Логика для GET-запроса, если необходимо
+    return render(request, 'sample.html', {})  # Перенаправление на текущую страницу с пустым контекстом
+
 
 def exit(request):
     request.session.flush()

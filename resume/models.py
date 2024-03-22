@@ -132,6 +132,7 @@ class Resume(models.Model):
     locale_resume = models.CharField(db_column='Locale_resume', max_length=45)  # Field name made lowercase.
     date_of_creation = models.DateTimeField(db_column='Date_of_creation')  # Field name made lowercase.
     moderation_status = models.CharField(db_column='Moderation_status', max_length=45)  # Field name made lowercase.
+    moderator_comment = models.CharField(db_column='Moderator_comment', max_length=300, blank=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
