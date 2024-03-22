@@ -3,7 +3,8 @@ import datetime
 from resume.dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, \
     POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES, CURRENCY_CHOICES, \
     SPECIALIZATION_CHOICES, BUSYNESS_CHOICES, WORK_TIME_CHOICES
-from resume.models import Students, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, WorkTimetable
+from resume.models import Students, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, WorkTimetable, \
+    Courses, TestsAndExams
 
 
 def create_student(student_form, user, id):
@@ -50,6 +51,26 @@ def create_education(education_form, resume):
                                   year_of_completion='2024', #!!!!!!!!!!!!!!
                                   level_education=dict(EDUCATION_LEVEL_CHOICES).get(
                                       education_form.cleaned_data.get('level_education')))
+
+
+def create_courses(courses_form, resume):
+    courses_new_id = Courses.objects.all().count() + 1
+    return Courses(id=courses_new_id, id_resume=resume,
+                                  organization=courses_form.cleaned_data.get(
+                                      'name_of_organization_course'),
+                                  course_name=courses_form.cleaned_data.get('name_of_course'),
+                                  specialization=courses_form.cleaned_data.get('specialization_of_course'),
+                                  year_of_completion='2024') #!!!!!!!!!!!!!!
+
+
+def create_tests_exams(tests_exams_form, resume):
+    tests_exams_new_id = EducationalInstitution.objects.all().count() + 1
+    return TestsAndExams(id=tests_exams_new_id, id_resume=resume,
+                                  organization=tests_exams_form.cleaned_data.get(
+                                      'name_of_organization_test'),
+                                  course_name=tests_exams_form.cleaned_data.get('name_of_test'),
+                                  specialization=tests_exams_form.cleaned_data.get('specialization_of_test'),
+                                  year_of_completion='2024') #!!!!!!!!!!!!!!
 
 
 def create_about_job(about_job_form, resume):

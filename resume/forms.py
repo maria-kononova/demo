@@ -37,7 +37,7 @@ class StudentForm(forms.Form):
     middle_name = forms.CharField(label='Отчество', max_length=30, widget=forms.TextInput(attrs={"class": "myfield"}))
     # photo = forms.FileField(label='Фото', widget=forms.FileInput(attrs={"class": "myfield_select"}))
     birthdate = forms.DateField(label='Дата рождения', widget=forms.SelectDateWidget(years=range(year, year - 101, -1),
-                                                                                    attrs={"class": "myfield_select"}))
+                                                                                     attrs={"class": "myfield_select"}))
     gender = forms.ChoiceField(label='Пол', choices=GENDER_CHOICES,
                                widget=forms.Select(attrs={"class": "myfield_select"}))
     phone = forms.CharField(label='Телефон', max_length=12, widget=forms.TextInput(attrs={"class": "myfield"}))
@@ -77,14 +77,16 @@ class ResumeForm(forms.Form):
                                       widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Языки
-    language = forms.ChoiceField(label='Язык', choices=LANGUAGE_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
-    proficiency_level = forms.ChoiceField(label='Уровень владения', choices=PROFICIENCY_LEVEL_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    language = forms.ChoiceField(label='Язык', choices=LANGUAGE_CHOICES,
+                                 widget=forms.Select(attrs={"class": "myfield_select"}))
+    proficiency_level = forms.ChoiceField(label='Уровень владения', choices=PROFICIENCY_LEVEL_CHOICES,
+                                          widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Гражданство
-    #country_citizen_chip = forms.ChoiceField(label='Гражданство', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    # country_citizen_chip = forms.ChoiceField(label='Гражданство', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Разрешение на работу
-    #country_work_resolution = forms.ChoiceField(label='Разрешение на работу', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
+    # country_work_resolution = forms.ChoiceField(label='Разрешение на работу', choices=COUNTRY_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
 
     # Ключевые навыки
     # skill = forms.ChoiceField(label='Ключевые навыки', choices=SKILL_CHOICES, widget=forms.Select(attrs={"class": "myfield_select"}))
@@ -126,3 +128,31 @@ class EducationForm(forms.Form):
                                                                                    attrs={"class": "myfield_select"}))
     level_education = forms.ChoiceField(label='Ступень образования', choices=EDUCATION_LEVEL_CHOICES,
                                         widget=forms.Select(attrs={"class": "myfield_select"}))
+
+
+# Курсы
+class CoursesForm(forms.Form):
+    name_of_organization_course = forms.CharField(label='Название организации', max_length=30,
+                                           widget=forms.TextInput(attrs={"class": "myfield"}))
+    name_of_course = forms.CharField(label='Название курса', max_length=30,
+                                     widget=forms.TextInput(attrs={"class": "myfield"}))
+    specialization_of_course = forms.CharField(label='Специализация', max_length=30,
+                                                    widget=forms.TextInput(attrs={"class": "myfield"}))
+    # Пока не разобралась как оставить только год
+    year_of_completion_course = forms.DateField(label='Год окончания',
+                                                     widget=forms.SelectDateWidget(years=range(year, year - 101, -1),
+                                                                                   attrs={"class": "myfield_select"}))
+
+
+# Тесты и экзамены
+class TestsExamsForm(forms.Form):
+    name_of_organization_test = forms.CharField(label='Название организации', max_length=30,
+                                           widget=forms.TextInput(attrs={"class": "myfield"}))
+    name_of_test = forms.CharField(label='Название курса', max_length=30,
+                                     widget=forms.TextInput(attrs={"class": "myfield"}))
+    specialization_of_test = forms.CharField(label='Специализация', max_length=30,
+                                                    widget=forms.TextInput(attrs={"class": "myfield"}))
+    # Пока не разобралась как оставить только год
+    year_of_completion_test = forms.DateField(label='Год окончания',
+                                                     widget=forms.SelectDateWidget(years=range(year, year - 101, -1),
+                                                                                   attrs={"class": "myfield_select"}))

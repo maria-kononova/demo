@@ -15,14 +15,14 @@ from django.contrib.auth.models import User
 
 from .dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, \
     POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES
-from .forms import UserLoginForm, StudentForm, ResumeForm, EducationForm, AboutJobForm
+from .forms import UserLoginForm, StudentForm, ResumeForm, EducationForm, AboutJobForm, TestsExamsForm, CoursesForm
 from .forms import UserRegistrationForm
 import json
 
 from .models import Test, Students, AuthUser, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, \
     WorkTimetable
 from .create_object import create_student, create_resume, create_education, create_about_job, create_specialization, \
-    create_busyness, create_work_timetable
+    create_busyness, create_work_timetable, create_courses, create_tests_exams
 
 
 # Create your views here.
@@ -47,12 +47,17 @@ def myresume(request):
         if request.method == 'POST':
             resume_form = ResumeForm(request.POST)
             education_form = EducationForm(request.POST)
+            courses_form = CoursesForm(request.POST)
+            tests_exams_form = TestsExamsForm(request.POST)
             about_job_form = AboutJobForm(request.POST)
-            if resume_form.is_valid() and education_form.is_valid() and about_job_form.is_valid():
+            if (resume_form.is_valid() and education_form.is_valid() and courses_form.is_valid()
+                    and tests_exams_form.is_valid() and about_job_form.is_valid()):
                 user = request.user
                 student = Students.objects.filter(user=user).first()
                 resume = create_resume(resume_form, student)
                 education = create_education(education_form, resume)
+                courses = create_courses(courses_form, resume)
+                tests_exams = create_tests_exams(tests_exams_form, resume)
                 about_job = create_about_job(about_job_form, resume)
                 specialization = create_specialization(about_job_form, about_job)
                 busyness = create_busyness(about_job_form, about_job)
@@ -60,6 +65,8 @@ def myresume(request):
                 with transaction.atomic():
                     resume.save()
                     education.save()
+                    courses.save()
+                    tests_exams.save()
                     about_job.save()
                     specialization.save()
                     busyness.save()
@@ -67,7 +74,8 @@ def myresume(request):
                     return redirect('home')
         else:
             return render(request, 'resume.html', {'resume_form': ResumeForm(),
-                                                   'education_form': EducationForm(), 'about_job_form': AboutJobForm()})
+                                                   'education_form': EducationForm(), 'about_job_form': AboutJobForm(),
+                                                   'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm()})
     else:
         return redirect('auth')
 

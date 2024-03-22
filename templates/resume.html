@@ -26,6 +26,20 @@
             {#            {% endfor %}#}
             {#            <button id="add-form" type="button">+</button>#}
             <hr>
+            <h2 class="user-role">Курсы</h2>
+            <hr>
+            <div class="bird-form">
+                {% csrf_token %}
+                {{ courses_form.as_p }}
+            </div>
+            <hr>
+            <h2 class="user-role">Тесты и экзамены</h2>
+            <hr>
+            <div class="bird-form">
+                {% csrf_token %}
+                {{ tests_exams_form.as_p }}
+            </div>
+            <hr>
             <h2 class="user-role">Дополнительно</h2>
             <hr>
             <div class="bird-form">
