@@ -29,7 +29,7 @@ from .create_object import create_student, create_resume, create_education, crea
 # request.session.flush() или response.delete_cookie('sessionid') или logout(request) для завершения сессии пользователя
 def home(request):
     if request.user.is_authenticated:
-        user= request.user
+        user = request.user
         student = Students.objects.filter(user=user)
         resumeList = []
         if user.is_staff:  # Проверяем, является ли пользователь модератором
@@ -87,6 +87,7 @@ def login_view(request):
                 else:
                     user_type = 'Студент'
                 request.session['user_type'] = user_type
+                request.session['resume_choice'] = 0
                 return redirect('home')
                 # return render(request, 'home.html', {
                 #     'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
@@ -116,22 +117,6 @@ def register_view(request):
     else:
         return redirect('home')
 
-def submit_comment(request):
-    if request.method == 'POST':
-        comment_text = request.POST.get('comment')
-        status = request.POST.get('status')
-        # Дополнительная логика для обработки комментария и статуса резюме
-
-        # Пример сохранения комментария в базе данных
-        resume_comment = ResumeComment(comment=comment_text, status=status)
-        resume_comment.save()
-
-        # Перенаправление на другую страницу или обновление текущей
-        return HttpResponseRedirect('/resume/1/sample')  # Измените URL на нужный вам
-
-    # Логика для GET-запроса, если необходимо
-    return render(request, 'sample.html', {})  # Перенаправление на текущую страницу с пустым контекстом
-
 
 def exit(request):
     request.session.flush()
@@ -141,7 +126,17 @@ def exit(request):
 def go_to_sample(request, pk):
     if request.user.is_authenticated:
         if request.method == 'POST':
-            return redirect('go_to_sample')
+            # Сохранение комментария и статуса в базе
+            comment_text = request.POST.get('comment')
+            status = request.POST.get('status')
+            # Получаем объект резюме, к которому относится комментарий (например, по ID)
+            resume = Resume.objects.get(pk=pk)
+            # Сохраняем комментарий и статус в резюме
+            resume.moderator_comment = comment_text
+            resume.moderation_status = status
+            with transaction.atomic():
+                resume.save(update_fields=['moderator_comment', 'moderation_status'])
+            return redirect('home')
         else:
             # Вывод данных резюме
             resume = Resume.objects.filter(pk=pk).first()
@@ -151,6 +146,7 @@ def go_to_sample(request, pk):
             busyness = Busyness.objects.filter(id_about_job=about_job.id_about_job)
             work_timetable = WorkTimetable.objects.filter(id_about_job=about_job.id_about_job)
             educational_institution = EducationalInstitution.objects.filter(id_resume=resume.id_resume)
+            request.session['resume_choice'] = resume.id_resume
             return render(request, 'sample.html', {'student': student, 'resume': resume,
                                                    'about_job': about_job, 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
@@ -198,8 +194,9 @@ def account_edit(request):
                     id_student = Students.objects.filter(user=user).first().id_student
                     student = create_student(student_form, user, id_student)
                     with transaction.atomic():
-                        student.save(update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone', 'email',
-                                                    'types_of_communication', 'education_level'])
+                        student.save(
+                            update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone', 'email',
+                                           'types_of_communication', 'education_level'])
                         return redirect('account')
         else:
             # Вывод формы для изменения данных (сами данные из бд пока не выгружаются для редактирования)
