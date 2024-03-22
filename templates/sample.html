@@ -74,7 +74,7 @@
                     {{ student.surname }} {{ student.name }} {{ student.middle_name }}
                 </div>
                 <div class="t32">
-                    Должность
+
                 </div>
                 <div class="container-49">
                     <img src="{% static 'img/icon_user.svg' %}" class="iconuser-circle-alt"/>
@@ -157,24 +157,24 @@
     </div>
     {% if request.session.user_type == 'Модератор' %}
         <div class="container-55">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="form-group">
-                            <label for="comment">Комментарий</label>
-                            <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="status">Статус резюме</label>
-                            <select class="form-control" id="status" name="status">
-                                <option value="moderation">модерация</option>
-                                <option value="approved">принято</option>
-                                <option value="rejected">отклонено</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Отправить</button>
-                    </form>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="comment">Комментарий</label>
+                    <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="status">Статус резюме</label>
+                    <select class="form-control" id="status" name="status">
+                        <option value="moderation">модерация</option>
+                        <option value="approved">принято</option>
+                        <option value="rejected">отклонено</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </div>
+        </div>
         </div>
     {% endif %}
 {% endblock %}

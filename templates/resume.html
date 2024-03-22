@@ -12,8 +12,8 @@
             <h2 class="user-role">О работе</h2>
             <hr>
             <div class="bird-form">
-            {% csrf_token %}
-            {{ about_job_form.as_p }}
+                {% csrf_token %}
+                {{ about_job_form.as_p }}
             </div>
             <hr>
             <h2 class="user-role">Образование</h2>
@@ -29,8 +29,8 @@
             <h2 class="user-role">Дополнительно</h2>
             <hr>
             <div class="bird-form">
-            {% csrf_token %}
-            {{ resume_form.as_p }}
+                {% csrf_token %}
+                {{ resume_form.as_p }}
             </div>
             <button type="submit" class="button">Отправить</button>
         </form>

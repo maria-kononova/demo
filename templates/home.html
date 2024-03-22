@@ -33,8 +33,10 @@
             {% endfor %}
             </tbody>
         </table>
-{% if request.session.user_type == 'Студент' %}
-            <a class="link" href="{% url 'myresume' %}">К созданию резюме!</a>
+        {% if request.session.user_type == 'Студент' %}
+            {% if request.session.student_created == 1 %}
+                <a class="link" href="{% url 'myresume' %}">К созданию резюме!</a>
+            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

@@ -49,7 +49,7 @@ def myresume(request):
             education_form = EducationForm(request.POST)
             about_job_form = AboutJobForm(request.POST)
             if resume_form.is_valid() and education_form.is_valid() and about_job_form.is_valid():
-                user= request.user
+                user = request.user
                 student = Students.objects.filter(user=user).first()
                 resume = create_resume(resume_form, student)
                 education = create_education(education_form, resume)
@@ -108,6 +108,7 @@ def register_view(request):
             form = UserRegistrationForm(request.POST)
             if form.is_valid():
                 form.save()
+                request.session['student_created'] = 0
                 return redirect('home')  # Перенаправление на страницу входа после успешной регистрации
         else:
             form = UserRegistrationForm()
@@ -170,6 +171,7 @@ def account(request):
                 student = create_student(student_form, user, None)
                 with transaction.atomic():
                     student.save()
+                request.session['student_created'] = 1
                 return redirect('account')
         else:
             # Вывод данных пользователя

@@ -45,7 +45,9 @@
                 {% endif %}
                 <li><a href="{% url 'home' %}">Мои резюме</a></li>
                 {% if request.session.user_type == 'Студент' %}
-                    <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
+                    {% if request.session.student_created == 1 %}
+                        <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
+                    {% endif %}
                 {% endif %}
                 <li><a href="{% url 'exit' %}">Выйти</a></li>
             </ul>
