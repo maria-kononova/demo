@@ -124,11 +124,12 @@ def account(request):
             user = request.user
             studentList = Students.objects.filter(user=user)
             photo_name = ""
-            if studentList[0].photo:
-                photo = Photo.objects.get(id=studentList[0].photo.id)
-                photo_name = ""
-                if photo:
-                    photo_name = photo.image.name.split(sep='/')[1]
+            if studentList.count() != 0:
+                if studentList[0].photo:
+                    photo = Photo.objects.get(id=studentList[0].photo.id)
+                    photo_name = ""
+                    if photo:
+                        photo_name = photo.image.name.split(sep='/')[1]
             return render(request, 'account.html',
                           {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check, 'photo': photo_name}) #'photo': photo_name
     else:
