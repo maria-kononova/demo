@@ -123,8 +123,9 @@ def account(request):
             update_check = 0
             user = request.user
             studentList = Students.objects.filter(user=user)
+            photo = Photo.objects.get(id=studentList[0].photo.id)
             return render(request, 'account.html',
-                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
+                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check, 'photo': photo.image.name.split(sep='/')[1]})
     else:
         return redirect('auth')
 
@@ -159,7 +160,7 @@ def get_image(request, image_name):
     folder_name = 'photo'
     path = os.path.join(os.getcwd(), folder_name, image_name)
     with open(path, 'rb') as image_file:
-        return HttpResponse(image_file.read(), content_type="image/jpeg")
+        return HttpResponse(image_file.read())
 
 
 def myresume(request):

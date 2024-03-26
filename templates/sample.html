@@ -8,7 +8,7 @@
             <div class="container-left">
                 <img src="{% static 'img/guap-logo.svg' %}" class="container-logo-guap"/>
                 <div class="container-photo">
-                    <img src="{% url 'get_image' image_name=photo %}"/>
+                    <img class="container-photo" src="{% url 'get_image' image_name=photo %}"/>
                 </div>
                 <div class="name-student">
                     {{ student.surname }} {{ student.name }} {{ student.middle_name }}
