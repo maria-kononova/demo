@@ -27,7 +27,63 @@ from .create_object import create_student, create_resume, create_education, crea
 
 # Create your views here.
 # request.session.flush() или response.delete_cookie('sessionid') или logout(request) для завершения сессии пользователя
+def register_view(request):
+    """ Функция, используемая для регистрации нового пользователя. """
+    if not request.user.is_authenticated:
+        if request.method == 'POST':
+            form = UserRegistrationForm(request.POST)
+            if form.is_valid():
+                form.save()
+                request.session['student_created'] = 0
+                return redirect('home')
+        else:
+            form = UserRegistrationForm()
+            return render(request, 'register.html', {'form': form})
+    else:
+        return redirect('home')
+
+
+def login_view(request):
+    """ Функция, используемая для входа пользователя в систему. """
+    if not request.user.is_authenticated:
+        if request.method == 'POST':
+            form = UserLoginForm(request.POST)
+            login_data = request.POST.dict()
+            username = login_data.get("username")
+            password = login_data.get("password")
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                if user.is_staff == 1:  # Если is_staff равно 1, то пользователь - модератор
+                    user_type = 'Модератор'
+                else:
+                    user_type = 'Студент'
+                request.session['user_type'] = user_type
+                request.session['resume_choice'] = 0
+                student = Students.objects.filter(user=user)
+                if student is not None:
+                    request.session['student_created'] = 1
+                else:
+                    request.session['student_created'] = 0
+                return redirect('home')
+            else:
+                form = UserLoginForm()
+                return render(request, 'login.html', {'form': form, 'msg': "Пароль или имя пользователя неверное"})
+        else:
+            form = UserLoginForm()
+            return render(request, 'login.html', {'form': form, 'msg': ""})
+    else:
+        return redirect('home')
+
+
+def exit(request):
+    """ Функция, используемая для выхода пользователя из системы. """
+    request.session.flush()
+    return redirect('auth')
+
+
 def home(request):
+    """ Функция, используемая для отображения главной страницы. """
     if request.user.is_authenticated:
         user = request.user
         student = Students.objects.filter(user=user)
@@ -42,9 +98,61 @@ def home(request):
         return redirect('auth')
 
 
-def myresume(request):
+def account(request):
+    """ Функция, используемая для отображения аккаунта студента (сохранение данных или вывод данных из базы). """
     if request.user.is_authenticated:
         if request.method == 'POST':
+            # Сохранение данных пользователя
+            student_form = StudentForm(request.POST)
+            if student_form.is_valid():
+                user = request.user
+                student = create_student(student_form, user, None)
+                with transaction.atomic():
+                    student.save()
+                request.session['student_created'] = 1
+                return redirect('account')
+        else:
+            # Вывод данных пользователя
+            update_check = 0
+            user = request.user
+            studentList = Students.objects.filter(user=user)
+            return render(request, 'account.html',
+                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
+    else:
+        return redirect('auth')
+
+
+def account_edit(request):
+    """ Функция, используемая для изменения данных студента в аккаунте. """
+    if request.user.is_authenticated:
+        user = request.user
+        update_check = 1
+        if request.method == "POST":
+            if 'edit_btn' in request.POST:
+                # Сохранение измененных данных
+                student_form = StudentForm(request.POST)
+                if student_form.is_valid():
+                    id_student = Students.objects.filter(user=user).first().id_student
+                    student = create_student(student_form, user, id_student)
+                    with transaction.atomic():
+                        student.save(
+                            update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone', 'email',
+                                           'types_of_communication', 'education_level'])
+                    return redirect('account')
+        else:
+            # Вывод формы для изменения данных
+            studentList = Students.objects.filter(user=user)
+            return render(request, 'account.html',
+                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
+    else:
+        return redirect('auth')
+
+
+def myresume(request):
+    """ Функция, используемая для отображения страницы "Создать резюме" и сохранения резюме. """
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            # Сохранение в БД
             resume_form = ResumeForm(request.POST)
             education_form = EducationForm(request.POST)
             courses_form = CoursesForm(request.POST)
@@ -73,6 +181,7 @@ def myresume(request):
                     work_timetable.save()
                     return redirect('home')
         else:
+            # Вывод пустых форм
             return render(request, 'resume.html', {'resume_form': ResumeForm(),
                                                    'education_form': EducationForm(), 'about_job_form': AboutJobForm(),
                                                    'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm()})
@@ -80,71 +189,14 @@ def myresume(request):
         return redirect('auth')
 
 
-def login_view(request):
-    if not request.user.is_authenticated:
-        if request.method == 'POST':
-            form = UserLoginForm(request.POST)
-            login_data = request.POST.dict()
-            username = login_data.get("username")
-            password = login_data.get("password")
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                if user.is_staff == 1:  # Если is_staff равно 1, то пользователь - модератор
-                    user_type = 'Модератор'
-                else:
-                    user_type = 'Студент'
-                request.session['user_type'] = user_type
-                request.session['resume_choice'] = 0
-                student = Students.objects.filter(user=user)
-                if student is not None:
-                    request.session['student_created'] = 1
-                else:
-                    request.session['student_created'] = 0
-                return redirect('home')
-                # return render(request, 'home.html', {
-                #     'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте
-            else:
-                form = UserLoginForm()
-                return render(request, 'login.html', {'form': form, 'msg': "Пароль или имя пользователя неверное"})
-        else:
-            form = UserLoginForm()
-        return render(request, 'login.html', {'form': form, 'msg': ""})
-    else:
-        return redirect('home')
-        # user_type = 'Модератор' if request.user.is_staff == 1 else 'Студент'
-        # return render(request, 'home.html', {'user_type': user_type})
-
-
-def register_view(request):
-    if not request.user.is_authenticated:
-        if request.method == 'POST':
-            form = UserRegistrationForm(request.POST)
-            if form.is_valid():
-                form.save()
-                request.session['student_created'] = 0
-                return redirect('home')  # Перенаправление на страницу входа после успешной регистрации
-        else:
-            form = UserRegistrationForm()
-        return render(request, 'register.html', {'form': form})
-    else:
-        return redirect('home')
-
-
-def exit(request):
-    request.session.flush()
-    return redirect('auth')
-
-
 def go_to_sample(request, pk):
+    """ Функция, используемая для отображения резюме. """
     if request.user.is_authenticated:
         if request.method == 'POST':
             # Сохранение комментария и статуса в базе
             comment_text = request.POST.get('comment')
             status = request.POST.get('status')
-            # Получаем объект резюме, к которому относится комментарий (например, по ID)
             resume = Resume.objects.get(pk=pk)
-            # Сохраняем комментарий и статус в резюме
             resume.moderator_comment = comment_text
             resume.moderation_status = status
             with transaction.atomic():
@@ -164,58 +216,5 @@ def go_to_sample(request, pk):
                                                    'about_job': about_job, 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
                                                    'educational_institution': educational_institution[0]})
-    else:
-        return redirect('auth')
-
-
-def account(request):
-    if request.user.is_authenticated:
-        if request.method == 'POST':
-            # Сохранение данных пользователя
-            print(list(request.POST.items()))
-            student_form = StudentForm(request.POST)
-            if student_form.is_valid():
-                print(student_form.cleaned_data)
-                user = request.user
-                student = create_student(student_form, user, None)
-                with transaction.atomic():
-                    student.save()
-                request.session['student_created'] = 1
-                return redirect('account')
-        else:
-            # Вывод данных пользователя
-            update_check = 0
-            user = request.user
-            studentList = Students.objects.filter(user=user)
-            return render(request, 'account.html',
-                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
-    else:
-        return redirect('auth')
-
-
-def account_edit(request):
-    if request.user.is_authenticated:
-        # student = get_object_or_404(Students, pk=pk)
-        user = request.user
-        update_check = 1
-        if request.method == "POST":
-            if 'edit_btn' in request.POST:
-                # Сохранение измененных данных
-                # form = StudentForm(request.POST, instance=student)
-                student_form = StudentForm(request.POST)
-                if student_form.is_valid():
-                    id_student = Students.objects.filter(user=user).first().id_student
-                    student = create_student(student_form, user, id_student)
-                    with transaction.atomic():
-                        student.save(
-                            update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone', 'email',
-                                           'types_of_communication', 'education_level'])
-                        return redirect('account')
-        else:
-            # Вывод формы для изменения данных (сами данные из бд пока не выгружаются для редактирования)
-            # form = StudentForm(instance=student)
-            studentList = Students.objects.filter(user=user)
-            return render(request, 'account.html',
-                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
     else:
         return redirect('auth')
