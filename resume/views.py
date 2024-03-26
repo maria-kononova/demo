@@ -112,10 +112,10 @@ def account(request):
             if student_form.is_valid():
                 user = request.user
                 student = create_student(student_form, user, None)
-                token, created = Token.objects.get_or_create(user=user)
-                post_request("resume/api/v1/students/create/", StudentsSerializer(student).data, token.key)
-                # with transaction.atomic():
-                #     student.save()
+                # token, created = Token.objects.get_or_create(user=user)
+                # post_request("resume/api/v1/students/create/", StudentsSerializer(student).data, token.key)
+                with transaction.atomic():
+                    student.save()
                 request.session['student_created'] = 1
                 return redirect('account')
         else:
@@ -123,9 +123,14 @@ def account(request):
             update_check = 0
             user = request.user
             studentList = Students.objects.filter(user=user)
-            photo = Photo.objects.get(id=studentList[0].photo.id)
+            photo_name = ""
+            if studentList[0].photo:
+                photo = Photo.objects.get(id=studentList[0].photo.id)
+                photo_name = ""
+                if photo:
+                    photo_name = photo.image.name.split(sep='/')[1]
             return render(request, 'account.html',
-                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check, 'photo': photo.image.name.split(sep='/')[1]})
+                          {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check, 'photo': photo_name}) #'photo': photo_name
     else:
         return redirect('auth')
 
