@@ -43,6 +43,7 @@ header ul li a {
 
 header ul li a:hover {
     transition: 0.5s;
+    transform: scale(1.1);
     color: white;
     text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #fff;
 }

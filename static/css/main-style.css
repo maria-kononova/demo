@@ -24,7 +24,7 @@ p {
 }
 
 .link:active {
-    color: #000;
+    color: #0072ff;
 }
 
 h1 {
@@ -193,4 +193,8 @@ td:last-child {
     font-size: 18px;
     color: #ED1443; /* Измените на нужный цвет */
     margin-bottom: 15px;
+}
+
+.link-center {
+    text-align: center;
 }
