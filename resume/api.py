@@ -270,6 +270,7 @@ class PhotoUploadView(APIView):
         serializer = PhotoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            #получения студента для сохранения id изображения
             student = Students.objects.filter(user=request.user).first()
             student.photo = ResumePhoto.objects.filter(id=serializer.data['id']).first()
             student.save()

@@ -4,7 +4,7 @@ from resume.dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, ED
     POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES, CURRENCY_CHOICES, \
     SPECIALIZATION_CHOICES, BUSYNESS_CHOICES, WORK_TIME_CHOICES
 from resume.models import Students, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, WorkTimetable, \
-    Courses, TestsAndExams
+    Courses, TestsAndExams, ResumePhoto
 
 
 def create_student(student_form, user, id):
@@ -18,6 +18,7 @@ def create_student(student_form, user, id):
                     gender=dict(GENDER_CHOICES).get(student_form.cleaned_data.get('gender')),
                     phone=student_form.cleaned_data.get('phone'),
                     email=student_form.cleaned_data.get('email'),
+                    #photo=ResumePhoto.objects.get(id=1),
                     types_of_communication=dict(TYPES_OF_COMMUNICATION_CHOICES).get(
                         student_form.cleaned_data.get('types_of_communication')),
                     education_level=dict(EDUCATION_LEVEL_CHOICES).get(
