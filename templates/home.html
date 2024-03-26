@@ -35,7 +35,9 @@
         </table>
         {% if request.session.user_type == 'Студент' %}
             {% if request.session.student_created == 1 %}
-                <a class="link" href="{% url 'myresume' %}">К созданию резюме!</a>
+                <div class="link-center">
+                    <a class="link" href="{% url 'myresume' %}">К созданию резюме!</a>
+                </div>
             {% endif %}
         {% endif %}
     </div>

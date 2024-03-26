@@ -10,7 +10,8 @@
         <hr>
         {% if student.count == 0 %}
             <form id="form-container" method="post" class="account-form">
-                <p>Введите ваши данные</p>
+                <p class="user-role">Введите ваши данные</p>
+                <hr>
                 {% csrf_token %}
                 <div class="form-group">
                     {{ student_form_account.as_p }}
@@ -21,15 +22,20 @@
             {% for s in student %}
                 {% if update_check == 1 %}
                     <form id="form-container" method="post" class="account-form">
-                        <p>Измените ваши данные</p>
+                        <p class="user-role">Измените ваши данные</p>
+                        <hr>
+                        <div class="bird-form">
                         {% csrf_token %}
                         <div class="form-group">
                             {{ student_form_account.as_p }}
                         </div>
+                            </div>
                         <div class="button-group">
+                            <button type="submit" class="button" name="edit_btn">Сохранить изменения</button>
+                            <div class="link-center">
                             <a class="link" href="{% url 'account' %}"
                                style="margin-left: 10px; margin-right: 15px;">Отмена</a>
-                            <button type="submit" class="btn btn-primary" name="edit_btn">Сохранить изменения</button>
+                            </div>
                         </div>
                     </form>
                     <form id="uploadForm" action="http://localhost:8000/resume/api/v1/upload/" method="post"
@@ -43,7 +49,11 @@
                         <div class="container-photo">
                             <img class="container-photo" src="{% url 'get_image' image_name=photo %}"/>
                         </div>
-                        <p>Ваши данные</p>
+                        <p class="user-role">Ваши данные</p>
+                        <hr>
+                        <div class="user-info">
+                        <div class="container-photo"></div>
+                            <div class="column-info">
                         <div class="info-item">
                             <strong>ФИО:</strong> {{ s.surname }} {{ s.name }} {{ s.middle_name }}
                         </div>
@@ -53,6 +63,8 @@
                         <div class="info-item">
                             <strong>Пол:</strong> {{ s.gender }}
                         </div>
+                            </div>
+                                <div class="column-info">
                         <div class="info-item">
                             <strong>Телефон:</strong> {{ s.phone }}
                         </div>
@@ -65,7 +77,11 @@
                         <div class="info-item">
                             <strong>Уровень образования:</strong> {{ s.education_level }}
                         </div>
-                        <a class="link" href="{% url 'account_edit' %}">Изменить данные</a>
+                                </div>
+                            </div>
+                        <div class="link-center">
+                            <a class="link" href="{% url 'account_edit' %}">Изменить данные</a>
+                        </div>
                     </div>
                 {% endif %}
             {% endfor %}
