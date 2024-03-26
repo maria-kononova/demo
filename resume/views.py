@@ -96,6 +96,11 @@ def login_view(request):
                     user_type = 'Студент'
                 request.session['user_type'] = user_type
                 request.session['resume_choice'] = 0
+                student = Students.objects.filter(user=user)
+                if student is not None:
+                    request.session['student_created'] = 1
+                else:
+                    request.session['student_created'] = 0
                 return redirect('home')
                 # return render(request, 'home.html', {
                 #     'user_type': user_type})  # Перенаправление на страницу "home" с передачей типа пользователя в контексте

@@ -5,158 +5,167 @@
 
     <div class="block">
         <div class="a-45">
-            <div class="container-5">
-                <img src="{% static 'img/guap-logo.svg' %}" class="s-guap-main-1"/>
-                <div class="foto-na-dokumenty-ot-pechaterfoto-31">
+            <div class="container-left">
+                <img src="{% static 'img/guap-logo.svg' %}" class="container-logo-guap"/>
+                <div class="container-photo">
                 </div>
-                <div class="group-6">
-                    <div class="t23">
-                        Дата рождения
-                    </div>
-                    <div class="t24">
-                        {{ student.birthdate }}
-                    </div>
+                <div class="name-student">
+                    {{ student.surname }} {{ student.name }} {{ student.middle_name }}
                 </div>
-                <div class="group-7">
-                    <div class="t25">
-                        Желаемая зарплата
+                <div class="data-info">
+                    {{ student.birthdate }}
+                </div>
+                <div class="group-info">
+                    <div class="name-info">
+                        Пол
                     </div>
-                    <div class="t000">
-                        {{ about_job.desired_salary }} {{ about_job.currency }}
+                    <div class="data-info_">
+                        {{ student.gender }}
                     </div>
                 </div>
-                <div class="group-8">
-                    <div class="t26">
-                        Город проживания
+                <div class="group-info">
+                    <div class="name-info">
+                        Уровень образования
                     </div>
-                    <div class="t27">
-                        {{ resume.city }}
+                    <div class="data-info_">
+                        {{ student.education_level }}
                     </div>
                 </div>
-                <div class="group-9">
-                    <div class="t28">
-                        Занятость
-                    </div>
-                    <span class="t29">
-                        {{ busyness.type_busyness }}
-                    </span>
-                </div>
-                <div class="group-10">
-                    <div class="t30">
-                        График работы
-                    </div>
-                    <span class="t31">
-                        {{ work_timetable.work_timetable }}
-                    </span>
-                </div>
-                <div class="rectangle-4">
-                </div>
-                <div class="t22">
+                <div class="line-contact"></div>
+                <div class="contact">
                     Контакты
                 </div>
-                <div class="container-50">
-                    <div class="iconphone">
-                        <img src="{% static 'img/icon_phone.svg' %}" class="vector-2"/>
-                    </div>
-                    <div class="t79322332456">
+                <div class="container-contact">
+                    <img src="{% static 'img/icon_phone.svg' %}" class="icon-contact"/>
+                    <div class="data-contact">
                         {{ student.phone }}
                     </div>
                 </div>
-                <div class="container-51">
-                    <img src="{% static 'img/icon_mail.svg' %}" class="iconmail"/>
-                    <span class="bibamail-ru">
+                <div class="container-contact">
+                    <img src="{% static 'img/icon_mail.svg' %}" class="icon-contact"/>
+                    <span class="data-contact">
                         {{ student.email }}
                     </span>
                 </div>
             </div>
-            <div class="container-52">
-                <div class="cls-bo-w-3-x-cnzk-fbfu-435-wta-2-jx-pfr-ngvd-enw-ytyxu-4-wc-efpt">
-                    {{ student.surname }} {{ student.name }} {{ student.middle_name }}
-                </div>
-                <div class="t32">
 
+
+            <div class="container-right">
+                <div class="container-icon">
+                    <img src="{% static 'img/icon_multiple.svg' %}" class="icon"/>
+                    <div class="icon-text">О РАБОТЕ</div>
                 </div>
-                <div class="container-49">
-                    <img src="{% static 'img/icon_user.svg' %}" class="iconuser-circle-alt"/>
-                    <div class="t19">
-                        ЛИЧНАЯ ИНФОРМАЦИЯ
+                <div class="ellipse-group">
+                    <div class="ellipse">
                     </div>
-                </div>
-                <div class="t44">
-                    {{ resume.description_skills }}
-                </div>
-                <div class="t46">
-                    {{ resume.possibility_of_transfer }}
-                </div>
-                <div class="t47">
-                    {{ resume.business_trips }}
-                </div>
-                <div class="container-54">
-                    <img src="{% static 'img/icon_multiple.svg' %}" class="iconmultiple-pages"/>
-                    <div class="t20">
-                        О РАБОТЕ
-                    </div>
-                </div>
-                <div class="group-16">
-                    <div class="ellipse-841">
-                    </div>
-                    <span class="t40">
+                    <span class="ellipse-text">
                         {{ about_job.desired_position }}
                     </span>
                 </div>
-                <div class="group-17">
-                    <div class="ellipse-843">
+                <div class="ellipse-group">
+                    <div class="ellipse">
                     </div>
-                    <span class="t42">
+                    <span class="ellipse-text">
+                        {{ about_job.desired_salary }} {{ about_job.currency }}
+                    </span>
+                </div>
+                <div class="ellipse-group">
+                    <div class="ellipse">
+                    </div>
+                    <span class="ellipse-text">
                         {{ specialization.specialization }}
                     </span>
                 </div>
-                <div class="container-53">
-                    <img src="{% static 'img/icon_bookmark.svg' %}" class="iconbookmark-book"/>
-                    <div class="t21">
+                <div class="ellipse-group">
+                    <div class="ellipse">
+                    </div>
+                    <span class="ellipse-text">
+                        {{ busyness.type_busyness }}
+                    </span>
+                </div>
+                <div class="ellipse-group">
+                    <div class="ellipse">
+                    </div>
+                    <span class="ellipse-text">
+                        {{ work_timetable.work_timetable }}
+                    </span>
+                </div>
+
+                <div class="container-icon">
+                    <img src="{% static 'img/icon_bookmark.svg' %}" class="icon"/>
+                    <div class="icon-text">
                         ОБРАЗОВАНИЕ
                     </div>
                 </div>
-                <div class="group-11">
-                    <div class="ellipse-8">
+                <div class="ellipse-group">
+                    <div class="ellipse">
                     </div>
-                    <span class="t39">
+                    <span class="ellipse-text">
                         {{ educational_institution.level_education }}
                     </span>
                 </div>
-                <div class="group-12">
-                    <div class="ellipse-4">
+                <div class="ellipse-group">
+                    <div class="ellipse">
                     </div>
-                    <span class="t33">
+                    <span class="ellipse-text">
                         {{ educational_institution.name_of_institution }}
                     </span>
                 </div>
-                <div class="group-13">
-                    <div class="ellipse-5">
+                <div class="ellipse-group">
+                    <div class="ellipse">
                     </div>
-                    <span class="t35">
+                    <span class="ellipse-text">
                         {{ educational_institution.faculty }}
                     </span>
                 </div>
-                <div class="group-14">
-                    <div class="ellipse-6">
+                <div class="ellipse-group">
+                    <div class="ellipse">
                     </div>
-                    <span class="t36">
+                    <span class="ellipse-text">
                         {{ educational_institution.specialization }}
                     </span>
                 </div>
-                <div class="group-15">
-                    <div class="ellipse-7">
+                <div class="ellipse-group">
+                    <div class="ellipse">
                     </div>
-                    <span class="t37">
+                    <span class="ellipse-text">
                         {{ educational_institution.year_of_completion }}
+                    </span>
+                </div>
+
+
+                <div class="container-icon">
+                    <img src="{% static 'img/icon_user.svg' %}" class="icon"/>
+                    <div class="icon-text">
+                        ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ
+                    </div>
+                </div>
+                <div class="ellipse-group">
+                    <div class="ellipse">
+                    </div>
+                    <span class="ellipse-text">
+                        {{ resume.city }}
+                    </span>
+                </div>
+                <div class="ellipse-group">
+                    <div class="ellipse">
+                    </div>
+                    <span class="ellipse-text">
+                        {{ resume.possibility_of_transfer }}
+                    </span>
+                </div>
+                <div class="ellipse-group">
+                    <div class="ellipse">
+                    </div>
+                    <span class="ellipse-text">
+                        {{ resume.business_trips }}
                     </span>
                 </div>
             </div>
         </div>
     </div>
     {% if request.session.user_type == 'Модератор' %}
-        <div class="container-55">
+        <div class="container-comment">
             <form method="post">
                 {% csrf_token %}
                 <div class="form-group">
