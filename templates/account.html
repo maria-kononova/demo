@@ -45,35 +45,42 @@
                     </form>
                 {% else %}
                     <div id="form-container" class="account-info">
-                        {% if photo != "" %}
-                            <div class="container-photo">
+                        <p class="user-role">Ваши данные</p>
+                        <hr>
+                        <div class="user-info">
+                            {% if photo != "" %}
+                            <div>
                                 <img class="container-photo" src="{% url 'get_image' image_name=photo %}"/>
                             </div>
-                        {% endif %}
-                        <p>Ваши данные</p>
-                        <div class="info-item">
-                            <strong>ФИО:</strong> {{ s.surname }} {{ s.name }} {{ s.middle_name }}
-                        </div>
-                        <div class="info-item">
-                            <strong>Дата рождения:</strong> {{ s.birthdate }}
-                        </div>
-                        <div class="info-item">
-                            <strong>Пол:</strong> {{ s.gender }}
-                        </div>
-                        <div class="info-item">
-                            <strong>Телефон:</strong> {{ s.phone }}
-                        </div>
-                        <div class="info-item">
-                            <strong>Почта:</strong> {{ s.email }}
-                        </div>
-                        <div class="info-item">
-                            <strong>Вид связи:</strong> {{ s.types_of_communication }}
-                        </div>
-                        <div class="info-item">
-                            <strong>Уровень образования:</strong> {{ s.education_level }}
+                            {% endif %}
+                            <div class="column-info">
+                                <div class="info-item">
+                                    <strong>ФИО:</strong> {{ s.surname }} {{ s.name }} {{ s.middle_name }}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Дата рождения:</strong> {{ s.birthdate }}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Пол:</strong> {{ s.gender }}
+                                </div>
+                            </div>
+                            <div class="column-info">
+                                <div class="info-item">
+                                    <strong>Телефон:</strong> {{ s.phone }}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Почта:</strong> {{ s.email }}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Вид связи:</strong> {{ s.types_of_communication }}
+                                </div>
+                                <div class="info-item">
+                                    <strong>Уровень образования:</strong> {{ s.education_level }}
+                                </div>
+                            </div>
                         </div>
                         <div class="link-center">
-                            <a class="link" href="{% url 'account_edit' %}">Изменить данные</a>
+<a class="link" href="{% url 'account_edit' %}">Изменить данные</a>
                         </div>
                     </div>
                 {% endif %}
