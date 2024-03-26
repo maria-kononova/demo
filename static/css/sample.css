@@ -29,15 +29,6 @@
     height: 82px;
 }
 
-.container-photo {
-    border-radius: 25px;
-    /*background: url('https://pechater.ru/wp-content/uploads/2019/04/Foto-na-dokumenty-ot-pechaterfoto-3.jpg') 50% / cover no-repeat;*/
-    margin: 0 11px 32px 0;
-    align-self: center;
-    width: 159px;
-    height: 240px;
-}
-
 .container-icon {
     margin: 0 7px 10px 7px;
     display: flex;

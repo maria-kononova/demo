@@ -66,7 +66,7 @@ def login_view(request):
                 request.session['user_type'] = user_type
                 request.session['resume_choice'] = 0
                 student = Students.objects.filter(user=user)
-                if student is not None:
+                if student:
                     request.session['student_created'] = 1
                 else:
                     request.session['student_created'] = 0
@@ -155,8 +155,9 @@ def account_edit(request):
     else:
         return redirect('auth')
 
-#получение изображения
+
 def get_image(request, image_name):
+    """ Функция, используемая для выгрузки фотографии студента. """
     folder_name = 'photo'
     path = os.path.join(os.getcwd(), folder_name, image_name)
     with open(path, 'rb') as image_file:
