@@ -1,7 +1,8 @@
 from rest_framework import permissions
 
-from resume.models import Students
+from resume.models import Students, AuthUser
 
+#Классы Permissions используются для определения прав доступа к тому или иному объекту
 
 # Права доступа только администратору(обновление, удаление) или только чтение
 class IsAdminOrReadOnly(permissions.BasePermission):
@@ -32,3 +33,4 @@ class IsOwnerStudent(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         student = Students.objects.filter(user=request.user).first()
         return obj.id_student == student
+

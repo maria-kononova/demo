@@ -1,4 +1,6 @@
 import datetime
+import os
+
 from django.forms import formset_factory
 from django.db import transaction
 from django.shortcuts import render, get_object_or_404
@@ -7,12 +9,14 @@ from django.template import loader
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
+from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import Group
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
+from .api import get_token, post_request
 from .dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, \
     POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES
 from .forms import UserLoginForm, StudentForm, ResumeForm, EducationForm, AboutJobForm, TestsExamsForm, CoursesForm
@@ -20,9 +24,10 @@ from .forms import UserRegistrationForm
 import json
 
 from .models import Test, Students, AuthUser, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, \
-    WorkTimetable
+    WorkTimetable, Photo
 from .create_object import create_student, create_resume, create_education, create_about_job, create_specialization, \
     create_busyness, create_work_timetable, create_courses, create_tests_exams
+from .serializers import StudentsSerializer
 
 
 # Create your views here.
@@ -107,8 +112,10 @@ def account(request):
             if student_form.is_valid():
                 user = request.user
                 student = create_student(student_form, user, None)
-                with transaction.atomic():
-                    student.save()
+                token, created = Token.objects.get_or_create(user=user)
+                post_request("resume/api/v1/students/create/", StudentsSerializer(student).data, token.key)
+                # with transaction.atomic():
+                #     student.save()
                 request.session['student_created'] = 1
                 return redirect('account')
         else:
@@ -146,6 +153,13 @@ def account_edit(request):
                           {'student': studentList, 'student_form_account': StudentForm(), 'update_check': update_check})
     else:
         return redirect('auth')
+
+#получение изображения
+def get_image(request, image_name):
+    folder_name = 'photo'
+    path = os.path.join(os.getcwd(), folder_name, image_name)
+    with open(path, 'rb') as image_file:
+        return HttpResponse(image_file.read(), content_type="image/jpeg")
 
 
 def myresume(request):
@@ -211,10 +225,11 @@ def go_to_sample(request, pk):
             busyness = Busyness.objects.filter(id_about_job=about_job.id_about_job)
             work_timetable = WorkTimetable.objects.filter(id_about_job=about_job.id_about_job)
             educational_institution = EducationalInstitution.objects.filter(id_resume=resume.id_resume)
+            photo = Photo.objects.get(id=student.photo.id)
             request.session['resume_choice'] = resume.id_resume
             return render(request, 'sample.html', {'student': student, 'resume': resume,
                                                    'about_job': about_job, 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
-                                                   'educational_institution': educational_institution[0]})
+                                                   'educational_institution': educational_institution[0], 'photo': photo.image.name.split(sep='/')[1]})
     else:
         return redirect('auth')

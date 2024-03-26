@@ -132,7 +132,8 @@ class Resume(models.Model):
     locale_resume = models.CharField(db_column='Locale_resume', max_length=45)  # Field name made lowercase.
     date_of_creation = models.DateTimeField(db_column='Date_of_creation')  # Field name made lowercase.
     moderation_status = models.CharField(db_column='Moderation_status', max_length=45)  # Field name made lowercase.
-    moderator_comment = models.CharField(db_column='Moderator_comment', max_length=300, blank=True)  # Field name made lowercase.
+    moderator_comment = models.CharField(db_column='Moderator_comment', max_length=300,
+                                         blank=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -158,21 +159,51 @@ class Specialization(models.Model):
         db_table = 'specialization'
 
 
+# class Students(models.Model):
+#     id_student = models.IntegerField(db_column='ID_student', primary_key=True)  # Field name made lowercase.
+#     surname = models.CharField(db_column='Surname', max_length=30)  # Field name made lowercase.
+#     name = models.CharField(db_column='Name', max_length=30)  # Field name made lowercase.
+#     middle_name = models.CharField(db_column='Middle_name', max_length=30, blank=True,
+#                                    null=True)  # Field name made lowercase.
+#     birthdate = models.DateField(db_column='Birthdate', blank=True, null=True)  # Field name made lowercase.
+#     gender = models.CharField(db_column='Gender', max_length=7)  # Field name made lowercase.
+#     photo = models.FileField(db_column='Photo', blank=True, null=True)  # Field name made lowercase.
+#     phone = models.CharField(db_column='Phone', max_length=12)  # Field name made lowercase.
+#     email = models.CharField(db_column='Email', max_length=45)  # Field name made lowercase.
+#     types_of_communication = models.CharField(db_column='Types_of_communication',
+#                                               max_length=45)  # Field name made lowercase.
+#     education_level = models.CharField(db_column='Education_level', max_length=45)  # Field name made lowercase.
+#     user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)  # Field name made lowercase.
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'students'
+
+class ResumePhoto(models.Model):
+    id = models.BigAutoField(primary_key=True)
+    image = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'resume_photo'
+
+
 class Students(models.Model):
-    id_student = models.IntegerField(db_column='ID_student', primary_key=True)  # Field name made lowercase.
+    id_student = models.AutoField(db_column='ID_student', primary_key=True)  # Field name made lowercase.
+    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)
     surname = models.CharField(db_column='Surname', max_length=30)  # Field name made lowercase.
     name = models.CharField(db_column='Name', max_length=30)  # Field name made lowercase.
     middle_name = models.CharField(db_column='Middle_name', max_length=30, blank=True,
                                    null=True)  # Field name made lowercase.
-    birthdate = models.DateField(db_column='Birthdate', blank=True, null=True)  # Field name made lowercase.
+    birthdate = models.DateField(db_column='Birthdate')  # Field name made lowercase.
     gender = models.CharField(db_column='Gender', max_length=7)  # Field name made lowercase.
-    photo = models.FileField(db_column='Photo', blank=True, null=True)  # Field name made lowercase.
+    photo = models.ForeignKey(ResumePhoto, models.DO_NOTHING, db_column='Photo', blank=True,
+                              null=True)  # Field name made lowercase.
     phone = models.CharField(db_column='Phone', max_length=12)  # Field name made lowercase.
     email = models.CharField(db_column='Email', max_length=45)  # Field name made lowercase.
     types_of_communication = models.CharField(db_column='Types_of_communication',
                                               max_length=45)  # Field name made lowercase.
     education_level = models.CharField(db_column='Education_level', max_length=45)  # Field name made lowercase.
-    user = models.ForeignKey(User, verbose_name='Пользователь', on_delete=models.CASCADE)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -238,3 +269,7 @@ class WorkTimetable(models.Model):
     class Meta:
         managed = False
         db_table = 'work_timetable'
+
+
+class Photo(models.Model):
+    image = models.ImageField(upload_to='photo')

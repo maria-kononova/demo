@@ -61,5 +61,10 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
+    <form id="uploadForm" action="http://localhost:8000/resume/api/v1/upload/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+        <input type="file" name="image" id="photoInput">
+    <button type="submit">Upload</button>
+    </form>
     </div>
 {% endblock %}

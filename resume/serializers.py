@@ -1,28 +1,42 @@
 from django.contrib.sites import requests
 from rest_framework import serializers
 
-from resume.models import AuthUser, Students, Resume
+from resume.models import AuthUser, Students, Resume, Photo
 
 
-class UserSerializer(serializers.ModelSerializer):
+# Сериализация данных резюме (статус)
+class UsersSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuthUser
-        fields = "__all__"
+        fields = ("id", "username")
 
 
+# Сериализация данных студента
 class StudentsSerializer(serializers.ModelSerializer):
     id_student = serializers.HiddenField(default=0)
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Students
         fields = ("id_student", "surname", "name", "middle_name", "birthdate", "gender", "phone", "email", "user")
 
 
+# Сериализация данных резюме (статус)
 class ResumesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Resume
         fields = ("moderation_status",)
 
+
+# Сериализатор для сохранения фотографий
+class PhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Photo
+        fields = '__all__'
+
+
+class ImageSerializer(serializers.Serializer):
+    image = serializers.ImageField()
 # class StudentsSerializer(serializers.Serializer):
 #     surname = serializers.CharField(max_length=30)
 #     name = serializers.CharField(max_length=30)

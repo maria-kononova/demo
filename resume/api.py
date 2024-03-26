@@ -1,15 +1,23 @@
+import os
+
 import requests
 import json
 
 from django.forms import model_to_dict
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Photo, ResumePhoto
+from .serializers import PhotoSerializer, ImageSerializer
 from resume.models import AuthUser, Students, Resume
 from resume.permissions import IsOwnerOrReadOnly, IsOwner, IsOwnerStudent
-from resume.serializers import UserSerializer, StudentsSerializer, ResumesSerializer
+from resume.serializers import StudentsSerializer, ResumesSerializer, UsersSerializer
 
 BASE_URL = 'https://api.hh.ru'
 URL = "http://localhost:8000/"
@@ -122,9 +130,9 @@ def get_access_token(url, client_id, client_secret):
 
 
 # ___________api________
-class UserAPIView(viewsets.ModelViewSet):
-    queryset = AuthUser.objects.all()
-    serializer_class = UserSerializer
+# class UserAPIView(viewsets.ModelViewSet):
+#     queryset = AuthUser.objects.all()
+#     serializer_class = UserSerializer
 
 
 # Students POST
@@ -138,8 +146,9 @@ class StudentsAPICreate(generics.ListCreateAPIView):
         existing_record = Students.objects.filter(user=user).first()
         if existing_record:
             student = Students.objects.filter(user=self.request.user).first()
-            return Response({"message": "You have already submitted a record. You can update your record on: ",
-                             "url": URL + "resume/api/v1/students/update/" + str(student.id_student)}, status=400)
+            return Response(
+                {"message": "У Вас уже есть запись о личных данных. Вы можете обновить личные данные по ссылке:",
+                 "url": URL + "resume/api/v1/students/update/" + str(student.id_student)}, status=200)
         custom_result = {'message': 'You can create a new student.'}
         return Response(custom_result)
 
@@ -160,8 +169,9 @@ class StudentsAPICreate(generics.ListCreateAPIView):
         if not student:
             serializer.save(user=self.request.user)
         else:
-            return Response({"message": "You have already submitted a record. You can update your record on: ",
-                             "url": URL + "resume/api/v1/students/update/" + str(student.id_student)}, status=400)
+            return Response(
+                {"message": "У Вас уже есть запись о личных данных. Вы можете обновить личные данные по ссылке:",
+                 "url": URL + "resume/api/v1/students/update/" + str(student.id_student)}, status=400)
 
 
 # Students GET
@@ -207,18 +217,79 @@ class StudentsAPIViewID(APIView):
         student = Students.objects.filter(user=self.request.user).first()
         if student:
             return Response({'ID': student.id_student}, status=200)
-        return Response({"message": "You don't have submitted a record. You can create your record on: ",
+        return Response({"message": "У Вас нет записи о личных данных. Вы можете создать ей по ссылке:",
                          "url": URL + "resume/api/v1/students/create/"}, status=400)
 
 
-#GET списка ID resume
+# GET списка ID resume
 class ResumesAPIView(generics.RetrieveAPIView):
     queryset = Resume.objects.all()
     serializer_class = ResumesSerializer
     permission_classes = (IsOwnerStudent,)
 
 
+# PUT обновление данных user
+# GET id студента
+class UsersAPIUpdate(APIView):
+    def get(self, request):
+        user = AuthUser.objects.filter(id=self.request.user.id).first()
+        if user:
+            return Response({'ID': user.id, "username": user.username}, status=200)
+        return Response({"message": "You don't have submitted a record."}, status=400)
 
+    def put(self, request, *args, **kwargs):
+        user = AuthUser.objects.filter(id=self.request.user.id).first()
+        if user:
+            try:
+                instance = AuthUser.objects.get(pk=user.id)
+            except:
+                return Response({"error": "Object does not exists"}, status=404)
+        serializer = UsersSerializer(data=request.data, instance=instance)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"user": serializer.data})
+
+
+def post_request(url, data, token):
+    url = URL + url
+    headers = {'Authorization': 'Token ' + token, 'Content-Type': 'application/json'}
+    response = requests.post(url, data=json.dumps(data), headers=headers)
+    print(response.json())
+
+
+def get_token(username, password):
+    url = URL + 'resume/api/v1/auth/token/login/'
+    body = {'username': username, 'password': password}
+    response = requests.post(url, data=json.dumps(body))
+    print(response.json())
+
+#POST Загрузка фотографии студента
+class PhotoUploadView(APIView):
+    # permission_classes = (IsOwnerStudent,)
+    def post(self, request):
+        serializer = PhotoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            student = Students.objects.filter(user=request.user).first()
+            student.photo = ResumePhoto.objects.filter(id=serializer.data['id']).first()
+            student.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# class SaveImageView(APIView):
+#     def post(self, request, *args, **kwargs):
+#         serializer = ImageSerializer(data=request.data)
+#         if serializer.is_valid():
+#             image_data = serializer.validated_data['image']
+#             folder_name = 'images'
+#             path = os.path.join(os.getcwd(), folder_name)
+#             if not os.path.exists(path):
+#                 os.makedirs(path)
+#             with open(os.path.join(path, image_data.name), 'wb+') as destination:
+#                 for chunk in image_data.chunks():
+#                     destination.write(chunk)
+#             return Response({'message': 'Image saved successfully'}, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # class ResumesAPIViewID(APIView):
 #     def get(self, request):

@@ -1,14 +1,10 @@
 from django.urls import path, include, re_path
-from rest_framework import routers
-
 from resume import views
 from resume.api import *
-
-# router = routers.SimpleRouter()
-# router.register(r'students', StudentsViewSet)
-# #router.register(r'resume/api/auth_user', UserAPIView)
+from resume.views import get_image
 
 urlpatterns = [
+    #переходы приложения
     path("resume/home", views.home, name="home"),
     path("resume/myresume", views.myresume, name="myresume"),
     path("resume/", views.login_view, name="auth"),
@@ -18,6 +14,7 @@ urlpatterns = [
     path("resume/account", views.account, name="account"),
     path("resume/edit", views.account_edit, name='account_edit'),
     path('resume/sample', views.go_to_sample, name='go_to_sample'),
+    #Конечные точки API
     path('resume/api/v1/drf-auth/', include('rest_framework.urls')),
     path('resume/api/v1/auth/', include('djoser.urls')),
     re_path(r'^resume/api/v1/auth/', include('djoser.urls.authtoken')),
@@ -27,4 +24,7 @@ urlpatterns = [
     path('resume/api/v1/students/update/<int:pk>/', StudentsAPIUpdate.as_view()),
     path('resume/api/v1/students/delete/<int:pk>/', StudentsAPIDelete.as_view()),
     path('resume/api/v1/resumes/<int:pk>/', ResumesAPIView.as_view()),
+    path('resume/api/v1/users/update/username/', UsersAPIUpdate.as_view()),
+    path('resume/api/v1/upload/', PhotoUploadView.as_view(), name='photo-upload'),
+    path('get-image/<str:image_name>/', get_image, name='get_image'),
 ]
