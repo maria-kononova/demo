@@ -15,6 +15,7 @@ year = datetime.now().year
 
 
 class UserRegistrationForm(UserCreationForm):
+    """ Класс, описывающий поля формы регистрации. """
     username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={"class": "myfield"}))
     email = forms.EmailField(label='Почта', widget=forms.EmailInput(attrs={"class": "myfield field-email"}))
     password1 = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={"class": "myfield"}))
@@ -26,12 +27,13 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserLoginForm(AuthenticationForm):
+    """ Класс, описывающий поля формы авторизации. """
     username = forms.CharField(label='Имя пользователя', widget=forms.TextInput(attrs={"class": "myfield"}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={"class": "myfield"}))
 
 
 class StudentForm(forms.Form):
-    # title = forms.CharField(label='Название резюме', max_length=45, widget=forms.TextInput(attrs={"class":"myfield"}))
+    """ Класс, описывающий поля формы для личных данных студента. """
     surname = forms.CharField(label='Фамилия', max_length=30, widget=forms.TextInput(attrs={"class": "myfield"}))
     name = forms.CharField(label='Имя', max_length=30, widget=forms.TextInput(attrs={"class": "myfield"}))
     middle_name = forms.CharField(label='Отчество', max_length=30, widget=forms.TextInput(attrs={"class": "myfield"}))
@@ -47,14 +49,9 @@ class StudentForm(forms.Form):
     education_level = forms.ChoiceField(label='Уровень образования', choices=EDUCATION_LEVEL_CHOICES,
                                         widget=forms.Select(attrs={"class": "myfield_select"}))
 
-    # class Meta:
-    #     model = Students
-    #     fields = ['content']
-    #     #fields = ('surname', 'name', 'middle_name', 'birthday', 'gender', 'phone', 'email', 'types_of_communication', 'education_level')
-
 
 class ResumeForm(forms.Form):
-    # Резюме
+    """ Класс, описывающий поля формы для основной информации резюме. """
     description_skills = forms.CharField(label='Описание скиллов', max_length=700,
                                          widget=forms.Textarea(attrs={"class": "myfield"}))
     city = forms.ChoiceField(label='Город', choices=CITY_CHOICES,
@@ -95,9 +92,8 @@ class ResumeForm(forms.Form):
     # photo_portfolio = forms.FileField(label='Фото для портфолио', widget=forms.FileInput(attrs={"class": "myfield_select"}))
 
 
-# о работе
 class AboutJobForm(forms.Form):
-    # О работе
+    """ Класс, описывающий поля формы "О работе". """
     desired_position = forms.CharField(label='Желаемая должность', max_length=50,
                                        widget=forms.TextInput(attrs={"class": "myfield"}))
     # Их тоже несколько
@@ -114,15 +110,14 @@ class AboutJobForm(forms.Form):
                                        widget=forms.Select(attrs={"class": "myfield_select"}))
 
 
-# Образование
 class EducationForm(forms.Form):
-    # Учебное заведение
+    """ Класс, описывающий поля формы "Образование". """
     name_of_institution = forms.CharField(label='Название учебного заведения', max_length=30,
                                           widget=forms.TextInput(attrs={"class": "myfield"}))
     faculty = forms.CharField(label='Факультет', max_length=30, widget=forms.TextInput(attrs={"class": "myfield"}))
     specialization_of_institution = forms.CharField(label='Специальность', max_length=30,
                                                     widget=forms.TextInput(attrs={"class": "myfield"}))
-    # Пока не разобралась как оставить только год
+    # Оставить только год
     year_of_completion_institution = forms.DateField(label='Год окончания',
                                                      widget=forms.SelectDateWidget(years=range(year, year - 101, -1),
                                                                                    attrs={"class": "myfield_select"}))
@@ -130,8 +125,8 @@ class EducationForm(forms.Form):
                                         widget=forms.Select(attrs={"class": "myfield_select"}))
 
 
-# Курсы
 class CoursesForm(forms.Form):
+    """ Класс, описывающий поля формы "Курсы". """
     name_of_organization_course = forms.CharField(label='Название организации', max_length=30,
                                            widget=forms.TextInput(attrs={"class": "myfield"}))
     name_of_course = forms.CharField(label='Название курса', max_length=30,
@@ -144,8 +139,8 @@ class CoursesForm(forms.Form):
                                                                                    attrs={"class": "myfield_select"}))
 
 
-# Тесты и экзамены
 class TestsExamsForm(forms.Form):
+    """ Класс, описывающий поля формы "Тесты и экзамены". """
     name_of_organization_test = forms.CharField(label='Название организации', max_length=30,
                                            widget=forms.TextInput(attrs={"class": "myfield"}))
     name_of_test = forms.CharField(label='Название курса', max_length=30,

@@ -8,6 +8,7 @@ from resume.models import Students, Resume, EducationalInstitution, AboutJob, Sp
 
 
 def create_student(student_form, user, id):
+    """ Функция для сохранения данных в таблицу students. """
     if not id:
         id = Students.objects.all().count() + 1
     return Students(id_student=id, surname=student_form.cleaned_data.get('surname'),
@@ -24,6 +25,7 @@ def create_student(student_form, user, id):
 
 
 def create_resume(resume_form, student):
+    """ Функция для сохранения данных в таблицу resume. """
     new_resume_id = Resume.objects.all().count() + 1
     return Resume(id_resume=new_resume_id, id_student=student,
                   description_skills=resume_form.cleaned_data.get('description_skills'),
@@ -42,38 +44,42 @@ def create_resume(resume_form, student):
 
 
 def create_education(education_form, resume):
+    """ Функция для сохранения данных в таблицу educational_institution. """
     education_new_id = EducationalInstitution.objects.all().count() + 1
     return EducationalInstitution(id=education_new_id, id_resume=resume,
                                   name_of_institution=education_form.cleaned_data.get(
                                       'name_of_institution'),
                                   faculty=education_form.cleaned_data.get('faculty'),
                                   specialization=education_form.cleaned_data.get('specialization_of_institution'),
-                                  year_of_completion='2024', #!!!!!!!!!!!!!!
+                                  year_of_completion='2024',  # !!!!!!!!!!!!!!
                                   level_education=dict(EDUCATION_LEVEL_CHOICES).get(
                                       education_form.cleaned_data.get('level_education')))
 
 
 def create_courses(courses_form, resume):
+    """ Функция для сохранения данных в таблицу courses. """
     courses_new_id = Courses.objects.all().count() + 1
     return Courses(id=courses_new_id, id_resume=resume,
-                                  organization=courses_form.cleaned_data.get(
-                                      'name_of_organization_course'),
-                                  course_name=courses_form.cleaned_data.get('name_of_course'),
-                                  specialization=courses_form.cleaned_data.get('specialization_of_course'),
-                                  year_of_completion='2024') #!!!!!!!!!!!!!!
+                   organization=courses_form.cleaned_data.get(
+                       'name_of_organization_course'),
+                   course_name=courses_form.cleaned_data.get('name_of_course'),
+                   specialization=courses_form.cleaned_data.get('specialization_of_course'),
+                   year_of_completion='2024')  # !!!!!!!!!!!!!!
 
 
 def create_tests_exams(tests_exams_form, resume):
+    """ Функция для сохранения данных в таблицу tests_and_exams. """
     tests_exams_new_id = EducationalInstitution.objects.all().count() + 1
     return TestsAndExams(id=tests_exams_new_id, id_resume=resume,
-                                  organization=tests_exams_form.cleaned_data.get(
-                                      'name_of_organization_test'),
-                                  course_name=tests_exams_form.cleaned_data.get('name_of_test'),
-                                  specialization=tests_exams_form.cleaned_data.get('specialization_of_test'),
-                                  year_of_completion='2024') #!!!!!!!!!!!!!!
+                         organization=tests_exams_form.cleaned_data.get(
+                             'name_of_organization_test'),
+                         course_name=tests_exams_form.cleaned_data.get('name_of_test'),
+                         specialization=tests_exams_form.cleaned_data.get('specialization_of_test'),
+                         year_of_completion='2024')  # !!!!!!!!!!!!!!
 
 
 def create_about_job(about_job_form, resume):
+    """ Функция для сохранения данных в таблицу about_job. """
     about_new_id = AboutJob.objects.all().count() + 1
     return AboutJob(id_about_job=about_new_id, id_resume=resume,
                     desired_position=about_job_form.cleaned_data.get('desired_position'),
@@ -82,6 +88,7 @@ def create_about_job(about_job_form, resume):
 
 
 def create_specialization(about_job_form, about_job):
+    """ Функция для сохранения данных в таблицу specialization. """
     specialization_new_id = Specialization.objects.all().count() + 1
     return Specialization(id=specialization_new_id, id_about_job=about_job,
                           specialization=dict(SPECIALIZATION_CHOICES).get(
@@ -89,6 +96,7 @@ def create_specialization(about_job_form, about_job):
 
 
 def create_busyness(about_job_form, about_job):
+    """ Функция для сохранения данных в таблицу busyness. """
     busyness_new_id = Busyness.objects.all().count() + 1
     return Busyness(id=busyness_new_id, id_about_job=about_job,
                     type_busyness=dict(BUSYNESS_CHOICES).get(
@@ -96,6 +104,7 @@ def create_busyness(about_job_form, about_job):
 
 
 def create_work_timetable(about_job_form, about_job):
+    """ Функция для сохранения данных в таблицу work_timetable. """
     work_timetable_new_id = WorkTimetable.objects.all().count() + 1
     return WorkTimetable(id=work_timetable_new_id, id_about_job=about_job,
                          work_timetable=dict(WORK_TIME_CHOICES).get(

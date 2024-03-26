@@ -5,62 +5,61 @@
     <link rel="stylesheet" href="{% static 'css/account.css' %}"/>
 
     <div class="container"></div>
-        <div class="block">
-            <h1 class="page-title">Аккаунт</h1>
-            <hr>
-            {% if student.count == 0 %}
-                <form id="form-container" method="post" class="account-form">
-                    <p>Введите ваши данные</p>
-                    {% csrf_token %}
-                    <div class="form-group">
-                        {{ student_form_account.as_p }}
-                    </div>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                </form>
-            {% else %}
-                {% for s in student %}
-                    {% if update_check == 1 %}
-                        <form id="form-container" method="post" class="account-form">
-                            <p>Измените ваши данные</p>
-                            {% csrf_token %}
-                            <div class="form-group">
-                                {{ student_form_account.as_p }}
-                            </div>
-                            <div class="button-group">
-                                <a class="link" href="{% url 'account' %}"
-                                   style="margin-left: 10px; margin-right: 15px;">Отмена</a>
-                                <button type="submit" class="btn btn-primary" name="edit_btn">Сохранить изменения</button>
-                            </div>
-                        </form>
-                    {% else %}
-                        <div id="form-container" class="account-info">
-                            <p>Ваши данные</p>
-                            <div class="info-item">
-                                <strong>ФИО:</strong> {{ s.surname }} {{ s.name }} {{ s.middle_name }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Дата рождения:</strong> {{ s.birthdate }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Пол:</strong> {{ s.gender }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Телефон:</strong> {{ s.phone }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Почта:</strong> {{ s.email }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Вид связи:</strong> {{ s.types_of_communication }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Уровень образования:</strong> {{ s.education_level }}
-                            </div>
-                            <a class="link" href="{% url 'account_edit' %}">Изменить данные</a>
+    <div class="block">
+        <h1 class="page-title">Аккаунт</h1>
+        <hr>
+        {% if student.count == 0 %}
+            <form id="form-container" method="post" class="account-form">
+                <p>Введите ваши данные</p>
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ student_form_account.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+        {% else %}
+            {% for s in student %}
+                {% if update_check == 1 %}
+                    <form id="form-container" method="post" class="account-form">
+                        <p>Измените ваши данные</p>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ student_form_account.as_p }}
                         </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        </div>
-{#    </div>#}
+                        <div class="button-group">
+                            <a class="link" href="{% url 'account' %}"
+                               style="margin-left: 10px; margin-right: 15px;">Отмена</a>
+                            <button type="submit" class="btn btn-primary" name="edit_btn">Сохранить изменения</button>
+                        </div>
+                    </form>
+                {% else %}
+                    <div id="form-container" class="account-info">
+                        <p>Ваши данные</p>
+                        <div class="info-item">
+                            <strong>ФИО:</strong> {{ s.surname }} {{ s.name }} {{ s.middle_name }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Дата рождения:</strong> {{ s.birthdate }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Пол:</strong> {{ s.gender }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Телефон:</strong> {{ s.phone }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Почта:</strong> {{ s.email }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Вид связи:</strong> {{ s.types_of_communication }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Уровень образования:</strong> {{ s.education_level }}
+                        </div>
+                        <a class="link" href="{% url 'account_edit' %}">Изменить данные</a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
 {% endblock %}
