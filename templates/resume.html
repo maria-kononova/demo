@@ -3,7 +3,6 @@
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/resume.css' %}"/>
-
     <div class="container"></div>
     <div class="block">
         <h1 class="page-title">Создание резюме</h1>
@@ -13,35 +12,191 @@
             <hr>
             <div class="bird-form">
                 {% csrf_token %}
-                {{ about_job_form.as_p }}
+                {% comment %}{{ about_job_form.as_p }}{% endcomment %}
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ about_job_form.desired_position.id_for_label }}">{{ about_job_form.desired_position.label }}</label>
+                        {{ about_job_form.desired_position }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ about_job_form.desired_salary.id_for_label }}">{{ about_job_form.desired_salary.label }}</label>
+                        {{ about_job_form.desired_salary }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ about_job_form.currency.id_for_label }}">{{ about_job_form.currency.label }}</label>
+                        {{ about_job_form.currency }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ about_job_form.specialization.id_for_label }}">{{ about_job_form.specialization.label }}</label>
+                        {{ about_job_form.specialization }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ about_job_form.busyness.id_for_label }}">{{ about_job_form.busyness.label }}</label>
+                        {{ about_job_form.busyness }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ about_job_form.work_timetable.id_for_label }}">{{ about_job_form.work_timetable.label }}</label>
+                        {{ about_job_form.work_timetable }}
+                    </div>
+                </div>
             </div>
             <hr>
             <h2 class="user-role">Образование</h2>
             <hr>
             <div class="bird-form">
                 {% csrf_token %}
-                {{ education_form.as_p }}
+                {% comment %}{{ education_form.as_p }}{% endcomment %}
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ education_form.name_of_institution.id_for_label }}">{{ education_form.name_of_institution.label }}</label>
+                        {{ education_form.name_of_institution }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ education_form.faculty.id_for_label }}">{{ education_form.faculty.label }}</label>
+                        {{ education_form.faculty }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ education_form.specialization_of_institution.id_for_label }}">{{ education_form.specialization_of_institution.label }}</label>
+                        {{ education_form.specialization_of_institution }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ education_form.level_education.id_for_label }}">{{ education_form.level_education.label }}</label>
+                        {{ education_form.level_education }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ education_form.year_of_completion_institution.id_for_label }}">{{ education_form.year_of_completion_institution.label }}</label>
+                        {{ education_form.year_of_completion_institution }}
+                    </div>
+                </div>
             </div>
             <hr>
             <h2 class="user-role">Курсы</h2>
             <hr>
             <div class="bird-form">
                 {% csrf_token %}
-                {{ courses_form.as_p }}
+                {% comment %}{{ courses_form.as_p }}{% endcomment %}
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ courses_form.name_of_organization_course.id_for_label }}">{{ courses_form.name_of_organization_course.label }}</label>
+                        {{ courses_form.name_of_organization_course }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ courses_form.specialization_of_course.id_for_label }}">{{ courses_form.specialization_of_course.label }}</label>
+                        {{ courses_form.specialization_of_course }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ courses_form.name_of_course.id_for_label }}">{{ courses_form.name_of_course.label }}</label>
+                        {{ courses_form.name_of_course }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ courses_form.year_of_completion_course.id_for_label }}">{{ courses_form.year_of_completion_course.label }}</label>
+                        {{ courses_form.year_of_completion_course }}
+                    </div>
+                </div>
             </div>
             <hr>
             <h2 class="user-role">Тесты и экзамены</h2>
             <hr>
             <div class="bird-form">
                 {% csrf_token %}
-                {{ tests_exams_form.as_p }}
+                {% comment %}{{ tests_exams_form.as_p }}{% endcomment %}
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ tests_exams_form.name_of_organization_test.id_for_label }}">{{ tests_exams_form.name_of_organization_test.label }}</label>
+                        {{ tests_exams_form.name_of_organization_test }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ tests_exams_form.specialization_of_test.id_for_label }}">{{ tests_exams_form.specialization_of_test.label }}</label>
+                        {{ tests_exams_form.specialization_of_test }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ tests_exams_form.name_of_test.id_for_label }}">{{ tests_exams_form.name_of_test.label }}</label>
+                        {{ tests_exams_form.name_of_test }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ tests_exams_form.year_of_completion_test.id_for_label }}">{{ tests_exams_form.year_of_completion_test.label }}</label>
+                        {{ tests_exams_form.year_of_completion_test }}
+                    </div>
+                </div>
             </div>
             <hr>
             <h2 class="user-role">Дополнительно</h2>
             <hr>
             <div class="bird-form">
                 {% csrf_token %}
-                {{ resume_form.as_p }}
+                {% comment %}{{ resume_form.as_p }}{% endcomment %}
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ resume_form.description_skills.id_for_label }}">{{ resume_form.description_skills.label }}</label>
+                        {{ resume_form.description_skills }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ resume_form.city.id_for_label }}">{{ resume_form.city.label }}</label>
+                        {{ resume_form.city }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ resume_form.station_metro.id_for_label }}">{{ resume_form.station_metro.label }}</label>
+                        {{ resume_form.station_metro }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ resume_form.possibility_of_transfer.id_for_label }}">{{ resume_form.possibility_of_transfer.label }}</label>
+                        {{ resume_form.possibility_of_transfer }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ resume_form.business_trips.id_for_label }}">{{ resume_form.business_trips.label }}</label>
+                        {{ resume_form.business_trips }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ resume_form.desired_time_in_the_way.id_for_label }}">{{ resume_form.desired_time_in_the_way.label }}</label>
+                        {{ resume_form.desired_time_in_the_way }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ resume_form.driving_license.id_for_label }}">{{ resume_form.driving_license.label }}</label>
+                        {{ resume_form.driving_license }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ resume_form.availability_car.id_for_label }}">{{ resume_form.availability_car.label }}</label>
+                        {{ resume_form.availability_car }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ resume_form.language.id_for_label }}">{{ resume_form.language.label }}</label>
+                        {{ resume_form.language }}
+                    </div>
+                    <div class="ml-25">
+                        <label for="{{ resume_form.proficiency_level.id_for_label }}">{{ resume_form.proficiency_level.label }}</label>
+                        {{ resume_form.proficiency_level }}
+                    </div>
+                </div>
+                <div class="row mb-10">
+                    <div class="ml-15">
+                        <label for="{{ resume_form.locale_resume.id_for_label }}">{{ resume_form.locale_resume.label }}</label>
+                        {{ resume_form.locale_resume }}
+                    </div>
+                </div>
             </div>
             <button type="submit" class="button">Отправить</button>
         </form>

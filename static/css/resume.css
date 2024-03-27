@@ -95,3 +95,15 @@ textarea:focus {
 textarea:hover {
     transform: scale(1.02);
 }
+
+.ml-15 {
+    margin-left: 15px;
+}
+
+.ml-25 {
+    margin-left: 25px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
