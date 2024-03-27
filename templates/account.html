@@ -8,82 +8,120 @@
     <div class="block">
         <h1 class="page-title">Аккаунт</h1>
         <hr>
-        {% if student == None %}
-            <form id="form-container" method="post" class="account-form">
-                <p class="user-role">Введите ваши данные</p>
+        {% if student != None and update_check == 0 %}
+            <form method="get">
+                <p class="user-role">Ваши данные</p>
                 <hr>
-                {% csrf_token %}
-                <div class="form-group">
-                    {{ student_form_account.as_p }}
+                <div class="user-info">
+                    {% if photo != "" %}
+                        <div>
+                            <img class="container-photo" src="{% url 'get_image' image_name=photo %}"/>
+                        </div>
+                    {% endif %}
+                    <div class="column-info">
+                        <div class="info-item">
+                            <strong>ФИО:</strong> {{ student.surname }} {{ student.name }} {{ student.middle_name }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Дата рождения:</strong> {{ student.birthdate }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Пол:</strong> {{ student.gender }}
+                        </div>
+                    </div>
+                    <div class="column-info">
+                        <div class="info-item">
+                            <strong>Телефон:</strong> {{ student.phone }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Почта:</strong> {{ student.email }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Вид связи:</strong> {{ student.types_of_communication }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Уровень образования:</strong> {{ student.education_level }}
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Сохранить</button>
+                <div class="link-center">
+                    <button type="submit" class="button" name="edit_btn">Изменить данные</button>
+                </div>
             </form>
-        {% else %}
-            {% if update_check == 1 %}
+
+        {% elif student == None or update_check == 1 %}
+            {% if student == None %}
+                <p class="user-role">Введите ваши данные</p>
+            {% elif update_check == 1 %}
                 <p class="user-role">Измените ваши данные</p>
-                <hr>
-                <form id="uploadForm" action="http://localhost:8000/resume/api/v1/upload/" method="post"
-                      enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="image" id="photoInput">
-                    <button type="submit">Upload</button>
-                </form>
-                <form id="form-container" method="post" class="account-form">
-                    <div class="bird-form">
+            {% endif %}
+            <hr>
+            {% if update_check == 1 %}
+                <div class="bird-form">
+                    <form id="uploadForm" action="http://localhost:8000/resume/api/v1/upload/" method="post"
+                          enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="form-group">
-                            {{ student_form_account.as_p }}
-                        </div>
-                    </div>
-                    <div class="button-group">
-                        <button type="submit" class="button" name="edit_btn">Сохранить изменения</button>
-                        <div class="link-center">
-                            <a class="link" href="{% url 'account' %}"
-                               style="margin-left: 10px; margin-right: 15px;">Отмена</a>
-                        </div>
-                    </div>
-                </form>
-            {% else %}
-                <div id="form-container" class="account-info">
-                    <p class="user-role">Ваши данные</p>
-                    <hr>
-                    <div class="user-info">
-                        {% if photo != "" %}
-                            <div>
-                                <img class="container-photo" src="{% url 'get_image' image_name=photo %}"/>
-                            </div>
-                        {% endif %}
-                        <div class="column-info">
-                            <div class="info-item">
-                                <strong>ФИО:</strong> {{ student.surname }} {{ student.name }} {{ student.middle_name }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Дата рождения:</strong> {{ student.birthdate }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Пол:</strong> {{ student.gender }}
-                            </div>
-                        </div>
-                        <div class="column-info">
-                            <div class="info-item">
-                                <strong>Телефон:</strong> {{ student.phone }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Почта:</strong> {{ student.email }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Вид связи:</strong> {{ student.types_of_communication }}
-                            </div>
-                            <div class="info-item">
-                                <strong>Уровень образования:</strong> {{ student.education_level }}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="link-center">
-                        <a class="link" href="{% url 'account_edit' %}">Изменить данные</a>
-                    </div>
+                        <input type="file" name="image" id="photoInput">
+                        <button type="submit">Upload</button>
+                    </form>
                 </div>
             {% endif %}
+            <form method="post" class="form-container" style="margin-top: 10px;">
+                {% csrf_token %}
+                <div class="bird-form">
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ student_form_account.surname.id_for_label }}">{{ student_form_account.surname.label }}</label>
+                            {{ student_form_account.surname }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ student_form_account.name.id_for_label }}">{{ student_form_account.name.label }}</label>
+                            {{ student_form_account.name }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ student_form_account.middle_name.id_for_label }}">{{ student_form_account.middle_name.label }}</label>
+                            {{ student_form_account.middle_name }}
+                        </div>
+                    </div>
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ student_form_account.birthdate.id_for_label }}">{{ student_form_account.birthdate.label }}</label>
+                            {{ student_form_account.birthdate }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ student_form_account.gender.id_for_label }}">{{ student_form_account.gender.label }}</label>
+                            {{ student_form_account.gender }}
+                        </div>
+                    </div>
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ student_form_account.phone.id_for_label }}">{{ student_form_account.phone.label }}</label>
+                            {{ student_form_account.phone }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ student_form_account.email.id_for_label }}">{{ student_form_account.email.label }}</label>
+                            {{ student_form_account.email }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ student_form_account.types_of_communication.id_for_label }}">{{ student_form_account.types_of_communication.label }}</label>
+                            {{ student_form_account.types_of_communication }}
+                        </div>
+                    </div>
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ student_form_account.education_level.id_for_label }}">{{ student_form_account.education_level.label }}</label>
+                            {{ student_form_account.education_level }}
+                        </div>
+                    </div>
+                </div>
+                <div class="link-center">
+                    {% if student == None %}
+                        <button type="submit" class="button" name="save_btn">Сохранить</button>
+                    {% elif update_check == 1 %}
+                        <button type="submit" class="button" name="save_btn">Сохранить изменения</button>
+                    {% endif %}
+                </div>
+            </form>
         {% endif %}
     </div>
 {% endblock %}

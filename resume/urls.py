@@ -4,7 +4,7 @@ from resume.api import *
 from resume.views import get_image
 
 urlpatterns = [
-    #переходы приложения
+    # Переходы приложения
     path("resume/home", views.home, name="home"),
     path("resume/myresume", views.myresume, name="myresume"),
     path("resume/", views.login_view, name="auth"),
@@ -12,9 +12,8 @@ urlpatterns = [
     path('resume/exit', views.exit, name='exit'),
     path('resume/<int:pk>/sample', views.go_to_sample, name='go_to_sample'),
     path("resume/account", views.account, name="account"),
-    path("resume/edit", views.account_edit, name='account_edit'),
     path('resume/sample', views.go_to_sample, name='go_to_sample'),
-    #Конечные точки API
+    # Конечные точки API
     path('resume/api/v1/drf-auth/', include('rest_framework.urls')),
     path('resume/api/v1/auth/', include('djoser.urls')),
     re_path(r'^resume/api/v1/auth/', include('djoser.urls.authtoken')),

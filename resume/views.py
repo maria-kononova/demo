@@ -104,25 +104,46 @@ def home(request):
 
 
 def account(request):
-    """ Функция, используемая для отображения аккаунта студента (сохранение данных или вывод данных из базы). """
+    """ Функция, используемая для отображения аккаунта студента. """
     if request.user.is_authenticated:
         if request.method == 'POST':
-            # Сохранение данных пользователя
+            # Сохранение и изменение данных пользователя
             student_form = StudentForm(request.POST)
             if student_form.is_valid():
-                user = request.user
-                student = create_student(student_form, user, None)
-                # token, created = Token.objects.get_or_create(user=user)
-                # post_request("resume/api/v1/students/create/", StudentsSerializer(student).data, token.key)
-                with transaction.atomic():
-                    student.save()
-                request.session['student_created'] = 1
-                return redirect('account')
+                if 'save_btn' in request.POST:
+                    # Нажата кнопка для сохранения / изменения
+                    user = request.user
+                    student = Students.objects.filter(user=user).first()
+                    if student:
+                        # Обновление данных, т. к. студент есть
+                        id_student = Students.objects.filter(user=user).first().id_student
+                        student = create_student(student_form, user, id_student)
+                        with transaction.atomic():
+                            student.save(
+                                update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone',
+                                               'email',
+                                               'types_of_communication', 'education_level'])
+                    else:
+                        # Создание нового студента
+                        student = create_student(student_form, user, None)
+                        # token, created = Token.objects.get_or_create(user=user)
+                        # post_request("resume/api/v1/students/create/", StudentsSerializer(student).data, token.key)
+                        with transaction.atomic():
+                            student.save()
+                    request.session['student_created'] = 1
+                    return redirect('account')
         else:
-            # Вывод данных пользователя
-            update_check = 0
+            # Если у пользователя не заполнены данные в аккаунте, попадаем на форму сохранения данных (без аватарки)
+            # Если у пользователя заполнены данные в аккаунте и update_check = 0 - вывод данных студента
+            # Если у пользователя заполнены данные в аккаунте и update_check = 1 - форма изменения данных (доступен выбор аватарки)
             user = request.user
             student = Students.objects.filter(user=user).first()
+            update_check = 0
+            student_form = StudentForm()
+            if 'edit_btn' in request.GET:
+                # Нажатие на кнопку "Изменить данные"
+                update_check = 1
+                # student_form = StudentForm(instance=student) # Так вроде должны подгружаться данные и бд, но тут ошибка
             photo_name = ""
             if student:
                 if student.photo:
@@ -131,33 +152,8 @@ def account(request):
                     if photo:
                         photo_name = photo.image.name.split(sep='/')[1]
             return render(request, 'account.html',
-                          {'student': student, 'student_form_account': StudentForm(), 'update_check': update_check, 'photo': photo_name}) #'photo': photo_name
-    else:
-        return redirect('auth')
-
-
-def account_edit(request):
-    """ Функция, используемая для изменения данных студента в аккаунте. """
-    if request.user.is_authenticated:
-        user = request.user
-        update_check = 1
-        if request.method == "POST":
-            if 'edit_btn' in request.POST:
-                # Сохранение измененных данных
-                student_form = StudentForm(request.POST)
-                if student_form.is_valid():
-                    id_student = Students.objects.filter(user=user).first().id_student
-                    student = create_student(student_form, user, id_student)
-                    with transaction.atomic():
-                        student.save(
-                            update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone', 'email',
-                                           'types_of_communication', 'education_level'])
-                    return redirect('account')
-        else:
-            # Вывод формы для изменения данных
-            student = Students.objects.filter(user=user).first()
-            return render(request, 'account.html',
-                          {'student': student, 'student_form_account': StudentForm(), 'update_check': update_check})
+                          {'student': student, 'student_form_account': student_form, 'update_check': update_check,
+                           'photo': photo_name})  # 'photo': photo_name
     else:
         return redirect('auth')
 
@@ -238,6 +234,7 @@ def go_to_sample(request, pk):
             return render(request, 'sample.html', {'student': student, 'resume': resume,
                                                    'about_job': about_job, 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
-                                                   'educational_institution': educational_institution[0], 'photo': photo.image.name.split(sep='/')[1]})
+                                                   'educational_institution': educational_institution[0],
+                                                   'photo': photo.image.name.split(sep='/')[1]})
     else:
         return redirect('auth')

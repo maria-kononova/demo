@@ -9,6 +9,7 @@ h1 {
 
 .form-group {
     margin-bottom: 20px;
+    justify-content: center;
 }
 
 /*.container-photo {*/
@@ -43,9 +44,24 @@ h1 {
     background: #e9ecfc;
     padding: 15px;
     border-radius: 8px;
-    margin-bottom: 10px;
 }
 
 .button {
     margin-bottom: 10px;
+}
+
+.ml-15 {
+    margin-left: 15px;
+}
+
+.ml-25 {
+    margin-left: 25px;
+}
+
+.mb-10 {
+    margin-bottom: 10px;
+}
+
+label {
+    font-size: 18px;
 }
