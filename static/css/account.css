@@ -59,5 +59,43 @@ h1 {
 }
 
 .mb-10 {
-    margin-bottom: 10px;
+    margin-bottom: 20px
+}
+
+#photoInput {
+    display: none; /* Скрываем стандартный input */
+  }
+
+.file-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.file-label:hover {
+    background-color: #0056b3;
+}
+
+.button-file {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-file:hover {
+    background-color: #0056b3;
+}
+
+.row {
+    margin-left: 25px
 }

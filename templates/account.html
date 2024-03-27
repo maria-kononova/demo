@@ -61,8 +61,11 @@
                     <form id="uploadForm" action="http://localhost:8000/resume/api/v1/upload/" method="post"
                           enctype="multipart/form-data">
                         {% csrf_token %}
+                         <label for="photoInput" class="file-label">
+                            Выберите фото
+                         </label>
                         <input type="file" name="image" id="photoInput">
-                        <button type="submit">Upload</button>
+                        <button class="button-file" type="submit">ЗАГРУЗИТЬ</button>
                     </form>
                 </div>
             {% endif %}
