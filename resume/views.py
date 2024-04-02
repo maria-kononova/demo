@@ -6,7 +6,7 @@ from django.db import transaction
 from django.shortcuts import render, get_object_or_404
 import requests
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from rest_framework.authtoken.models import Token
@@ -104,7 +104,7 @@ def home(request):
 
 
 def account(request):
-    """ Функция, используемая для отображения аккаунта студента. """
+    """ Функция, используемая для отображения аккаунта студента (сохранение данных или вывод данных из базы). """
     if request.user.is_authenticated:
         if request.method == 'POST':
             # Сохранение и изменение данных пользователя
@@ -234,7 +234,6 @@ def go_to_sample(request, pk):
             return render(request, 'sample.html', {'student': student, 'resume': resume,
                                                    'about_job': about_job, 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
-                                                   'educational_institution': educational_institution[0],
-                                                   'photo': photo.image.name.split(sep='/')[1]})
+                                                   'educational_institution': educational_institution[0], 'photo': photo.image.name.split(sep='/')[1]})
     else:
         return redirect('auth')

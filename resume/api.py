@@ -3,10 +3,10 @@ import os
 import requests
 import json
 
-from django.forms import model_to_dict
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 from rest_framework import viewsets, generics
+from rest_framework.authtoken.models import Token
+from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,17 +14,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Photo, ResumePhoto
-from .serializers import PhotoSerializer, ImageSerializer
+from .serializers import PhotoSerializer, ImageSerializer, ChangePasswordSerializer
 from resume.models import AuthUser, Students, Resume
 from resume.permissions import IsOwnerOrReadOnly, IsOwner, IsOwnerStudent
 from resume.serializers import StudentsSerializer, ResumesSerializer, UsersSerializer
 
-BASE_URL = 'https://api.hh.ru'
+HH_URL = 'https://api.hh.ru'
 URL = "http://localhost:8000/"
+
+""" Обращение к API HH """
 
 
 def get_from_url(url):
-    j = requests.get(f"{BASE_URL}{url}").json()
+    j = requests.get(f"{HH_URL}{url}").json()
     # Загрузка JSON-строки в объект Python
     data = json.loads(json.dumps(j))
     # Получение списка имен объектов
@@ -35,7 +37,7 @@ def get_from_url(url):
 
 
 def get_from_dictionaries(entity):
-    j = requests.get(f"{BASE_URL}/dictionaries").json()
+    j = requests.get(f"{HH_URL}/dictionaries").json()
     # Загрузка JSON-строки в объект Python
     data = json.loads(json.dumps(j))
     # Получение списка имен объектов
@@ -44,7 +46,7 @@ def get_from_dictionaries(entity):
 
 
 def get_currency():
-    j = requests.get(f"{BASE_URL}/dictionaries").json()
+    j = requests.get(f"{HH_URL}/dictionaries").json()
     # Загрузка JSON-строки в объект Python
     data = json.loads(json.dumps(j))
     # Получение списка имен объектов
@@ -53,7 +55,7 @@ def get_currency():
 
 
 def get_specialization():
-    j = requests.get(f"{BASE_URL}/specializations").json()
+    j = requests.get(f"{HH_URL}/specializations").json()
     data = json.loads(json.dumps(j))
     # Извлечение данных в виде списка кортежей (id, name)
     # list = []
@@ -129,10 +131,7 @@ def get_access_token(url, client_id, client_secret):
     return response.json()["access_token"]
 
 
-# ___________api________
-# class UserAPIView(viewsets.ModelViewSet):
-#     queryset = AuthUser.objects.all()
-#     serializer_class = UserSerializer
+""" Методы API """
 
 
 # Students POST
@@ -179,17 +178,6 @@ class StudentsAPIView(generics.RetrieveAPIView):
     queryset = Students.objects.all()
     serializer_class = StudentsSerializer
     permission_classes = (IsOwner,)
-    # def retrieve(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #
-    #     # Получение текущего пользователя из запроса
-    #     current_user = request.user
-    #
-    #     # Фильтрация объектов по пользователю
-    #     instance = self.get_queryset().filter(user=current_user).first()
-    #
-    #     serializer = self.get_serializer(instance)
-    #     return Response(serializer.data)
 
 
 # Students PUT
@@ -227,15 +215,22 @@ class ResumesAPIView(generics.RetrieveAPIView):
     serializer_class = ResumesSerializer
     permission_classes = (IsOwnerStudent,)
 
+class ResumesIDAPIView(APIView):
+    def get(self, request):
+        user = request.user
+        student = Students.objects.filter(user=user).first()
+        resumes_id = Resume.objects.filter(id_student=student)
+        current_user_resume_ids = [resume.id_resume for resume in resumes_id]
+        return Response({'id': current_user_resume_ids})
 
-# PUT обновление данных user
-# GET id студента
+
+# PUT обновление данных user username
 class UsersAPIUpdate(APIView):
     def get(self, request):
         user = AuthUser.objects.filter(id=self.request.user.id).first()
         if user:
             return Response({'ID': user.id, "username": user.username}, status=200)
-        return Response({"message": "You don't have submitted a record."}, status=400)
+        return Response({"message": "У вас нет записи."}, status=400)
 
     def put(self, request, *args, **kwargs):
         user = AuthUser.objects.filter(id=self.request.user.id).first()
@@ -243,13 +238,33 @@ class UsersAPIUpdate(APIView):
             try:
                 instance = AuthUser.objects.get(pk=user.id)
             except:
-                return Response({"error": "Object does not exists"}, status=404)
+                return Response({"error": "Нет объекта"}, status=404)
         serializer = UsersSerializer(data=request.data, instance=instance)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({"user": serializer.data})
+        if hasattr(request.user, 'auth_token'):
+            request.user.auth_token.delete()
+        token, created = Token.objects.get_or_create(user=request.user)
+        return Response({"user": serializer.data, 'token': token.key}, status=status.HTTP_200_OK)
 
 
+# PUT обновление данных user password
+class ChangePasswordView(UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        # if using drf authtoken, create a new token
+        if hasattr(user, 'auth_token'):
+            user.auth_token.delete()
+        token, created = Token.objects.get_or_create(user=user)
+        # return new token
+        return Response({'token': token.key}, status=status.HTTP_200_OK)
+
+
+# Метод обращения к API Post-запрос
 def post_request(url, data, token):
     url = URL + url
     headers = {'Authorization': 'Token ' + token, 'Content-Type': 'application/json'}
@@ -263,59 +278,17 @@ def get_token(username, password):
     response = requests.post(url, data=json.dumps(body))
     print(response.json())
 
-#POST Загрузка фотографии студента
+
+# POST Загрузка фотографии студента
 class PhotoUploadView(APIView):
     # permission_classes = (IsOwnerStudent,)
     def post(self, request):
         serializer = PhotoSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            #получения студента для сохранения id изображения
+            # получения студента для сохранения id изображения
             student = Students.objects.filter(user=request.user).first()
             student.photo = ResumePhoto.objects.filter(id=serializer.data['id']).first()
             student.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class SaveImageView(APIView):
-#     def post(self, request, *args, **kwargs):
-#         serializer = ImageSerializer(data=request.data)
-#         if serializer.is_valid():
-#             image_data = serializer.validated_data['image']
-#             folder_name = 'images'
-#             path = os.path.join(os.getcwd(), folder_name)
-#             if not os.path.exists(path):
-#                 os.makedirs(path)
-#             with open(os.path.join(path, image_data.name), 'wb+') as destination:
-#                 for chunk in image_data.chunks():
-#                     destination.write(chunk)
-#             return Response({'message': 'Image saved successfully'}, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class ResumesAPIViewID(APIView):
-#     def get(self, request):
-#         resume = Resume.objects.filter(id_student=Students.objects.filter(user=self.request.user).first().id_student)
-#         if resume:
-#             return Response({'ID': resume.id_resume}, status=200)
-#         return Response({"message": "You don't have submitted a record."}, status=400)
-
-
-#
-#     def post(self, request):
-#         serializer = StudentsSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response({'student': serializer.data})
-#
-#     def put(self, request, *args, **kwargs):
-#         pk = kwargs.get('pk', None)
-#         if not pk:
-#             return Response({"error": "Method PUT not allowed"}, status=404)
-#         try:
-#             instance = Students.objects.get(pk=pk)
-#         except:
-#             return Response({"error": "Object does not exists"}, status=404)
-#         serializer = StudentsSerializer(data=request.data, instance=instance)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#         return Response({"students": serializer.data})

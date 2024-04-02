@@ -22,8 +22,10 @@ urlpatterns = [
     path('resume/api/v1/students/<int:pk>/', StudentsAPIView.as_view()),
     path('resume/api/v1/students/update/<int:pk>/', StudentsAPIUpdate.as_view()),
     path('resume/api/v1/students/delete/<int:pk>/', StudentsAPIDelete.as_view()),
+    path('resume/api/v1/resumes/', ResumesIDAPIView.as_view()),
     path('resume/api/v1/resumes/<int:pk>/', ResumesAPIView.as_view()),
     path('resume/api/v1/users/update/username/', UsersAPIUpdate.as_view()),
+    path('resume/api/v1/users/update/password/', ChangePasswordView.as_view()),
     path('resume/api/v1/upload/', PhotoUploadView.as_view(), name='photo-upload'),
     path('get-image/<str:image_name>/', get_image, name='get_image'),
 ]

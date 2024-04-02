@@ -2,7 +2,7 @@ from rest_framework import permissions
 
 from resume.models import Students, AuthUser
 
-#Классы Permissions используются для определения прав доступа к тому или иному объекту
+""" Классы Permissions используются для определения прав доступа к тому или иному объекту  при образении к API"""
 
 # Права доступа только администратору(обновление, удаление) или только чтение
 class IsAdminOrReadOnly(permissions.BasePermission):

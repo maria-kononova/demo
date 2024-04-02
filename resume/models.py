@@ -197,8 +197,7 @@ class Students(models.Model):
                                    null=True)  # Field name made lowercase.
     birthdate = models.DateField(db_column='Birthdate')  # Field name made lowercase.
     gender = models.CharField(db_column='Gender', max_length=7)  # Field name made lowercase.
-    photo = models.ForeignKey(ResumePhoto, models.DO_NOTHING, db_column='Photo', blank=True,
-                              null=True)  # Field name made lowercase.
+    photo = models.ForeignKey('ResumePhoto', models.DO_NOTHING, db_column='Photo', blank=True, null=True)
     phone = models.CharField(db_column='Phone', max_length=12)  # Field name made lowercase.
     email = models.CharField(db_column='Email', max_length=45)  # Field name made lowercase.
     types_of_communication = models.CharField(db_column='Types_of_communication',
