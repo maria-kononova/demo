@@ -139,7 +139,14 @@ def account(request):
             user = request.user
             student = Students.objects.filter(user=user).first()
             update_check = 0
-            student_form = StudentForm()
+            if student:
+                print(student.birthdate)
+                student_form = StudentForm(
+                initial={'surname': student.surname, 'name': student.name, 'middle_name': student.middle_name,
+                         'birthdate': student.birthdate, 'gender': get_key(student.gender, GENDER_CHOICES), 'phone': student.phone, 'email': student.email,
+                         'types_of_communication': get_key(student.types_of_communication, TYPES_OF_COMMUNICATION_CHOICES), 'education_level': get_key(student.education_level, EDUCATION_LEVEL_CHOICES)})
+            else:
+                student_form = StudentForm()
             if 'edit_btn' in request.GET:
                 # Нажатие на кнопку "Изменить данные"
                 update_check = 1
@@ -157,6 +164,12 @@ def account(request):
     else:
         return redirect('auth')
 
+# Функция для поиска ключа по значению в списке выбора
+def get_key(value, CHOICES):
+    for key, val in CHOICES:
+        if val == value:
+            return key
+    return None
 
 def get_image(request, image_name):
     """ Функция, используемая для выгрузки фотографии студента. """
@@ -236,6 +249,7 @@ def go_to_sample(request, pk):
             return render(request, 'sample.html', {'student': student, 'resume': resume,
                                                    'about_job': about_job, 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
-                                                   'educational_institution': educational_institution[0], 'photo': photo})
+                                                   'educational_institution': educational_institution[0],
+                                                   'photo': photo})
     else:
         return redirect('auth')

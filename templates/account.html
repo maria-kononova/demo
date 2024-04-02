@@ -58,13 +58,16 @@
             <hr>
             {% if update_check == 1 %}
                 <div class="bird-form">
+                    <div>
+                        <img id="uploaded-image" class="container-photo"/>
+                    </div>
                     <form id="uploadForm" action="http://localhost:8000/resume/api/v1/upload/" method="post"
                           enctype="multipart/form-data">
                         {% csrf_token %}
-                         <label for="photoInput" class="file-label">
+                        <label for="photoInput" class="file-label">
                             Выберите фото
-                         </label>
-                        <input type="file" name="image" id="photoInput">
+                        </label>
+                        <input type="file" name="image" accept="image/*" id="photoInput">
                         <button class="button-file" type="submit">ЗАГРУЗИТЬ</button>
                     </form>
                 </div>
@@ -127,4 +130,17 @@
             </form>
         {% endif %}
     </div>
+    <script>
+        // Обработчик события изменения файла
+        document.querySelector('input[type="file"]').addEventListener('change', function () {
+            var file = this.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                document.getElementById('uploaded-image').src = e.target.result;
+            }
+
+            reader.readAsDataURL(file);
+        });
+    </script>
 {% endblock %}
