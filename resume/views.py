@@ -229,11 +229,13 @@ def go_to_sample(request, pk):
             busyness = Busyness.objects.filter(id_about_job=about_job.id_about_job)
             work_timetable = WorkTimetable.objects.filter(id_about_job=about_job.id_about_job)
             educational_institution = EducationalInstitution.objects.filter(id_resume=resume.id_resume)
-            photo = Photo.objects.get(id=student.photo.id)
+            photo = ""
+            if student.photo is not None:
+                photo = Photo.objects.get(id=student.photo.id).image.name.split(sep='/')[1]
             request.session['resume_choice'] = resume.id_resume
             return render(request, 'sample.html', {'student': student, 'resume': resume,
                                                    'about_job': about_job, 'specialization': specialization[0],
                                                    'busyness': busyness[0], 'work_timetable': work_timetable[0],
-                                                   'educational_institution': educational_institution[0], 'photo': photo.image.name.split(sep='/')[1]})
+                                                   'educational_institution': educational_institution[0], 'photo': photo})
     else:
         return redirect('auth')

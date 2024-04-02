@@ -31,9 +31,9 @@
 
     <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.6.0"></script>
-{#    <script src="https://unpkg.com/htmx.org@1.9.11" #}
-{#            integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" #}
-{#            crossorigin="anonymous"></script>#}
+    {#    <script src="https://unpkg.com/htmx.org@1.9.11" #}
+    {#            integrity="sha384-0gxUXCCR8yv9FM2b+U3FDbsKthCI66oH5IA9fHppQq9DDMHuMauqq1ZHBpJxQ0J0" #}
+    {#            crossorigin="anonymous"></script>#}
 </head>
 {#<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>#}
 <body>
@@ -46,12 +46,13 @@
             <ul>
                 {% if request.session.user_type == 'Студент' %}
                     <li><a href="{% url 'account' %}">Аккаунт</a></li>
-                {% endif %}
-                <li><a href="{% url 'home' %}">Мои резюме</a></li>
-                {% if request.session.user_type == 'Студент' %}
+                    <li><a href="{% url 'home' %}">Мои резюме</a></li>
                     {% if request.session.student_created == 1 %}
                         <li><a href="{% url 'myresume' %}">Создать резюме</a></li>
                     {% endif %}
+                {% endif %}
+                {% if request.session.user_type == 'Модератор' %}
+                    <li><a href="{% url 'home' %}">Список резюме</a></li>
                 {% endif %}
                 <li><a href="{% url 'exit' %}">Выйти</a></li>
             </ul>

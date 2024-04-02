@@ -7,9 +7,11 @@
         <div class="a-45">
             <div class="container-left">
                 <img src="{% static 'img/guap-logo.svg' %}" class="container-logo-guap"/>
-                <div class="container-photo">
-                    <img class="container-photo" src="{% url 'get_image' image_name=photo %}"/>
-                </div>
+                {% if photo != "" %}
+                    <div class="container-photo">
+                        <img class="container-photo" src="{% url 'get_image' image_name=photo %}"/>
+                    </div>
+                {% endif %}
                 <div class="name-student">
                     {{ student.surname }} {{ student.name }} {{ student.middle_name }}
                 </div>
