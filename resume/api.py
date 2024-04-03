@@ -21,6 +21,8 @@ from resume.serializers import StudentsSerializer, ResumesSerializer, UsersSeria
 
 HH_URL = 'https://api.hh.ru'
 URL = "http://localhost:8000/"
+CLIENT_ID = "VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0"
+CLIENT_SECRET = "JDUG1I830GU1JHKGSOFBVQGH03TG51IS284HP4RC536RJ99BJ2LMVAEHDS0SMLRT"
 
 """ Обращение к API HH """
 
@@ -130,6 +132,41 @@ def get_access_token(url, client_id, client_secret):
     )
     return response.json()["access_token"]
 
+
+def authenticate_user(username, password):
+    url = 'https://api.hh.ru/oauth/token'
+    data = {
+        'grant_type': 'password',
+        'username': username,
+        'password': password,
+        'client_id': 'your_client_id',
+        'client_secret': 'your_client_secret'
+    }
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+
+    response = requests.post(url, data=data, headers=headers)
+
+    if response.status_code == 200:
+        access_token = response.json()['access_token']
+        return access_token
+    else:
+        return response.status_code
+
+def auth_app():
+    url = 'https://api.hh.ru/vacancies'
+    headers = {
+        'User-Agent': 'Ваше приложение',
+        'Authorization': 'Bearer ваш_api_ключ'
+    }
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        print('Запрос успешно выполнен')
+    else:
+        print('Ошибка при выполнении запроса:', response.text)
 
 """ Методы API """
 

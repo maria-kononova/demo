@@ -9,6 +9,7 @@ from django.template import loader
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import Group
 from django import forms
@@ -16,7 +17,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .api import get_token, post_request
+from .api import get_token, post_request, authenticate_user
 from .dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, \
     POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES
 from .forms import UserLoginForm, StudentForm, ResumeForm, EducationForm, AboutJobForm, TestsExamsForm, CoursesForm
@@ -24,10 +25,10 @@ from .forms import UserRegistrationForm
 import json
 
 from .models import Test, Students, AuthUser, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, \
-    WorkTimetable, Photo
+    WorkTimetable, Photo, ResumePhoto
 from .create_object import create_student, create_resume, create_education, create_about_job, create_specialization, \
     create_busyness, create_work_timetable, create_courses, create_tests_exams
-from .serializers import StudentsSerializer
+from .serializers import StudentsSerializer, PhotoSerializer
 
 
 # Create your views here.
@@ -93,6 +94,7 @@ def home(request):
         user = request.user
         student = Students.objects.filter(user=user)
         resumeList = []
+        print(authenticate_user("515nonia515@gmail.com", "228338118"))
         if user.is_staff:  # Проверяем, является ли пользователь модератором
             resumeList = Resume.objects.filter(moderation_status='модерация')
         else:
@@ -140,11 +142,13 @@ def account(request):
             student = Students.objects.filter(user=user).first()
             update_check = 0
             if student:
-                print(student.birthdate)
                 student_form = StudentForm(
-                initial={'surname': student.surname, 'name': student.name, 'middle_name': student.middle_name,
-                         'birthdate': student.birthdate, 'gender': get_key(student.gender, GENDER_CHOICES), 'phone': student.phone, 'email': student.email,
-                         'types_of_communication': get_key(student.types_of_communication, TYPES_OF_COMMUNICATION_CHOICES), 'education_level': get_key(student.education_level, EDUCATION_LEVEL_CHOICES)})
+                    initial={'surname': student.surname, 'name': student.name, 'middle_name': student.middle_name,
+                             'birthdate': student.birthdate, 'gender': get_key(student.gender, GENDER_CHOICES),
+                             'phone': student.phone, 'email': student.email,
+                             'types_of_communication': get_key(student.types_of_communication,
+                                                               TYPES_OF_COMMUNICATION_CHOICES),
+                             'education_level': get_key(student.education_level, EDUCATION_LEVEL_CHOICES)})
             else:
                 student_form = StudentForm()
             if 'edit_btn' in request.GET:
@@ -158,11 +162,13 @@ def account(request):
                     photo_name = ""
                     if photo:
                         photo_name = photo.image.name.split(sep='/')[1]
+            token, created = Token.objects.get_or_create(user=user)
             return render(request, 'account.html',
                           {'student': student, 'student_form_account': student_form, 'update_check': update_check,
-                           'photo': photo_name})  # 'photo': photo_name
+                           'photo': photo_name, 'token': token})  # 'photo': photo_name
     else:
         return redirect('auth')
+
 
 # Функция для поиска ключа по значению в списке выбора
 def get_key(value, CHOICES):
@@ -171,12 +177,27 @@ def get_key(value, CHOICES):
             return key
     return None
 
+
 def get_image(request, image_name):
     """ Функция, используемая для выгрузки фотографии студента. """
     folder_name = 'photo'
     path = os.path.join(os.getcwd(), folder_name, image_name)
     with open(path, 'rb') as image_file:
         return HttpResponse(image_file.read())
+
+
+@csrf_exempt
+def upload_image(request):
+    if request.method == 'POST' and request.FILES.get('image'):
+        image = request.FILES['image']
+        # Обработка изображения, например, сохранение на сервере или отправка на API
+        photo = Photo(image=image)
+        photo.save()
+        student = Students.objects.filter(user=request.user).first()
+        student.photo = ResumePhoto.objects.filter(id=photo.id).first()
+        student.save()
+        print("ok")
+    return JsonResponse({'message': 'Изображение успешно загружено'})
 
 
 def myresume(request):

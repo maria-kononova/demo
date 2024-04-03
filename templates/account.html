@@ -56,23 +56,29 @@
                 <p class="user-role">Измените ваши данные</p>
             {% endif %}
             <hr>
-            {% if update_check == 1 %}
-                <div class="bird-form">
+            <div class="bird-form">
+                {% if photo == "" %}
                     <div>
-                        <img id="uploaded-image" class="container-photo"/>
+                        <img class="container-photo edit" src="{% static 'img/no_photo.png' %}"/>
                     </div>
-                    <form id="uploadForm" action="http://localhost:8000/resume/api/v1/upload/" method="post"
-                          enctype="multipart/form-data">
-                        {% csrf_token %}
-                        <label for="photoInput" class="file-label">
-                            Выберите фото
-                        </label>
-                        <input type="file" name="image" accept="image/*" id="photoInput">
-                        <button class="button-file" type="submit">ЗАГРУЗИТЬ</button>
-                    </form>
-                </div>
-            {% endif %}
-            <form method="post" class="form-container" style="margin-top: 10px;">
+                {% endif %}
+                {% if photo != "" %}
+                    <div>
+                        <img class="container-photo edit" src="{% url 'get_image' image_name=photo %}"/>
+                    </div>
+                {% endif %}
+                <form id="uploadFormImage" action="http://localhost:8000/resume/api/v1/upload/" method="post"
+                      enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <label for="photoInput" class="file-label">
+                        Выберите фото
+                    </label>
+                    <input type="file" name="image" id="photoInput">
+                    <button id="imageSaveBtn" style="display: none;" class="button-file" type="submit">ЗАГРУЗИТЬ
+                    </button>
+                </form>
+            </div>
+            <form id="uploadFormAccount" method="post" class="form-container" style="margin-top: 10px;">
                 {% csrf_token %}
                 <div class="bird-form">
                     <div class="row mb-10">
@@ -130,6 +136,7 @@
             </form>
         {% endif %}
     </div>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
     <script>
         // Обработчик события изменения файла
         document.querySelector('input[type="file"]').addEventListener('change', function () {
@@ -137,10 +144,33 @@
             var reader = new FileReader();
 
             reader.onload = function (e) {
-                document.getElementById('uploaded-image').src = e.target.result;
+                document.getElementsByClassName('container-photo edit')[0].src = e.target.result;
+                document.getElementsByClassName('container-photo edit')[1].src = e.target.result;
             }
 
             reader.readAsDataURL(file);
         });
+        //обработчик отправки формы изменения/сохранения личных данных с загрузкой изображения
+        document.getElementById('uploadFormAccount').addEventListener('submit', function (event) {
+            //отправка формы выполняется автоматически, сохраняя личные данные
+            //затем осуществляется отправка изображения, если оно есть
+            var fileInput = document.getElementById('photoInput');
+            if (fileInput.value) {
+                var input = document.querySelector('input[type="file"]')
+                var data = new FormData($('uploadFormImage').get(0))
+                data.append('image', input.files[0]);
+                $.ajax({
+                    url: "upload",
+                    type: "POST",
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                    }
+                });
+            }
+        });
     </script>
+
 {% endblock %}
