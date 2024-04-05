@@ -185,7 +185,7 @@ def get_image(request, image_name):
     with open(path, 'rb') as image_file:
         return HttpResponse(image_file.read())
 
-
+#функция загрузки изображения
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST' and request.FILES.get('image'):

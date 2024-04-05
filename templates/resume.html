@@ -201,4 +201,15 @@
             <button type="submit" class="button">Отправить</button>
         </form>
     </div>
+    <script>
+        function codeAddress() {
+            let myToast = Toastify({
+                text: "Вы можете приступить к созданию своего резюме!",
+                duration: 3000
+            });
+            myToast.showToast();
+        }
+
+        window.onload = codeAddress;
+    </script>
 {% endblock %}
