@@ -29,7 +29,7 @@
                     <td>{{ res.date_of_creation }}</td>
                     <td>{{ res.moderation_status }}</td>
                     <td><a class="link" href="{% url 'go_to_sample' pk=res.id_resume %}">Перейти</a></td>
-                </tr>
+                </tr>ы
             {% endfor %}
             </tbody>
         </table>
@@ -41,4 +41,13 @@
             {% endif %}
         {% endif %}
     </div>
+    {% if request.session.student_created != 1 %}
+        <script>
+            let myToast = Toastify({
+                text: "Для создания резюме изначально необходимо заполнить личные данные!",
+                duration: 5000
+            });
+            myToast.showToast();
+        </script>
+    {% endif %}
 {% endblock %}
