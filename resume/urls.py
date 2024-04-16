@@ -11,6 +11,7 @@ urlpatterns = [
     path('resume/register', views.register_view, name='register'),
     path('resume/exit', views.exit, name='exit'),
     path('resume/<int:pk>/sample', views.go_to_sample, name='go_to_sample'),
+    path('resume/<int:pk>/edit', views.resume_edit, name='resume_edit'),
     path("resume/account", views.account, name="account"),
     path('resume/sample', views.go_to_sample, name='go_to_sample'),
     path('resume/upload', views.upload_image, name="upload"),

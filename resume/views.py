@@ -192,7 +192,8 @@ def get_image(request, image_name):
     with open(path, 'rb') as image_file:
         return HttpResponse(image_file.read())
 
-#функция загрузки изображения
+
+# функция загрузки изображения
 @csrf_exempt
 def upload_image(request):
     if request.method == 'POST' and request.FILES.get('image'):
@@ -243,9 +244,17 @@ def myresume(request):
             # Вывод пустых форм
             return render(request, 'resume.html', {'resume_form': ResumeForm(),
                                                    'education_form': EducationForm(), 'about_job_form': AboutJobForm(),
-                                                   'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm()})
+                                                   'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm(), 'edit': 0})
     else:
         return redirect('auth')
+
+
+def resume_edit(request, pk):
+    print(pk)
+    # Вывод пустых форм
+    return render(request, 'resume.html', {'resume_form': ResumeForm(),
+                                           'education_form': EducationForm(), 'about_job_form': AboutJobForm(),
+                                           'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm(), "edit": 1})
 
 
 def go_to_sample(request, pk):

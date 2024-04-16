@@ -5,7 +5,12 @@
     <link rel="stylesheet" href="{% static 'css/resume.css' %}"/>
     <div class="container"></div>
     <div class="block">
+     {% if edit == 1 %}
+        <h1 class="page-title">Редактирование резюме</h1>
+    {% endif %}
+    {% if edit == 0 %}
         <h1 class="page-title">Создание резюме</h1>
+    {% endif %}
         <hr>
         <form id="form-container" method="post">
             <h2 class="user-role">О работе</h2>
