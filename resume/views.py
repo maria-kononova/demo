@@ -242,10 +242,18 @@ def myresume(request):
                     work_timetable.save()
                     return redirect('home')
         else:
+            # return render(request, 'resume.html', {'resume_form': resume_form,
+            #                                        'education_form_list': education_form_list,
+            #                                        'about_job_form': about_job_form,
+            #                                        'courses_form_list': courses_form_list,
+            #                                        'test_and_exam_form_list': test_and_exam_form_list,
+            #                                        "edit": 1})
             # Вывод пустых форм
             return render(request, 'resume.html', {'resume_form': ResumeForm(),
-                                                   'education_form': EducationForm(), 'about_job_form': AboutJobForm(),
-                                                   'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm(),
+                                                   'education_form_list': [EducationForm()],
+                                                   'about_job_form': AboutJobForm(),
+                                                   'courses_form_list': [CoursesForm()],
+                                                   'test_and_exam_form_list': [TestsExamsForm()],
                                                    'edit': 0})
     else:
         return redirect('auth')
@@ -254,8 +262,34 @@ def myresume(request):
 def resume_edit(request, pk):
     """ Функция, используемая для редактирования резюме. """
     if request.method == 'POST':
-        print("ok")
-
+        # Сохранение в БД
+        resume_form = ResumeForm(request.POST)
+        education_form = EducationForm(request.POST)
+        courses_form = CoursesForm(request.POST)
+        tests_exams_form = TestsExamsForm(request.POST)
+        about_job_form = AboutJobForm(request.POST)
+        resume_old = Resume.objects.get(id_resume=pk)
+        about_job_old = AboutJob.objects.get(id_resume=pk)
+        if (resume_form.is_valid() and education_form.is_valid() and courses_form.is_valid()
+                and tests_exams_form.is_valid() and about_job_form.is_valid()):
+            resume = create_resume(resume_form, resume_old.id_student, pk)
+            about_job = create_about_job(about_job_form, resume, about_job_old.id_about_job)
+            education = create_education(education_form, resume)
+            courses = create_courses(courses_form, resume)
+            tests_exams = create_tests_exams(tests_exams_form, resume)
+            specialization = create_specialization(about_job_form, about_job)
+            busyness = create_busyness(about_job_form, about_job)
+            work_timetable = create_work_timetable(about_job_form, about_job)
+            with transaction.atomic():
+                resume.save()
+                # education.save()
+                # courses.save()
+                # tests_exams.save()
+                about_job.save()
+                # specialization.save()
+                # busyness.save()
+                # work_timetable.save()
+        return redirect(go_to_sample, pk)
     else:
         resume = Resume.objects.get(pk=pk)
         # подгрузка данных резюме
@@ -319,7 +353,8 @@ def resume_edit(request, pk):
         return render(request, 'resume.html', {'resume_form': resume_form,
                                                'education_form_list': education_form_list,
                                                'about_job_form': about_job_form,
-                                               'courses_form_list': courses_form_list, 'test_and_exam_form_list': test_and_exam_form_list,
+                                               'courses_form_list': courses_form_list,
+                                               'test_and_exam_form_list': test_and_exam_form_list,
                                                "edit": 1})
 
 

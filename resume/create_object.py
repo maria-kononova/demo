@@ -25,9 +25,10 @@ def create_student(student_form, user, id):
                         student_form.cleaned_data.get('education_level')), user=user)
 
 
-def create_resume(resume_form, student):
+def create_resume(resume_form, student, new_resume_id):
     """ Функция для сохранения данных в таблицу resume. """
-    new_resume_id = Resume.objects.all().count() + 1
+    if not new_resume_id:
+        new_resume_id = Resume.objects.all().count() + 1
     return Resume(id_resume=new_resume_id, id_student=student,
                   description_skills=resume_form.cleaned_data.get('description_skills'),
                   city=resume_form.cleaned_data.get('city'),
@@ -79,9 +80,10 @@ def create_tests_exams(tests_exams_form, resume):
                          year_of_completion='2024')  # !!!!!!!!!!!!!!
 
 
-def create_about_job(about_job_form, resume):
+def create_about_job(about_job_form, resume, about_new_id):
     """ Функция для сохранения данных в таблицу about_job. """
-    about_new_id = AboutJob.objects.all().count() + 1
+    if not about_new_id:
+        about_new_id = AboutJob.objects.all().count() + 1
     return AboutJob(id_about_job=about_new_id, id_resume=resume,
                     desired_position=about_job_form.cleaned_data.get('desired_position'),
                     desired_salary=about_job_form.cleaned_data.get('desired_salary'),
