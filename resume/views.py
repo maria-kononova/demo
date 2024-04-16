@@ -115,16 +115,23 @@ def account(request):
                 if 'save_btn' in request.POST:
                     # Нажата кнопка для сохранения / изменения
                     user = request.user
-                    student = Students.objects.filter(user=user).first()
+                    student = Students.objects.filter(user=user).last()
                     if student:
                         # Обновление данных, т. к. студент есть
-                        id_student = Students.objects.filter(user=user).first().id_student
-                        student = create_student(student_form, user, id_student)
-                        with transaction.atomic():
-                            student.save(
-                                update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone',
-                                               'email',
-                                               'types_of_communication', 'education_level'])
+                        student = Students.objects.filter(user=user).last()
+                        resume = Resume.objects.filter(id_student=student.id_student)
+                        if resume.exists():
+                            student_new = create_student(student_form, user, None)
+                            student_new.photo = student.photo
+                            with transaction.atomic():
+                                student_new.save()
+                        else:
+                            student = create_student(student_form, user, student.id_student)
+                            with transaction.atomic():
+                                student.save(
+                                    update_fields=['surname', 'name', 'middle_name', 'birthdate', 'gender', 'phone',
+                                                   'email',
+                                                   'types_of_communication', 'education_level'])
                     else:
                         # Создание нового студента
                         student = create_student(student_form, user, None)
@@ -139,7 +146,7 @@ def account(request):
             # Если у пользователя заполнены данные в аккаунте и update_check = 0 - вывод данных студента
             # Если у пользователя заполнены данные в аккаунте и update_check = 1 - форма изменения данных (доступен выбор аватарки)
             user = request.user
-            student = Students.objects.filter(user=user).first()
+            student = Students.objects.filter(user=user).last()
             update_check = 0
             if student:
                 student_form = StudentForm(
