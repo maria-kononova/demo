@@ -2,7 +2,7 @@
 {% block content %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/sample.css' %}"/>
-    
+
     <div class="block">
         <div class="a-45">
             <div class="container-left">
@@ -166,15 +166,22 @@
                 </div>
             </div>
         </div>
-    {% if request.session.user_type == 'Студент' and resume.moderation_status == 'принято' %}
-        <a href="https://spb.hh.ru/account/login?backurl=%2Foauth%2Fauthorize%3Fclient_id%3DVQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0%26response_type%3Dcode%26skip_choose_account%3DTrue&oauth=true&role=applicant" style="width: auto;" class="button">Отправить на hh.ru</a>
-           {% comment %}https://hh.ru/oauth/authorize?response_type=code&client_id=VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0{% endcomment %}
-        <br>
-    {% endif %}
-    {% if request.session.user_type == 'Студент' and resume.moderation_status == 'отклонено' %}
-        <a href="{% url 'resume_edit' pk=resume.id_resume %}" style="width: auto;" class="button">Редактировать</a>
-        <br>
-    {% endif %}
+        {% if request.session.user_type == 'Студент' and resume.moderation_status == 'принято' %}
+            <a href="https://spb.hh.ru/account/login?backurl=%2Foauth%2Fauthorize%3Fclient_id%3DVQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0%26response_type%3Dcode%26skip_choose_account%3DTrue&oauth=true&role=applicant"
+               style="width: auto;" class="button">Отправить на hh.ru</a>
+            {% comment %}https://hh.ru/oauth/authorize?response_type=code&client_id=VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0{% endcomment %}
+            <br>
+        {% endif %}
+        {% if request.session.user_type == 'Студент' and resume.moderation_status != 'модерация' %}
+            <div class="row">
+                <a href="{% url 'resume_edit' pk=resume.id_resume %}" style="width: auto;"
+                   class="button">Редактировать</a>
+                <a href="{% url 'resume_edit' pk=resume.id_resume %}" style="width: auto;"
+                   class="button">Отправить на модерацию</a>
+                <br>
+            </div>
+            <br>
+        {% endif %}
     </div>
     {% if request.session.user_type == 'Модератор' %}
         <div class="container-comment">
@@ -196,5 +203,5 @@
             </form>
         </div>
     {% endif %}
-    
+
 {% endblock %}

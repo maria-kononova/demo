@@ -5,12 +5,19 @@
     <link rel="stylesheet" href="{% static 'css/resume.css' %}"/>
     <div class="container"></div>
     <div class="block">
-     {% if edit == 1 %}
-        <h1 class="page-title">Редактирование резюме</h1>
-    {% endif %}
-    {% if edit == 0 %}
-        <h1 class="page-title">Создание резюме</h1>
-    {% endif %}
+        {% if edit == 1 %}
+            <h1 class="page-title">Редактирование резюме</h1>
+        {% endif %}
+        {% if edit == 0 %}
+            <h1 class="page-title">Создание резюме</h1>
+            <script>
+                let myToast = Toastify({
+                    text: "Вы можете приступить к созданию своего резюме!",
+                    duration: 3000
+                });
+                myToast.showToast();
+            </script>
+        {% endif %}
         <hr>
         <form id="form-container" method="post">
             <h2 class="user-role">О работе</h2>
@@ -55,88 +62,93 @@
             <h2 class="user-role">Образование</h2>
             <hr>
             <div class="bird-form">
-                {% csrf_token %}
-                {% comment %}{{ education_form.as_p }}{% endcomment %}
-                <div class="row mb-10">
-                    <div class="ml-15">
-                        <label for="{{ education_form.name_of_institution.id_for_label }}">{{ education_form.name_of_institution.label }}</label>
-                        {{ education_form.name_of_institution }}
+                {% for education_form in education_form_list %}
+                    {% csrf_token %}
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ education_form.name_of_institution.id_for_label }}">{{ education_form.name_of_institution.label }}</label>
+                            {{ education_form.name_of_institution }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ education_form.faculty.id_for_label }}">{{ education_form.faculty.label }}</label>
+                            {{ education_form.faculty }}
+                        </div>
                     </div>
-                    <div class="ml-25">
-                        <label for="{{ education_form.faculty.id_for_label }}">{{ education_form.faculty.label }}</label>
-                        {{ education_form.faculty }}
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ education_form.specialization_of_institution.id_for_label }}">{{ education_form.specialization_of_institution.label }}</label>
+                            {{ education_form.specialization_of_institution }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ education_form.level_education.id_for_label }}">{{ education_form.level_education.label }}</label>
+                            {{ education_form.level_education }}
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-10">
-                    <div class="ml-15">
-                        <label for="{{ education_form.specialization_of_institution.id_for_label }}">{{ education_form.specialization_of_institution.label }}</label>
-                        {{ education_form.specialization_of_institution }}
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ education_form.year_of_completion_institution.id_for_label }}">{{ education_form.year_of_completion_institution.label }}</label>
+                            {{ education_form.year_of_completion_institution }}
+                        </div>
                     </div>
-                    <div class="ml-25">
-                        <label for="{{ education_form.level_education.id_for_label }}">{{ education_form.level_education.label }}</label>
-                        {{ education_form.level_education }}
-                    </div>
-                </div>
-                <div class="row mb-10">
-                    <div class="ml-15">
-                        <label for="{{ education_form.year_of_completion_institution.id_for_label }}">{{ education_form.year_of_completion_institution.label }}</label>
-                        {{ education_form.year_of_completion_institution }}
-                    </div>
-                </div>
+                {% endfor %}
             </div>
             <hr>
             <h2 class="user-role">Курсы</h2>
             <hr>
             <div class="bird-form">
-                {% csrf_token %}
-                {% comment %}{{ courses_form.as_p }}{% endcomment %}
-                <div class="row mb-10">
-                    <div class="ml-15">
-                        <label for="{{ courses_form.name_of_organization_course.id_for_label }}">{{ courses_form.name_of_organization_course.label }}</label>
-                        {{ courses_form.name_of_organization_course }}
+                {% for courses_form in courses_form_list %}
+                    {% csrf_token %}
+                    {% comment %}{{ courses_form.as_p }}{% endcomment %}
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ courses_form.name_of_organization_course.id_for_label }}">{{ courses_form.name_of_organization_course.label }}</label>
+                            {{ courses_form.name_of_organization_course }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ courses_form.specialization_of_course.id_for_label }}">{{ courses_form.specialization_of_course.label }}</label>
+                            {{ courses_form.specialization_of_course }}
+                        </div>
                     </div>
-                    <div class="ml-25">
-                        <label for="{{ courses_form.specialization_of_course.id_for_label }}">{{ courses_form.specialization_of_course.label }}</label>
-                        {{ courses_form.specialization_of_course }}
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ courses_form.name_of_course.id_for_label }}">{{ courses_form.name_of_course.label }}</label>
+                            {{ courses_form.name_of_course }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ courses_form.year_of_completion_course.id_for_label }}">{{ courses_form.year_of_completion_course.label }}</label>
+                            {{ courses_form.year_of_completion_course }}
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-10">
-                    <div class="ml-15">
-                        <label for="{{ courses_form.name_of_course.id_for_label }}">{{ courses_form.name_of_course.label }}</label>
-                        {{ courses_form.name_of_course }}
-                    </div>
-                    <div class="ml-25">
-                        <label for="{{ courses_form.year_of_completion_course.id_for_label }}">{{ courses_form.year_of_completion_course.label }}</label>
-                        {{ courses_form.year_of_completion_course }}
-                    </div>
-                </div>
+                {% endfor %}
             </div>
             <hr>
             <h2 class="user-role">Тесты и экзамены</h2>
             <hr>
             <div class="bird-form">
-                {% csrf_token %}
-                {% comment %}{{ tests_exams_form.as_p }}{% endcomment %}
-                <div class="row mb-10">
-                    <div class="ml-15">
-                        <label for="{{ tests_exams_form.name_of_organization_test.id_for_label }}">{{ tests_exams_form.name_of_organization_test.label }}</label>
-                        {{ tests_exams_form.name_of_organization_test }}
+                {% for tests_exams_form in test_and_exam_form_list %}
+                    {% csrf_token %}
+                    {% comment %}{{ tests_exams_form.as_p }}{% endcomment %}
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ tests_exams_form.name_of_organization_test.id_for_label }}">{{ tests_exams_form.name_of_organization_test.label }}</label>
+                            {{ tests_exams_form.name_of_organization_test }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ tests_exams_form.specialization_of_test.id_for_label }}">{{ tests_exams_form.specialization_of_test.label }}</label>
+                            {{ tests_exams_form.specialization_of_test }}
+                        </div>
                     </div>
-                    <div class="ml-25">
-                        <label for="{{ tests_exams_form.specialization_of_test.id_for_label }}">{{ tests_exams_form.specialization_of_test.label }}</label>
-                        {{ tests_exams_form.specialization_of_test }}
+                    <div class="row mb-10">
+                        <div class="ml-15">
+                            <label for="{{ tests_exams_form.name_of_test.id_for_label }}">{{ tests_exams_form.name_of_test.label }}</label>
+                            {{ tests_exams_form.name_of_test }}
+                        </div>
+                        <div class="ml-25">
+                            <label for="{{ tests_exams_form.year_of_completion_test.id_for_label }}">{{ tests_exams_form.year_of_completion_test.label }}</label>
+                            {{ tests_exams_form.year_of_completion_test }}
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-10">
-                    <div class="ml-15">
-                        <label for="{{ tests_exams_form.name_of_test.id_for_label }}">{{ tests_exams_form.name_of_test.label }}</label>
-                        {{ tests_exams_form.name_of_test }}
-                    </div>
-                    <div class="ml-25">
-                        <label for="{{ tests_exams_form.year_of_completion_test.id_for_label }}">{{ tests_exams_form.year_of_completion_test.label }}</label>
-                        {{ tests_exams_form.year_of_completion_test }}
-                    </div>
-                </div>
+                {% endfor %}
             </div>
             <hr>
             <h2 class="user-role">Дополнительно</h2>
@@ -206,15 +218,4 @@
             <button type="submit" class="button">Отправить</button>
         </form>
     </div>
-    <script>
-        function codeAddress() {
-            let myToast = Toastify({
-                text: "Вы можете приступить к созданию своего резюме!",
-                duration: 3000
-            });
-            myToast.showToast();
-        }
-
-        window.onload = codeAddress;
-    </script>
 {% endblock %}

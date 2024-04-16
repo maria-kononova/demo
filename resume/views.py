@@ -19,13 +19,14 @@ from django.contrib.auth.models import User
 
 from .api import get_token, post_request, authenticate_user
 from .dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, \
-    POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES
+    POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES, CITY_CHOICES, STATION_METRO_CHOICES, \
+    LOCALE_RESUME_CHOICES, SPECIALIZATION_CHOICES, BUSYNESS_CHOICES, WORK_TIME_CHOICES
 from .forms import UserLoginForm, StudentForm, ResumeForm, EducationForm, AboutJobForm, TestsExamsForm, CoursesForm
 from .forms import UserRegistrationForm
 import json
 
 from .models import Test, Students, AuthUser, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, \
-    WorkTimetable, Photo, ResumePhoto
+    WorkTimetable, Photo, ResumePhoto, Courses, TestsAndExams
 from .create_object import create_student, create_resume, create_education, create_about_job, create_specialization, \
     create_busyness, create_work_timetable, create_courses, create_tests_exams
 from .serializers import StudentsSerializer, PhotoSerializer
@@ -244,17 +245,82 @@ def myresume(request):
             # Вывод пустых форм
             return render(request, 'resume.html', {'resume_form': ResumeForm(),
                                                    'education_form': EducationForm(), 'about_job_form': AboutJobForm(),
-                                                   'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm(), 'edit': 0})
+                                                   'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm(),
+                                                   'edit': 0})
     else:
         return redirect('auth')
 
 
 def resume_edit(request, pk):
-    print(pk)
-    # Вывод пустых форм
-    return render(request, 'resume.html', {'resume_form': ResumeForm(),
-                                           'education_form': EducationForm(), 'about_job_form': AboutJobForm(),
-                                           'courses_form': CoursesForm(), 'tests_exams_form': TestsExamsForm(), "edit": 1})
+    """ Функция, используемая для редактирования резюме. """
+    if request.method == 'POST':
+        print("ok")
+
+    else:
+        resume = Resume.objects.get(pk=pk)
+        # подгрузка данных резюме
+        resume_form = ResumeForm(
+            initial={'description_skills': resume.description_skills, 'city': get_key(resume.city, CITY_CHOICES),
+                     'station_metro': get_key(resume.station_metro, STATION_METRO_CHOICES),
+                     'possibility_of_transfer': get_key(resume.possibility_of_transfer,
+                                                        POSSIBILITY_OF_TRANSFER_CHOICES),
+                     'business_trips': get_key(resume.business_trips, BUSINESS_TRIPS_CHOICES),
+                     'desired_time_in_the_way': get_key(resume.desired_time_in_the_way, DESIRED_TIME_CHOICES),
+                     'availability_car': resume.availability_car,
+                     'location': get_key(resume.locale_resume, LOCALE_RESUME_CHOICES)})
+        # подгрузка данных образования (несколько форм)
+        education_form_list = []
+        education_list = EducationalInstitution.objects.filter(id_resume=pk).all()
+        for education in education_list:
+            education_form = EducationForm(initial={
+                'name_of_institution': education.name_of_institution,
+                'faculty': education.faculty,
+                'specialization_of_institution': education.specialization,
+                'year_of_completion_institution': education.year_of_completion,
+                'level_education': get_key(education.level_education, EDUCATION_LEVEL_CHOICES)
+            })
+            education_form_list.append(education_form)
+        # подгрузка данных о работе
+        about_job = AboutJob.objects.filter(id_resume=pk).first()
+        busyness = Busyness.objects.filter(id_about_job=about_job).first()
+        work_timetable = WorkTimetable.objects.filter(id_about_job=about_job).first()
+        specialization = Specialization.objects.filter(id_about_job=about_job).first()
+        about_job_form = AboutJobForm(initial={
+            'desired_position': about_job.desired_position,
+            'specialization': get_key(specialization.specialization, SPECIALIZATION_CHOICES),
+            'desired_salary': about_job.desired_salary,
+            'currency': about_job.currency,
+            'busyness': get_key(busyness.type_busyness, BUSYNESS_CHOICES),
+            'work_timetable': get_key(work_timetable.work_timetable, WORK_TIME_CHOICES),
+        })
+        # подгрузка данных о курсах
+        courses_form_list = []
+        courses_list = Courses.objects.filter(id_resume=pk).all()
+        for courses in courses_list:
+            courses_form = CoursesForm(initial={
+                'name_of_organization_course': courses.organization,
+                'name_of_course': courses.course_name,
+                'specialization_of_course': courses.specialization,
+                'year_of_completion_course': courses.year_of_completion
+            })
+            courses_form_list.append(courses_form)
+        # подгрузка данных о тестах и экзаменах
+        test_and_exam_form_list = []
+        test_and_exam_list = TestsAndExams.objects.filter(id_resume=pk).all()
+        for test_and_exam in test_and_exam_list:
+            test_and_exam_form = TestsExamsForm(initial={
+                'name_of_organization_test': test_and_exam.organization,
+                'name_of_test': test_and_exam.course_name,
+                'specialization_of_test': test_and_exam.specialization,
+                'year_of_completion_test': test_and_exam.year_of_completion
+            })
+            test_and_exam_form_list.append(test_and_exam_form)
+        # Вывод форм с данными
+        return render(request, 'resume.html', {'resume_form': resume_form,
+                                               'education_form_list': education_form_list,
+                                               'about_job_form': about_job_form,
+                                               'courses_form_list': courses_form_list, 'test_and_exam_form_list': test_and_exam_form_list,
+                                               "edit": 1})
 
 
 def go_to_sample(request, pk):
