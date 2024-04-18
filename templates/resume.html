@@ -4,6 +4,13 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/resume.css' %}"/>
     <div class="container"></div>
+    {% if moderation_comment != None %}
+        <div class="block">
+            <h1 class="page-title">Комментарий модератора</h1>
+            <hr>
+            <h2>{{ moderation_comment }}</h2>
+        </div>
+    {% endif %}
     <div class="block">
         {% if edit == 1 %}
             <h1 class="page-title">Редактирование резюме</h1>

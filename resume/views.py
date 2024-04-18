@@ -355,7 +355,7 @@ def resume_edit(request, pk):
                                                'about_job_form': about_job_form,
                                                'courses_form_list': courses_form_list,
                                                'test_and_exam_form_list': test_and_exam_form_list,
-                                               "edit": 1})
+                                               "edit": 1, 'moderation_comment': resume.moderator_comment})
 
 
 def go_to_sample(request, pk):
