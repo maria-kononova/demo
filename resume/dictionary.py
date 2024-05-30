@@ -1,4 +1,4 @@
-from resume.api import get_from_url, get_from_dictionaries, get_currency, get_specialization
+from resume.api import get_from_url, get_from_dictionaries, get_currency, get_specialization, get_metro_stations
 
 COUNTRY_CHOICES = get_from_url("/areas/countries")
 
@@ -38,18 +38,13 @@ SPECIALIZATION_CHOICES = get_specialization()
 # График работы
 WORK_TIME_CHOICES = get_from_dictionaries("schedule")
 
+# Выбор станции метро
+STATION_METRO_CHOICES = get_metro_stations(1)
+
 # Выбор города
 CITY_CHOICES = (
-    ('Санкт-Петербург', "Санкт-Петербург"),
-    ('Москва', "Москва"),
-)
-
-# Выбор станции метро
-STATION_METRO_CHOICES = (
-    ('Сенная', "Сенная"),
-    ('Адмиралтейская', "Адмиралтейская"),
-    ('Площадь Восстания', "Площадь Восстания"),
-    ('Невский проспект', "Невский проспект"),
+    ('1', "Москва"),
+    ('2', "Санкт-Петербург"),
 )
 
 # Выбор категории прав

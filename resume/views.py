@@ -17,7 +17,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-from .api import get_token, post_request, authenticate_user
+from .api import get_token, post_request, create_resume_on_hh, get_metro_stations, get_access_token
 from .dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, \
     POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES, CITY_CHOICES, STATION_METRO_CHOICES, \
     LOCALE_RESUME_CHOICES, SPECIALIZATION_CHOICES, BUSYNESS_CHOICES, WORK_TIME_CHOICES
@@ -95,7 +95,6 @@ def home(request):
         user = request.user
         student = Students.objects.filter(user=user)
         resumeList = []
-        print(authenticate_user("515nonia515@gmail.com", "228338118"))
         if user.is_staff:  # Проверяем, является ли пользователь модератором
             resumeList = Resume.objects.filter(moderation_status='модерация')
         else:
@@ -391,3 +390,143 @@ def go_to_sample(request, pk):
                                                    'photo': photo})
     else:
         return redirect('auth')
+
+
+def get_data(request):
+    selected_value = request.GET.get('selected_value')
+    data = get_metro_stations(selected_value)
+    return JsonResponse(data, safe=False)
+
+
+def auth_hh(request, pk):
+    return redirect(
+        "https://hh.ru/oauth/authorize?response_type=code&client_id=VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0&redirect_uri=http://localhost:8080/resume/access/" + pk + "/")
+
+
+def get_access_token_view(request, pk):
+    code = request.GET.get('code')
+    access_token = get_access_token(code, pk)
+    print(access_token)
+    return redirect(f"http://localhost:8080/resume/send/{pk}/?access_token={access_token}")
+
+
+def resume_send(request, pk):
+    access_token = request.GET.get('access_token')
+    resume = Resume.objects.get(pk=pk)
+    student = resume.id_student
+    # Пример данных для создания резюме (обязательные поля)
+    resume_data = {
+        "area": {
+            "id": 113
+        },
+        "citizenship": [
+            {
+                "id": get_key(resume.city, CITY_CHOICES)
+            }
+        ],
+        "contact": [
+            {
+                "preferred": True,
+                "type": {
+                    "id": "email",
+                    "name": "Эл. почта"
+                },
+                "value": student.email
+            },
+            {
+                "comment": "Комментарий",
+                "need_verification": False,
+                "preferred": False,
+                "type": {
+                    "id": "cell",
+                    "name": "Мобильный телефон"
+                },
+                "value": {
+                    "city": "955",
+                    "country": "7",
+                    "formatted": "7-955-000-0000",
+                    "number": "0000000"
+                },
+                "verified": False
+            }
+        ],
+        "education": {
+            "additional": None,
+            "attestation": None,
+            "elementary": None,
+            "level": {
+                "id": "master",
+                "name": "Магистр"
+            },
+            "primary": [
+                {
+                    "name": "testUniversity",
+                    "name_id": None,
+                    "organization": "testFaculty",
+                    "organization_id": None,
+                    "result": "testSpeciality",
+                    "result_id": None,
+                    "year": 1988
+                }
+            ]
+        },
+        "experience": [
+            {
+                "area": None,
+                "company": "Компания",
+                "company_id": None,
+                "company_url": "http://url.ru",
+                "description": "Руководил отделом",
+                "employer": None,
+                "end": "2012-02-06",
+                "industries": [],
+                "industry": None,
+                "position": "Директор",
+                "start": "2011-01-02"
+            }
+        ],
+        "first_name": student.name,
+        "gender": {
+            "id": "male",
+            "name": None
+        },
+        "language": [
+            {
+                "id": "eng",
+                "level": {
+                    "id": "a1",
+                    "name": "A1"
+                },
+                "name": "Английский"
+            }
+        ],
+        "last_name": student.surname,
+        "photo": None,
+        "portfolio": None,
+        "skills": resume.description_skills,
+        "title": "RESUME"
+    }
+    #     {
+    #     "title": "Программист Python",
+    #     "specialization": {
+    #         "id": "1.221"  # ID специализации на HeadHunter, можно найти в их документации
+    #     },
+    #     "salary": {
+    #         "amount": 100000,
+    #         "currency": "RUR"
+    #     },
+    #     "experience": {
+    #         "id": "between1And3"  # ID опыта работы на HeadHunter
+    #     },
+    #     "skills": [
+    #         {
+    #             "name": "Python"
+    #         },
+    #         {
+    #             "name": "Django"
+    #         }
+    #     ]
+    # }
+    result = create_resume_on_hh(access_token, resume_data)
+    print(result)
+    return HttpResponse("Received code: {}".format(access_token))

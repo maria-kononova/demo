@@ -167,9 +167,9 @@
             </div>
         </div>
         {% if request.session.user_type == 'Студент' and resume.moderation_status == 'принято' %}
-            <a href="https://spb.hh.ru/account/login?backurl=%2Foauth%2Fauthorize%3Fclient_id%3DVQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0%26response_type%3Dcode%26skip_choose_account%3DTrue&oauth=true&role=applicant"
+            <a href="{% url 'auth_hh' pk=resume.id_resume %}"
                style="width: auto;" class="button">Отправить на hh.ru</a>
-            {% comment %}https://hh.ru/oauth/authorize?response_type=code&client_id=VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0{% endcomment %}
+            {% comment %}https://spb.hh.ru/account/login?backurl=%2Foauth%2Fauthorize%3Fclient_id%3DVQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0%26response_type%3Dcode%26skip_choose_account%3DTrue&oauth=true&role=applicant{% endcomment %}
             <br>
         {% endif %}
         {% if request.session.user_type == 'Студент' and resume.moderation_status != 'модерация' %}

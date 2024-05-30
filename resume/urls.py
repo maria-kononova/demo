@@ -15,6 +15,10 @@ urlpatterns = [
     path("resume/account", views.account, name="account"),
     path('resume/sample', views.go_to_sample, name='go_to_sample'),
     path('resume/upload', views.upload_image, name="upload"),
+    path('resume/auth_hh/<str:pk>', views.auth_hh, name='auth_hh'),
+    path('resume/send/<int:pk>/', views.resume_send),
+    path('resume/access/<int:pk>/', views.get_access_token_view),
+    path('get_data/', views.get_data, name='get_data'),
     # Конечные точки API
     path('resume/api/v1/drf-auth/', include('rest_framework.urls')),
     path('resume/api/v1/auth/', include('djoser.urls')),

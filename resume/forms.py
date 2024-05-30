@@ -55,9 +55,9 @@ class ResumeForm(forms.Form):
     description_skills = forms.CharField(label='Описание скиллов', max_length=700,
                                          widget=forms.Textarea(attrs={"class": "myfield"}))
     city = forms.ChoiceField(label='Город', choices=CITY_CHOICES,
-                             widget=forms.Select(attrs={"class": "myfield_select"}))
+                             widget=forms.Select(attrs={"id":"city_choiser", "class": "myfield_select"}))
     station_metro = forms.ChoiceField(label='Станция метро', choices=STATION_METRO_CHOICES,
-                                      widget=forms.Select(attrs={"class": "myfield_select"}))
+                                      widget=forms.Select(attrs={ "id":"metro_choiser", "class": "myfield_select"}))
     # Нужно добавить место для переезда / коммандировки
     possibility_of_transfer = forms.ChoiceField(label='Переезд', choices=POSSIBILITY_OF_TRANSFER_CHOICES,
                                                 widget=forms.Select(attrs={"class": "myfield_select"}))

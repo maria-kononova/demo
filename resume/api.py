@@ -20,7 +20,7 @@ from resume.permissions import IsOwnerOrReadOnly, IsOwner, IsOwnerStudent
 from resume.serializers import StudentsSerializer, ResumesSerializer, UsersSerializer
 
 HH_URL = 'https://api.hh.ru'
-URL = "http://localhost:8000/"
+URL = "http://localhost:8080/"
 CLIENT_ID = "VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0"
 CLIENT_SECRET = "JDUG1I830GU1JHKGSOFBVQGH03TG51IS284HP4RC536RJ99BJ2LMVAEHDS0SMLRT"
 
@@ -40,18 +40,14 @@ def get_from_url(url):
 
 def get_from_dictionaries(entity):
     j = requests.get(f"{HH_URL}/dictionaries").json()
-    # Загрузка JSON-строки в объект Python
     data = json.loads(json.dumps(j))
-    # Получение списка имен объектов
     names_list = [(d['id'], d['name']) for d in data[entity]]
     return names_list
 
 
 def get_currency():
     j = requests.get(f"{HH_URL}/dictionaries").json()
-    # Загрузка JSON-строки в объект Python
     data = json.loads(json.dumps(j))
-    # Получение списка имен объектов
     names_list = [(d['code'], d['abbr']) for d in data["currency"]]
     return names_list
 
@@ -59,72 +55,53 @@ def get_currency():
 def get_specialization():
     j = requests.get(f"{HH_URL}/specializations").json()
     data = json.loads(json.dumps(j))
-    # Извлечение данных в виде списка кортежей (id, name)
-    # list = []
-    # for item in data:
-    #     for spec in item['specializations']:
-    #         list.append((spec['id'], spec['name']))
     list = [(item['id'], item['name']) for item in data]
     return list
 
 
-def auth():
-    # client_id = "VQVJ5QBD7OJ2L58U2ET8M7O8CNNEQSUM3F6T2D7RM449KETARC92PRRODBDN28S0"
-    # client_secret = "JDUG1I830GU1JHKGSOFBVQGH03TG51IS284HP4RC536RJ99BJ2LMVAEHDS0SMLRT"
-    # # NO339LH7AML4HME1A7EPBD25P432HM64CT9ER92LBRRO9UNJO7F0DF4P7RNPM0FP
-    # access_token = requests.post('https://hh.ru/oauth/token',
-    #                              {'grant_type': 'authorization_code', 'client_id': client_id,
-    #                               'client_secret': client_secret, 'code': '<CODE>'}).json()
-    #
-    # print(access_token)
-    # headers = {
-    #     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'
-    # }
-    # r = requests.get("https://hh.ru", headers=headers)
-    # print(r)
-    url = 'https://moscow.hh.ru/account/login'
+def get_metro_stations(id):
+    response = requests.get(f"{HH_URL}/metro/{id}")
 
-    # Важно. По умолчанию requests отправляет вот такой
-    # заголовок 'User-Agent': 'python-requests/2.22.0 ,  а это приводит к тому , что Nginx
-    # отправляет 404 ответ. Поэтому нам нужно сообщить серверу, что запрос идет от браузера
+    if response.status_code == 200:
+        metro_stations = {}
+        data = response.json()
 
-    user_agent_val = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36'
+        for line in data['lines']:
+            for station in line['stations']:
+                station_name = station['name']
+                station_id = station['id']
 
-    # Создаем сессию и указываем ему наш user-agent
-    session = requests.Session()
-    r = session.get(url, headers={
-        'User-Agent': user_agent_val
-    })
+                metro_stations[station_id] = station_name
 
-    # Указываем referer. Иногда , если не указать , то приводит к ошибкам.
-    session.headers.update({'Referer': url})
+        if metro_stations:
+            list = []
+            for station_id, station_name in metro_stations.items():
+                station_choice = (station_id, station_name)
+                list.append(station_choice)
 
-    # Хотя , мы ранее указывали наш user-agent и запрос удачно прошел и вернул
-    # нам нужный ответ, но user-agent изменился на тот , который был
-    # по умолчанию. И поэтому мы обновляем его.
-    session.headers.update({'User-Agent': user_agent_val})
-
-    # Получаем значение _xsrf из cookies
-    _xsrf = session.cookies.get('_xsrf', domain=".hh.ru")
-
-    # Осуществляем вход с помощью метода POST с указанием необходимых данных
-    post_request = session.post(url, {
-        'backUrl': 'https://spb.hh.ru/',
-        'username': '515nonia515@gmail.com',
-        'password': '228338118',
-        '_xsrf': _xsrf,
-        'remember': 'yes',
-    })
-    url = post_request.json()['redirectUrl']
-
-    # Вход успешно воспроизведен и мы сохраняем страницу в html файл
-    with open("hh_success.html", "w", encoding="utf-8") as f:
-        f.write(post_request.text)
-
-    return post_request.json()['redirectUrl']
+        return list
+    else:
+        return None
 
 
-def get_access_token(url, client_id, client_secret):
+# Метод создания резюме на HH
+def create_resume_on_hh(auth_token, resume_data):
+    url = HH_URL + "/resumes"
+    headers = {
+        "Authorization": "Bearer " + auth_token,
+        "User-Agent": "Resume",
+        "Content-Type": "application/json"
+    }
+
+    response = requests.post(url, headers=headers, json=resume_data)
+
+    if response.status_code == 201:
+        return "Резюме успешно создано на HeadHunter"
+    else:
+        return "Ошибка при создании резюме на HeadHunter: {}".format(response.text)
+
+
+def get_access_token_app(url, client_id, client_secret):
     response = requests.post(
         url,
         data={"grant_type": "client_credentials"},
@@ -133,40 +110,52 @@ def get_access_token(url, client_id, client_secret):
     return response.json()["access_token"]
 
 
-def authenticate_user(username, password):
-    url = 'https://api.hh.ru/oauth/token'
-    data = {
-        'grant_type': 'password',
-        'username': username,
-        'password': password,
-        'client_id': 'your_client_id',
-        'client_secret': 'your_client_secret'
-    }
-    headers = {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    }
+def get_access_token(auth_token, pk):
+    response = requests.post(
+        "https://api.hh.ru/token",
+        data={"grant_type": "authorization_code", "client_id": CLIENT_ID, "client_secret": CLIENT_SECRET,
+              "redirect_uri": URL + f"resume/access/{pk}/", "code": auth_token}
+    )
+    print(response.json())
+    return response.json()["access_token"]
 
-    response = requests.post(url, data=data, headers=headers)
 
-    if response.status_code == 200:
-        access_token = response.json()['access_token']
-        return access_token
-    else:
-        return response.status_code
+# def authenticate_user(username, password):
+#     url = 'https://api.hh.ru/oauth/token'
+#     data = {
+#         'grant_type': 'password',
+#         'username': username,
+#         'password': password,
+#         'client_id': 'your_client_id',
+#         'client_secret': 'your_client_secret'
+#     }
+#     headers = {
+#         'Content-Type': 'application/x-www-form-urlencoded'
+#     }
+#
+#     response = requests.post(url, data=data, headers=headers)
+#
+#     if response.status_code == 200:
+#         access_token = response.json()['access_token']
+#         return access_token
+#     else:
+#         return response.status_code
+#
+#
+# def auth_app():
+#     url = 'https://api.hh.ru/vacancies'
+#     headers = {
+#         'User-Agent': 'Ваше приложение',
+#         'Authorization': 'Bearer ваш_api_ключ'
+#     }
+#
+#     response = requests.get(url, headers=headers)
+#
+#     if response.status_code == 200:
+#         print('Запрос успешно выполнен')
+#     else:
+#         print('Ошибка при выполнении запроса:', response.text)
 
-def auth_app():
-    url = 'https://api.hh.ru/vacancies'
-    headers = {
-        'User-Agent': 'Ваше приложение',
-        'Authorization': 'Bearer ваш_api_ключ'
-    }
-
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
-        print('Запрос успешно выполнен')
-    else:
-        print('Ошибка при выполнении запроса:', response.text)
 
 """ Методы API """
 
@@ -251,6 +240,7 @@ class ResumesAPIView(generics.RetrieveAPIView):
     queryset = Resume.objects.all()
     serializer_class = ResumesSerializer
     permission_classes = (IsOwnerStudent,)
+
 
 class ResumesIDAPIView(APIView):
     def get(self, request):

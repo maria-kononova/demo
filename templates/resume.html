@@ -225,4 +225,26 @@
             <button type="submit" class="button">Отправить</button>
         </form>
     </div>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#city_choiser').change(function () {
+                var selected_value = $(this).val();
+                $.ajax({
+                    url: '/get_data/',
+                    type: 'GET',
+                    data: {selected_value: selected_value},
+                    success: function (data) {
+                        // Обновление choices у ChoiceField
+                        var select = $('#metro_choiser');
+                        select.empty();
+                        $.each(data, function (index, station) {
+                            select.append('<option value="' + station[0] + '">' + station[1] + '</option>');
+                        });
+                    },
+                });
+            });
+        });
+        
+    </script>
 {% endblock %}
