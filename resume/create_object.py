@@ -1,8 +1,9 @@
 import datetime
 
+from resume.api import get_metro_stations
 from resume.dictionary import GENDER_CHOICES, TYPES_OF_COMMUNICATION_CHOICES, EDUCATION_LEVEL_CHOICES, \
     POSSIBILITY_OF_TRANSFER_CHOICES, BUSINESS_TRIPS_CHOICES, DESIRED_TIME_CHOICES, CURRENCY_CHOICES, \
-    SPECIALIZATION_CHOICES, BUSYNESS_CHOICES, WORK_TIME_CHOICES
+    SPECIALIZATION_CHOICES, BUSYNESS_CHOICES, WORK_TIME_CHOICES, CITY_CHOICES
 from resume.models import Students, Resume, EducationalInstitution, AboutJob, Specialization, Busyness, WorkTimetable, \
     Courses, TestsAndExams, ResumePhoto
 
@@ -29,10 +30,17 @@ def create_resume(resume_form, student, new_resume_id):
     """ Функция для сохранения данных в таблицу resume. """
     if not new_resume_id:
         new_resume_id = Resume.objects.all().count() + 1
+    id_city = resume_form.cleaned_data.get('city')
+    metro = get_metro_stations(id_city)
+    print(id_city)
+    print(dict(metro).get(
+                      resume_form.cleaned_data.get('station_metro')))
     return Resume(id_resume=new_resume_id, id_student=student,
                   description_skills=resume_form.cleaned_data.get('description_skills'),
-                  city=resume_form.cleaned_data.get('city'),
-                  station_metro=resume_form.cleaned_data.get('station_metro'),
+                  city=dict(CITY_CHOICES).get(
+                      resume_form.cleaned_data.get('city')),
+                  station_metro=dict(metro).get(
+                      resume_form.cleaned_data.get('station_metro')),
                   possibility_of_transfer=dict(POSSIBILITY_OF_TRANSFER_CHOICES).get(
                       resume_form.cleaned_data.get('possibility_of_transfer')),
                   business_trips=dict(BUSINESS_TRIPS_CHOICES).get(
